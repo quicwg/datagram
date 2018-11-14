@@ -1,0 +1,6 @@
+*.txt
+*.html
+lib/
+.refcache/
+.targets.mk
+*.xml
