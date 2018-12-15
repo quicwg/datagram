@@ -66,7 +66,7 @@ Extending QUIC to support transmitting unreliable application data would
 provide another option for secure datagrams, with the added benefit of sharing
 a cryptographic and authentication context used for reliable streams.
 
-This document defines two new DATAGRAM QUIC frame types, which
+This document defines four new DATAGRAM QUIC frame types, which
 carry application data without requiring retransmissions.
 
 ## Specification of Requirements
@@ -93,7 +93,7 @@ handshake, which has a basic packet loss retransmission timer. This
 may allow loss recovery to occur more quickly for QUIC data.
 
 - QUIC datagrams, while unreliable, can support acknowledgements,
-allowing applications to be aware of if a datagram was successfully
+allowing applications to be aware of whether a datagram was successfully
 received.
 
 These reductions in connection latency, and application insight into
@@ -124,17 +124,23 @@ terminate the connection with error PROTOCOL_VIOLATION.
 # Datagram Frame Type
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
-The DATAGRAM frame type takes the form 0b0001110X (or the set of values from
-0x1c to 0x1d). The least significant byte of the DATAGRAM frame type is the
+The DATAGRAM frame type takes the form 0b001000XX (or the set of values from
+0x20 to 0x23). The least significant bit of the DATAGRAM frame type is the
 LEN bit (0x01). It indicates that there is a Length field present. If this
-bit is set to 0, the Length field is absent and the Stream Data field extends
+bit is set to 0, the Length field is absent and the Datagram Data field extends
 to the end of the packet. If this bit is set to 1, the Length field is present.
+The second least significant bit of the DATAGRAM frame type is the
+DATAGRAM_ID bit (0x02). It indicates that there is a Datagram ID field present.
+If this bit is set to 0, the Datagram ID field is absent and the Datagram ID is
+assumed to be zero. If this bit is set to 1, the Datagram ID field is present.
 
 A DATAGRAM frame is shown below.
 
 ~~~
 0                   1                   2                   3
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                      [Datagram ID (i)]                      ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                         [Length (i)]                        ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -144,6 +150,11 @@ A DATAGRAM frame is shown below.
 {: #datagram-format title="DATAGRAM Frame Format"}
 
 The fields of a DATAGRAM frame are as follows:
+
+Datagram ID:
+
+: A variable-length integer indicating the datagram ID of the datagram (see
+{{datagram-id}}).
 
 Length:
 
@@ -170,6 +181,14 @@ Note that the DATAGRAM frame does not support identifying separate flows of
 datagrams within a single QUIC connection, as the Stream ID does for
 STREAM frames. Demultiplexing datagram data is the responsibility of the
 application.
+
+## Datagram Identifiers {#datagram-id}
+
+Since several applications relying on datagrams have the need to identify which
+application-level flow a given datagram is a part of, DATAGRAM frames carry a
+datagram identifier. Applications that do not have a need for the identifier
+can use the value zero on their DATAGRAM frames and use the DATAGRAM_ID bit
+to omit sending the identifier over the wire.
 
 ## Flow Control and Acknowledgements
 
