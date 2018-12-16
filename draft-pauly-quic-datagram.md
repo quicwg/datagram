@@ -177,18 +177,15 @@ data to the application immediately.
 
 DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 
-Note that the DATAGRAM frame does not support identifying separate flows of
-datagrams within a single QUIC connection, as the Stream ID does for
-STREAM frames. Demultiplexing datagram data is the responsibility of the
-application.
-
 ## Datagram Identifiers {#datagram-id}
 
 Since several applications relying on datagrams have the need to identify which
 application-level flow a given datagram is a part of, DATAGRAM frames carry a
 datagram identifier. Applications that do not have a need for the identifier
 can use the value zero on their DATAGRAM frames and use the DATAGRAM_ID bit
-to omit sending the identifier over the wire.
+to omit sending the identifier over the wire. If an application uses a mixture
+of DATAGRAM frames with and without the DATAGRAM_ID bit set, the frames without
+it are assumed to be part of the application-level flow with Datagram ID zero.
 
 ## Flow Control and Acknowledgements
 
