@@ -213,7 +213,7 @@ either by 0-RTT or 1-RTT keys.
 
 # IANA Considerations
 
-This document registers a new value in the QUIC Transport Parameters:
+This document registers a new value in the QUIC Transport Parameter Registry:
 
 Value:
 
