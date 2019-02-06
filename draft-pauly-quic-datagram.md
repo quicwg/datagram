@@ -113,7 +113,7 @@ datagrams.
 # Transport Parameter
 
 Support for receiving the DATAGRAM frame types is advertised by means
-of a QUIC Transport Parameter (name=accepts_datagrams, value=12).
+of a QUIC Transport Parameter (name=accepts_datagrams, value=0x000e).
 An endpoint that includes this parameter supports the DATAGRAM frame
 types and is willing to receive such frames on this connection. Endpoints
 MUST NOT send DATAGRAM frames until they have sent and received the
@@ -217,7 +217,7 @@ This document registers a new value in the QUIC Transport Parameters:
 
 Value:
 
-: 12 (if this document is approved)
+: 0x000e (if this document is approved)
 
 Parameter Name:
 
