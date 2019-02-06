@@ -237,8 +237,8 @@ Specification:
 
 : Indicates that the connection should enable support for unreliable DATAGRAM
 frames. An endpoint that advertises this transport parameter can receive
-datagrams frames from the other endpoint, up to the length in bytes provided
-in the transport parameter.
+datagrams frames from the other endpoint, up to and including the length in
+bytes provided in the transport parameter.
 
 This document also registers a new value in the QUIC Frame Type registry:
 
