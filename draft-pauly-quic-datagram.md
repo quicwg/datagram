@@ -113,19 +113,29 @@ datagrams.
 # Transport Parameter
 
 Support for receiving the DATAGRAM frame types is advertised by means
-of a QUIC Transport Parameter (name=accepts_datagrams, value=0x000e).
-An endpoint that includes this parameter supports the DATAGRAM frame
-types and is willing to receive such frames on this connection. Endpoints
-MUST NOT send DATAGRAM frames until they have sent and received the
-accepts_datagrams transport parameter. An endpoint that receives a DATAGRAM
-frame when it has not sent the accepts_datagrams transport parameter MUST
-terminate the connection with error PROTOCOL_VIOLATION.
+of a QUIC Transport Parameter (name=max_datagram_frame_size, value=0x0020).
+The max_datagram_frame_size transport parameter is an integer value
+(represented as a variable-length integer) that represents the maximum
+size of a DATAGRAM frame (including the frame type, datagram ID, length and
+payload) the endpoint is willing to receive, in bytes. An endpoint that
+includes this parameter supports the DATAGRAM frame types and is willing to
+receive such frames on this connection. Endpoints MUST NOT send DATAGRAM
+frames until they have sent and received the max_datagram_frame_size transport
+parameter. Endpoints MUST NOT send DATAGRAM frames of size strictly larger
+than the value of max_datagram_frame_size the endpoint has received from its
+peer. An endpoint that receives a DATAGRAM frame when it has not sent the
+max_datagram_frame_size transport parameter MUST terminate the connection with
+error PROTOCOL_VIOLATION. An endpoint that receives a DATAGRAM frame that is
+strictly larger than the value it sent in its max_datagram_frame_size
+transport parameter MUST terminate the connection with error
+PROTOCOL_VIOLATION.
+
 
 # Datagram Frame Type
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
-The DATAGRAM frame type takes the form 0b001000XX (or the set of values from
-0x20 to 0x23). The least significant bit of the DATAGRAM frame type is the
+The DATAGRAM frame type takes the form 0b001100XX (or the set of values from
+0x30 to 0x33). The least significant bit of the DATAGRAM frame type is the
 LEN bit (0x01). It indicates that there is a Length field present. If this
 bit is set to 0, the Length field is absent and the Datagram Data field extends
 to the end of the packet. If this bit is set to 1, the Length field is present.
@@ -217,23 +227,24 @@ This document registers a new value in the QUIC Transport Parameter Registry:
 
 Value:
 
-: 0x000e (if this document is approved)
+: 0x0020 (if this document is approved)
 
 Parameter Name:
 
-: accepts_datagrams
+: max_datagram_frame_size
 
 Specification:
 
-: Indicates that the connection should enable support for unreliable DATAGRAM frames.
-An endpoint that advertises this transport parameter can receive datagrams frames
-from the other endpoint.
+: Indicates that the connection should enable support for unreliable DATAGRAM
+frames. An endpoint that advertises this transport parameter can receive
+datagrams frames from the other endpoint, up to the length in bytes provided
+in the transport parameter.
 
 This document also registers a new value in the QUIC Frame Type registry:
 
 Value:
 
-: 0x1c - 0x1d (if this document is approved)
+: 0x30 - 0x33 (if this document is approved)
 
 Frame Name:
 
