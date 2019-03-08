@@ -180,7 +180,7 @@ Datagram Data:
 When an application sends an unreliable datagram over a QUIC connection,
 QUIC will generate a new DATAGRAM frame and send it in the first available
 packet. This frame SHOULD NOT be delayed, but MAY be coalesced
-with other STREAM or DATAGRAM frames.
+with other frames.
 
 When a QUIC endpoint receives a valid DATAGRAM frame, it SHOULD deliver the
 data to the application immediately.
