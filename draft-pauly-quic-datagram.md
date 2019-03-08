@@ -103,7 +103,7 @@ network applications.
 
 Unreliable QUIC datagrams can also be used to implement an IP
 packet tunnel over QUIC, such as for a Virtual Private Network (VPN).
-Internet-layer tunneling protocols generally require a reliable and 
+Internet-layer tunneling protocols generally require a reliable and
 authenticated handshake, followed by unreliable secure transmission
 of IP packets. This can, for example, require a TLS connection for
 the control data, and DTLS for tunneling IP packets. A single
@@ -112,37 +112,36 @@ datagrams.
 
 # Transport Parameter
 
-Support for receiving the DATAGRAM frame types is advertised by means
-of a QUIC Transport Parameter (name=max_datagram_frame_size, value=0x0020).
-The max_datagram_frame_size transport parameter is an integer value
-(represented as a variable-length integer) that represents the maximum
-size of a DATAGRAM frame (including the frame type, datagram ID, length and
-payload) the endpoint is willing to receive, in bytes. An endpoint that
-includes this parameter supports the DATAGRAM frame types and is willing to
-receive such frames on this connection. Endpoints MUST NOT send DATAGRAM
-frames until they have sent and received the max_datagram_frame_size transport
-parameter. Endpoints MUST NOT send DATAGRAM frames of size strictly larger
-than the value of max_datagram_frame_size the endpoint has received from its
-peer. An endpoint that receives a DATAGRAM frame when it has not sent the
-max_datagram_frame_size transport parameter MUST terminate the connection with
-error PROTOCOL_VIOLATION. An endpoint that receives a DATAGRAM frame that is
-strictly larger than the value it sent in its max_datagram_frame_size
-transport parameter MUST terminate the connection with error
-PROTOCOL_VIOLATION.
+Support for receiving the DATAGRAM frame types is advertised by means of a QUIC
+Transport Parameter (name=max_datagram_frame_size, value=0x0020). The
+max_datagram_frame_size transport parameter is an integer value (represented as
+a variable-length integer) that represents the maximum size of a DATAGRAM frame
+(including the frame type, datagram flow ID, length and payload) the endpoint is
+willing to receive, in bytes. An endpoint that includes this parameter supports
+the DATAGRAM frame types and is willing to receive such frames on this
+connection. Endpoints MUST NOT send DATAGRAM frames until they have sent and
+received the max_datagram_frame_size transport parameter. Endpoints MUST NOT
+send DATAGRAM frames of size strictly larger than the value of
+max_datagram_frame_size the endpoint has received from its peer. An endpoint
+that receives a DATAGRAM frame when it has not sent the max_datagram_frame_size
+transport parameter MUST terminate the connection with error PROTOCOL_VIOLATION.
+An endpoint that receives a DATAGRAM frame that is strictly larger than the
+value it sent in its max_datagram_frame_size transport parameter MUST terminate
+the connection with error PROTOCOL_VIOLATION.
 
 
 # Datagram Frame Type
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
 The DATAGRAM frame type takes the form 0b001100XX (or the set of values from
-0x30 to 0x33). The least significant bit of the DATAGRAM frame type is the
-LEN bit (0x01). It indicates that there is a Length field present. If this
-bit is set to 0, the Length field is absent and the Datagram Data field extends
-to the end of the packet. If this bit is set to 1, the Length field is present.
-The second least significant bit of the DATAGRAM frame type is the
-DATAGRAM_ID bit (0x02). It indicates that there is a Datagram ID field present.
-If this bit is set to 0, the Datagram ID field is absent and the Datagram ID is
-assumed to be zero. If this bit is set to 1, the Datagram ID field is present.
+0x30 to 0x33). The least significant bit of the DATAGRAM frame type is the LEN
+bit (0x01). It indicates that there is a Length field present. If this bit is
+set to 0, the Length field is absent and the Datagram Data field extends to the
+end of the packet. If this bit is set to 1, the Length field is present. The
+second least significant bit of the DATAGRAM frame type is the DATAGRAM_FLOW_ID
+bit (0x02). It indicates that there is a Datagram Flow ID field present. If this bit
+is set to 0, the Datagram Flow ID field is absent and the Datagram Flow ID is assumed to
+be zero. If this bit is set to 1, the Datagram Flow ID field is present.
 
 A DATAGRAM frame is shown below.
 
@@ -150,7 +149,7 @@ A DATAGRAM frame is shown below.
 0                   1                   2                   3
 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                      [Datagram ID (i)]                      ...
+|                    [Datagram Flow ID (i)]                   ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                         [Length (i)]                        ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -161,15 +160,15 @@ A DATAGRAM frame is shown below.
 
 The fields of a DATAGRAM frame are as follows:
 
-Datagram ID:
+Datagram Flow ID:
 
-: A variable-length integer indicating the datagram ID of the datagram (see
-{{datagram-id}}).
+: A variable-length integer indicating the datagram flow ID of the datagram (see
+{{datagram-flow-id}}).
 
 Length:
 
-: A variable-length integer specifying the length of the datagram in bytes. If the length
-is zero, the data extends to the end of the QUIC packet.
+: A variable-length integer specifying the length of the datagram in bytes. If
+ the length is zero, the data extends to the end of the QUIC packet.
 
 Datagram Data:
 
@@ -187,15 +186,16 @@ data to the application immediately.
 
 DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 
-## Datagram Identifiers {#datagram-id}
+## Datagram Flow Identifiers {#datagram-flow-id}
 
-Since several applications relying on datagrams have the need to identify which
-application-level flow a given datagram is a part of, DATAGRAM frames carry a
-datagram identifier. Applications that do not have a need for the identifier
-can use the value zero on their DATAGRAM frames and use the DATAGRAM_ID bit
-to omit sending the identifier over the wire. If an application uses a mixture
-of DATAGRAM frames with and without the DATAGRAM_ID bit set, the frames without
-it are assumed to be part of the application-level flow with Datagram ID zero.
+Since several applications relying on datagrams have the need to identify the
+application-level flow of which a given datagram is a part, DATAGRAM frames
+carry a datagram flow identifier. Applications that do not have a need for the
+identifier can use the value zero on their DATAGRAM frames and use the
+DATAGRAM_FLOW_ID bit to omit sending the identifier over the wire. If an
+application uses a mixture of DATAGRAM frames with and without the
+DATAGRAM_FLOW_ID bit set, the frames without it are assumed to be part of the
+application-level flow with Datagram Flow ID zero.
 
 ## Flow Control and Acknowledgements
 
