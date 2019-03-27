@@ -1,0 +1,50 @@
+Minutes
+
+QUIC Datagram Side Meeting
+IETF 103, Bangkok
+
+What are the use cases that would be interested in unreliable QUIC?
+General interest in real time media, bundled with reliable transport. Sensor reading
+VPN use case of making things look like web traffic, but allow tunneled packet to be sent unreliably
+Realtime audio/video (bidirectional like RTC Web, unidirectional streaming)
+WebRTC over QUIC
+Video conference, augmented reality, single transport for media and data. Current spec for AR has synchronization problem.
+HTTP/WebSocket/Datachannel servers currently have multiple connections that could be just one
+Centralized conferencing in WebRTC
+Signaling traffic (mobile core network, high signaling load)
+Measurement traffic being multiplexed with data
+5G wifi/cellular link multi-path control for datagrams
+Use QUIC as a TURN relay into the CDN
+Consolidating reverse proxy
+
+Should work as an extension QUIC (v1)
+Minimal or no changes to how applications handle datagram payload and sending
+
+Don’t need to support fragmentation of datagrams in QUIC, just make sure that the frame boundaries are supported. Application on top generally fragments if necessary.
+Application must be able to introspect maximum datagram size for the datagram channel
+
+Try to accommodate different use cases with sensible support if possible
+
+Should DATAGRAM frames be ACKed?
+Yes. Would applications use it? Helps know what to encode next, for example.
+ACKs may need different scheduling algorithms for DATAGRAMs
+No flow control; but rate control. Could delay ACKs to help determine rate of consumption to influence rate of sending, packet pacing
+
+Can there be multiple ID spaces for DATAGRAM frames?
+Draft currently says no, but suggestion at meeting was to introduce a DATAGRAM_ID
+DATAGRAM_ID could be used to set different congestion control per datagram “flow”
+Different queues to deliver to application
+Different priorities
+Should be a VLI
+Handles bundling of RTP vs RTCP, or multiple RTP streams
+
+DATAGRAM_IDs are a different namespace from STREAM_IDs. They do not have equivalents such as RESET_DATAGRAM_ID, MAX_DATAGRAM_DATA, DATAGRAM_DATA_BLOCKED, MAX_DATAGRAM_IDS, or DATAGRAMS_BLOCKED.
+Separate even and odd for which side initiated? But can always send in any direction without the other side opening it.
+
+Upon migration or any connection ID length change, signal that maximum datagram size changed
+
+Can we pass up ICMP errors for a given DATAGRAM?
+
+Can send DATAGRAMs in 0-RTT
+
+Add congestion window consideration—sending “immediately” still respects congestion control

@@ -1,0 +1,153 @@
+Minutes
+
+QUIC Datagram Side Meeting
+IETF 104, Prague
+Wednesday, March 27, 15:00-16:00
+Congress Hall 3
+
+https://etherpad.ietf.org/p/quic-datagram-sidemeeting
+
+Note taker: Tom Jones
+
+QUIC Datagram - Tommy Pauly
+
+Martin Thompson: how big can it be. Does 0 length datagram carry any semantics
+David: if you do not include the ext you don't speak datagrams. 
+Jonathon Lennox: what is the maximum?
+Tommy: huge! we shouldn't specifed a max
+David: we could say must be smaller than max packet size
+Martin: max packet, pmtu andthis field will drive max packet down
+Ian Swett: what if the pmtu increases due to dplpmtud
+Tommy: this is the max the app will accept
+David: this is a problem in quic in general. 
+Gorry Fairhurst: this looks fine to me, it looks like tcp mss. this looks really good.
+Phillip: as it is a param, a middle box that sees client hello can block datagram.
+David: that is true of any quic ext
+Phillip: is this a problem
+Tommy: we can solve this orthoganolly
+Jonathon: I want to push back against saying we don't want fragmented datagrams. 
+David: we are not saying we never want frags, we are saying this doesn't support them. if you want it we can add later
+Gorry: +1
+
+Brain Trammell: these wouldn't be demultiplexed on the connection id tuples
+Tommy: they are stream ids in a connection
+Brain: this is a stream id 
+Tommy: yes
+Brain: call it fragment id
+Tommy: we won't decide the name here
+Jana: you should not call it datagram id. I think this is useful, you need to clarify what it means to be on the same datagram id. maybe a context id.
+Nils Ohlmier the idea behind this is to represent the 5 tuple
+Tommy: This could be used to represent the socket id
+David: this is completely generic, this can be used for flows. the application profile on top defines what this id means
+Martin: therefore it is useless. I think this should be removed. it doesn't add value and you have jsut explained why. anyone that needs this can do it in the datagram payload. it is a poor fit for a number of protocols, i.e. rtp. Not everyone wants a 62 bit field. 
+Eric: you can turn it off. Is there value in having a mechanism at the quic layer that allows the apps on top to demux. 
+Martin: no
+Tommy: there are different opions on that and we can't resolve now
+Allie: in the sense these are stream ids, how do these map, uni directional bi directional?
+Tommy: no semantics
+Colin Perkins: as a group we need to decide if we are desinging the minimal extension or something with a wider range of servies for applications. 
+Ian Swett: we should remove the datagram id. this is the only variable length int in the transport, that the transport does nothing with. everytime it is seen it has to be parsed, but hte transport has no use for it. 
+Tommy: you can think of it as queueing in the app buffer. 
+
+Lars Eggert: I was ad when we did tunnel encap cc. If you required the thing you encap by congestion controlled it would be much easier to swallow. we have text in rfcs that allows this and it would make the cc issues go away.
+Tommy: if it is a tunnel yes, but for real time stuff no. up to the App
+Victor: I think we should make this app eliecting so that datagrams count agains the congestion window.
+Igor: we need to understand what ack means. in my mind the sender of the app is taking responsibilty
+Mirja: do you wnat to discuss all these details or use cases. 
+
+Tommy: raise your hand if you want acks (Tommy thought it was clear yes)
+Tommy: raise your hand if you want cc (like half the room or more)
+Tommy: raise your hand if you want flow control (yes- 2 people, many no - in a room of many more than 2)
+
+
+Voice/Video use cases and requirements - Colin Perkins
+
+Roni Evan: what about multipoint
+Colin: I have not considered multipoint, quic is point to point, if you want to build on top go ahead.
+Roni: interactive video needs it
+Colin: quic is p2p, if you want it you need to build it in the app. I am not proposing multipoint or multicast quick. Multipoint quic is out of scope for this discussion.
+
+Martin: we get cc and encryption with quic, in addition you want to create groups of unreliable things and give them ordering.
+Colin: yes. Identifying subflows in the quic dgram flow with a seq number of some sort is needed. 
+Mike Bishop: datagrams vs unreliable data on streams?
+Colin: lets get to the end before having that discussion
+
+Ian: on timestamps, I support an extension for timestamps. 1 per ack frame or 1 per recevied packet. different real time congestion controllers are different
+Colin: it depends how much multiplexing you do. it gets hard if you multiplex datagrams. timestamp per datagram. it depends if you want different clock rates for differnt flows
+Christian: there might be some context to set in sense of the protocol.
+Colin: this is when the data should be rendered.
+Christian: you are using something like a render time, and not like a tcp time stamp
+Colin: yes, a time when this should be presented.
+Christian: would it make sense to have an rtp frame for quic
+Colin: it is not just rtp that needs this.
+Christian: there are classes that come to mind, like gui applications, I think what you want is an rtp frame
+Colin: we can define a mapping.I would like to provide a more general service rahter than a custom thing for each real time app.
+Christian: we don't try and do turn on top or rtp.
+Colin: we want transport services that are usful for a set of applcaitons, we do it for non real time, but we want it for real time too.
+Christian: real time relationshipo with the applciation is much closer. Most apps will have an ext that sayas for frame x call func y
+Colin: we are keen for quic to support reliable apps, we are discouraging when it comes to real time. We do better with a more full featured set of transport features.
+Christian: we know rtp well, I am all for doing a quic rtp frame so it is supported well.
+Igor: do you want in orde delivery for your streams?
+Colin: no. I want to know which packets got lost
+Igor: do you need the sequeincing from the transport or can you do it in the app.
+Colin: you can build anything in the app. 
+Tommy: we do have packet numbers, exposing the order could help apps
+Colin: either we only build in transport only things, or offer a more full featured transport that supports more classes of applcation.
+Haarld Alvestrand: I was considering key frames. Video key frames are awful. it would seem like an obvious extension to deliver key frames reliably. should consider mixed mode designs.
+Colin: it has been proposed, I am aiming for hte minimal set
+Haarld: the minimal set is in the datagram proposal
+Colin: the minimal real time support, not the minimal datagram support
+Colin: I was assking about transport level timestamps before. I don't think we should be adding framing to the transport that has no applicability to the transport, do it in the app. 
+Colin: are udp port numbers an app level feature.
+Ian: an id without any new functionality isn't a transport feature
+Tommy: lets follow up after
+Cullin Jenkins(???): there are always a thousand reason to not include a real time feature. they are more efficient in the transport than at the app layer. 
+Jana: to make progess we need to use something, maybe that is rtp. you were in the sctp-pr community, there are things shared here. it would be useful if the folks that built things with the sctp-pr api were involved in this discussion. 
+Colin: sure, mpeg and rtp have a substream id and use that. We have some widely deploy experience.
+Jonathan: It seems like you are reinventing the session layer. You have a common lib on top of quic that can do this without bothering transport. 
+Colin: you may want to intgrate it in the cc in the future
+Jonathan: it reiteate what Haarld said about key frames.
+Colin: it means the deadline is different. 
+
+Game use cases and requirements  - Robin Marx
+
+Igor: when to talk about acks being delayed, isn't it easier for the reciever to send their own acks. 
+Robin: the question is what you want to do in quic vs the app
+Igor: apps have a meaning for the transport, overloading the meaning isn't good for either
+Lucas: it is interesting how gaming is eating into live viewing. The valve link is really interesting, it gives an API over a QUIC-based implementation that game devs can use today.
+Andrew McGreggor: there is a lot in datagrams for quic that implies some things about quics api. we don't normally do apis in the ietf. lets not thing about this in terms of the socket api. there is a load of extra stuff that comes with the payload we need to expose to the app. we should expose this for a send too.
+Haarld: end to end principal, says a clock update function like this needs to be implemented end to end. Anything the transport does is an optimization not a replacement. We should not waste too much time depending on quic to do things quic can only do imperfectly.
+
+Praveen: we can quic by the gaming folks at xbox, summary:
+
+   - sdk is message oriented. games tend to have a voice and game channel.
+
+   - that makes for a simple programming model.
+
+   - reliability is on a per message basis, one could be sent reliable and one not. the underlying cc can mix the two. the app chooses what
+
+   - channels are uni directional
+
+   - the api provides out of order deliver, an app can post a message and it can be delivered out of order.
+
+   - there is a mechanism to detect if the packet was recevied AND if the app processed the message. 
+
+
+Tunneling use cases and requirements - David Schinazi
+
+Dave Taht: Do you have any running code
+David: not yet. 
+
+Datagram only quic profile - Lucas Pardue
+
+Lucas: QUIC leaves the use of STREAMs to the application. In HTTP/3 we are having a little fun defining how streams are used. Specifically when not to need them. A thought experiment made me wonder could we have a DATAGRAM-only profile of QUIC
+Martin: Yes. Default Transport parameters allow exatly this.
+Lucas There is some other work on cross-conenction congestion control that could let us coordinate independent DATAGRAM-only connections. 
+
+Next Steps
+
+Tommy: there is interest, what do we want to do?
+
+Lars: the charter calls unreliable out of scope. PR is the other one. Since the charter was written the world has moved on. at the time multipath seemed like the thing to do first. now people want to carry media over quic. we will probably recharter before v1. until then we can't do anything
+Tommy: you mentioned around montreal we could look at rechartering, could we do it then?
+Lars: we can start at any time. I am not holidng up the charter saying 'stop this' we should reflex the new reality in the charter.
