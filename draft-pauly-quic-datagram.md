@@ -162,8 +162,8 @@ to be zero otherwise.
 Length:
 
 : A variable-length integer specifying the length of the datagram in bytes. This field
-is present only when the LEN bit is set. If the length is zero, or if it is not present,
-the datagram data extends to the end of the QUIC packet.
+is present only when the LEN bit is set. If the LEN bit is not set, the datagram data
+extends to the end of the QUIC packet.
 
 Datagram Data:
 
