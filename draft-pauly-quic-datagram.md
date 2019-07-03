@@ -162,8 +162,8 @@ to be zero otherwise.
 Length:
 
 : A variable-length integer specifying the length of the datagram in bytes. This field
-is present when the LEN bit is set, and is assumed to be zero otherwise.
-If the length is zero, the datagram data extends to the end of the QUIC packet.
+is present only when the LEN bit is set. If the length is zero, or if it is not present,
+the datagram data extends to the end of the QUIC packet.
 
 Datagram Data:
 
@@ -173,8 +173,8 @@ Datagram Data:
 
 When an application sends an unreliable datagram over a QUIC connection,
 QUIC will generate a new DATAGRAM frame and send it in the first available
-packet. This frame SHOULD NOT be delayed by anything other than the
-congestion controller, but MAY be coalesced with other frames.
+packet. This frame SHOULD be sent as soon as possible, and MAY be
+coalesced with other frames.
 
 When a QUIC endpoint receives a valid DATAGRAM frame, it SHOULD deliver the
 data to the application immediately, as long as it is able to process the frame
@@ -210,8 +210,9 @@ application-level flow with Flow ID zero.
 
 Although DATAGRAM frames are not retransmitted upon loss detection, they are
 ack-eliciting ({{!I-D.ietf-quic-recovery}}). Receivers SHOULD support delaying
-ACK frames in reponse to receiving packets that only contain DATAGRAM frames,
-since the timing of these acknowledgements is not used for loss recovery.
+ACK frames (within the limits specified by max_ack_delay) in reponse to receiving
+packets that only contain DATAGRAM frames, since the timing of these
+acknowledgements is not used for loss recovery.
 
 If a sender detects that a packet containing a specific DATAGRAM frame has been
 lost, the implementation MAY notify the application that the datagram was lost.
