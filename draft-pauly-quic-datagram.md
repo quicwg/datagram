@@ -37,13 +37,6 @@ author:
     country: United States of America
     email: dschinazi.ietf@gmail.com
 
-informative:
-  I-D.ietf-quic-transport:
-  RFC0768:
-  RFC2119:
-  RFC6347:
-  RFC8174:
-
 --- abstract
 
 This document defines an extension to the QUIC transport protocol to
@@ -54,14 +47,14 @@ a QUIC connection.
 
 # Introduction
 
-The QUIC Transport Protocol {{I-D.ietf-quic-transport}} provides a secure,
+The QUIC Transport Protocol {{!I-D.ietf-quic-transport}} provides a secure,
 multiplexed connection for transmitting reliable streams of application data.
 Reliability within QUIC is performed on a per-stream basis, so some frame
 types are not eligible for retransmission.
 
 Some applications, particularly those that need to transmit real-time data,
 prefer to transmit data unreliably. These applications can build directly upon
-UDP {{RFC0768}} as a transport, and can add security with DTLS {{RFC6347}}.
+UDP {{?RFC0768}} as a transport, and can add security with DTLS {{?RFC6347}}.
 Extending QUIC to support transmitting unreliable application data would
 provide another option for secure datagrams, with the added benefit of sharing
 a cryptographic and authentication context used for reliable streams.
@@ -74,7 +67,7 @@ carry application data without requiring retransmissions.
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
 "OPTIONAL" in this document are to be interpreted as described in BCP 14
-{{RFC2119}} {{RFC8174}} when, and only when,
+{{?RFC2119}} {{?RFC8174}} when, and only when,
 they appear in all capitals, as shown here.
 
 # Motivation
@@ -116,7 +109,7 @@ Support for receiving the DATAGRAM frame types is advertised by means
 of a QUIC Transport Parameter (name=max_datagram_frame_size, value=0x0020).
 The max_datagram_frame_size transport parameter is an integer value
 (represented as a variable-length integer) that represents the maximum
-size of a DATAGRAM frame (including the frame type, datagram ID, length and
+size of a DATAGRAM frame (including the frame type, flow identifier, length and
 payload) the endpoint is willing to receive, in bytes. An endpoint that
 includes this parameter supports the DATAGRAM frame types and is willing to
 receive such frames on this connection. Endpoints MUST NOT send DATAGRAM
@@ -130,7 +123,6 @@ strictly larger than the value it sent in its max_datagram_frame_size
 transport parameter MUST terminate the connection with error
 PROTOCOL_VIOLATION.
 
-
 # Datagram Frame Type
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
@@ -140,36 +132,38 @@ LEN bit (0x01). It indicates that there is a Length field present. If this
 bit is set to 0, the Length field is absent and the Datagram Data field extends
 to the end of the packet. If this bit is set to 1, the Length field is present.
 The second least significant bit of the DATAGRAM frame type is the
-DATAGRAM_ID bit (0x02). It indicates that there is a Datagram ID field present.
-If this bit is set to 0, the Datagram ID field is absent and the Datagram ID is
-assumed to be zero. If this bit is set to 1, the Datagram ID field is present.
+FLOW_ID bit (0x02). It indicates that there is a Flow ID field present.
+If this bit is set to 0, the Flow ID field is absent and the Flow ID is
+assumed to be zero. If this bit is set to 1, the Flow ID field is present.
 
-A DATAGRAM frame is shown below.
+The DATAGRAM frame is structured as follows:
 
 ~~~
-0                   1                   2                   3
-0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                      [Datagram ID (i)]                      ...
+|                        [Flow ID (i)]                        ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                         [Length (i)]                        ...
+|                        [Length (i)]                         ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                       Datagram Data (*)                     ...
+|                      Datagram Data (*)                      ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~
 {: #datagram-format title="DATAGRAM Frame Format"}
 
-The fields of a DATAGRAM frame are as follows:
+DATAGRAM frames contain the following fields:
 
-Datagram ID:
+Flow ID:
 
-: A variable-length integer indicating the datagram ID of the datagram (see
-{{datagram-id}}).
+: A variable-length integer indicating the Flow ID of the datagram (see
+{{flow-id}}). This field is present when the FLOW_ID bit is set, and is assumed
+to be zero otherwise.
 
 Length:
 
-: A variable-length integer specifying the length of the datagram in bytes. If the length
-is zero, the data extends to the end of the QUIC packet.
+: A variable-length integer specifying the length of the datagram in bytes. This field
+is present only when the LEN bit is set. If the LEN bit is not set, the datagram data
+extends to the end of the QUIC packet.
 
 Datagram Data:
 
@@ -179,40 +173,77 @@ Datagram Data:
 
 When an application sends an unreliable datagram over a QUIC connection,
 QUIC will generate a new DATAGRAM frame and send it in the first available
-packet. This frame SHOULD NOT be delayed, but MAY be coalesced
-with other frames.
+packet. This frame SHOULD be sent as soon as possible, and MAY be
+coalesced with other frames.
 
 When a QUIC endpoint receives a valid DATAGRAM frame, it SHOULD deliver the
-data to the application immediately.
+data to the application immediately, as long as it is able to process the frame
+and can store the contents in memory.
 
 DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 
-## Datagram Identifiers {#datagram-id}
+## Flow Identifiers {#flow-id}
 
-Since several applications relying on datagrams have the need to identify which
-application-level flow a given datagram is a part of, DATAGRAM frames carry a
-datagram identifier. Applications that do not have a need for the identifier
-can use the value zero on their DATAGRAM frames and use the DATAGRAM_ID bit
-to omit sending the identifier over the wire. If an application uses a mixture
-of DATAGRAM frames with and without the DATAGRAM_ID bit set, the frames without
-it are assumed to be part of the application-level flow with Datagram ID zero.
+Flow identifiers represent bidirectional flows of datagrams within a single QUIC
+connection. These are effectively equivalent to UDP ports, that allow basic
+demultiplexing of application data. Whenever one side of a connection
+receives a frame with a Flow ID was was not previously known, it MAY represent
+this to the application as a new flow of datagrams.
 
-## Flow Control and Acknowledgements
+The primary role of the QUIC transport towards the flow identifier is to provide
+a standard mechanism for demultiplexing application data flows, which may be
+destined for different processing threads in the application, akin to UDP sockets.
 
-Although the DATAGRAM frame is not retransmitted upon loss detection,
-it does contribute to the maximum data for the overall connection. Packets that
-contain only DATAGRAM frames do need to be acknowledged, but
-implementations SHOULD defer and batch acknowledgements since
-the timing of these acknowledgements is not used for loss recovery.
+Beyond this, a sender SHOULD ensure that DATAGRAM frames within a single flow
+are transmitted in order relative to one another. If multiple DATAGRAM frames can
+packed into a single packet, the sender SHOULD group them by Flow ID to
+promote fate-sharing within a specific flow and improve the ability to process batches
+of datagram messages efficiently on the receiver.
 
-The DATAGRAM frame does not provide any explicit flow control signaling
-apart from the connection-level flow control. DATAGRAM frames are flow
-controlled only when the maximum data for the connection is hit, at which point
-the BLOCKED frame is sent.
+Applications that do not have a need for the Flow ID can use the value zero on
+their DATAGRAM frames and clear the FLOW_ID bit to omit sending the identifier
+over the wire. If an application uses a mixture of DATAGRAM frames with and
+without the FLOW_ID bit set, the frames without it are assumed to be part of the
+application-level flow with Flow ID zero.
 
-In cases in which a DATAGRAM frame is blocked due to connection-level
-flow control or congestion control, an implementation MAY drop the frame
-without sending it.
+## Acknowledgements
+
+Although DATAGRAM frames are not retransmitted upon loss detection, they are
+ack-eliciting ({{!I-D.ietf-quic-recovery}}). Receivers SHOULD support delaying
+ACK frames (within the limits specified by max_ack_delay) in reponse to receiving
+packets that only contain DATAGRAM frames, since the timing of these
+acknowledgements is not used for loss recovery.
+
+If a sender detects that a packet containing a specific DATAGRAM frame has been
+lost, the implementation MAY notify the application that the datagram was lost.
+Similarly, if a packet containing a DATAGRAM frame is acknowledged, the
+implementation MAY notify the application that the datagram was successfully
+transmitted and received.
+
+## Flow Control
+
+DATAGRAM frames do not provide any explicit flow control signaling,
+and do not contribute to any per-flow or connection-wide data limit.
+
+The risk associated with not providing flow control for DATAGRAM frames
+is that a receiver may not be able to commit the necessary resources to process
+the frames. For example, it may not be able to store the frame contents in memory.
+However, since DATAGRAM frames are inherently unreliable, they MAY be
+dropped by the receiver if the receiver cannot process them.
+
+## Congestion Control
+
+DATAGRAM frames are subject to a QUIC connection's congestion control.
+Specifically, if a DATAGRAM frame is enqueued to be sent by the application,
+but sending a packet with this frame is not allowed by the congestion control
+window as specified in {{!I-D.ietf-quic-recovery}}, the packet cannot be sent.
+The sender implementation MUST either drop the frame without sending it
+(at which point it MAY notify the application) or else delay sending the frame
+until the window opens.
+
+Implementations can optionally support allowing the application to specify
+a sending expiration time, beyond which a congestion-controlled DATAGRAM
+frame ought to be dropped without transmission.
 
 # Security Considerations
 
