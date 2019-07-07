@@ -206,7 +206,7 @@ over the wire. If an application uses a mixture of DATAGRAM frames with and
 without the FLOW_ID bit set, the frames without it are assumed to be part of the
 application-level flow with Flow ID zero.
 
-## Acknowledgements
+## Acknowledgement Handling
 
 Although DATAGRAM frames are not retransmitted upon loss detection, they are
 ack-eliciting ({{!I-D.ietf-quic-recovery}}). Receivers SHOULD support delaying
