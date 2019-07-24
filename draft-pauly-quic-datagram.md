@@ -96,7 +96,7 @@ network applications.
 
 Unreliable QUIC datagrams can also be used to implement an IP
 packet tunnel over QUIC, such as for a Virtual Private Network (VPN).
-Internet-layer tunneling protocols generally require a reliable and 
+Internet-layer tunneling protocols generally require a reliable and
 authenticated handshake, followed by unreliable secure transmission
 of IP packets. This can, for example, require a TLS connection for
 the control data, and DTLS for tunneling IP packets. A single
@@ -127,7 +127,7 @@ PROTOCOL_VIOLATION.
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
 The DATAGRAM frame type takes the form 0b0011000X (or the values 0x30
-and0x31). The least significant bit of the DATAGRAM frame type is the
+and 0x31). The least significant bit of the DATAGRAM frame type is the
 LEN bit (0x01). It indicates that there is a Length field present. If this
 bit is set to 0, the Length field is absent and the Datagram Data field extends
 to the end of the packet. If this bit is set to 1, the Length field is present.
@@ -213,7 +213,7 @@ until the window opens.
 
 Implementations can optionally support allowing the application to specify
 a sending expiration time, beyond which a congestion-controlled DATAGRAM
-frame ought to be dropped without transmission. 
+frame ought to be dropped without transmission.
 
 # Security Considerations
 
@@ -245,7 +245,7 @@ This document also registers a new value in the QUIC Frame Type registry:
 
 Value:
 
-: 0x30 - 0x33 (if this document is approved)
+: 0x30 and 0x31 (if this document is approved)
 
 Frame Name:
 
