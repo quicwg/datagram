@@ -172,8 +172,8 @@ DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 
 Application protocols using datagrams might need to differentiate categories or
 flows of datagrams being transmitted over a single QUIC connection.
-Each application protocol is expected to define its mechanism for
-adding flow identifiers or similar mechanisms to the datagram payload
+Each application protocol is expected to define its own mechanism for
+adding flow identifiers or similar mechanisms to the datagram payloads
 being sent over the QUIC transport.
 
 ## Acknowledgement Handling
