@@ -109,7 +109,7 @@ Support for receiving the DATAGRAM frame types is advertised by means
 of a QUIC Transport Parameter (name=max_datagram_frame_size, value=0x0020).
 The max_datagram_frame_size transport parameter is an integer value
 (represented as a variable-length integer) that represents the maximum
-size of a DATAGRAM frame (including the frame type, flow identifier, length and
+size of a DATAGRAM frame (including the frame type, length, and
 payload) the endpoint is willing to receive, in bytes. An endpoint that
 includes this parameter supports the DATAGRAM frame types and is willing to
 receive such frames on this connection. Endpoints MUST NOT send DATAGRAM
@@ -126,23 +126,17 @@ PROTOCOL_VIOLATION.
 # Datagram Frame Type
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
-The DATAGRAM frame type takes the form 0b001100XX (or the set of values from
-0x30 to 0x33). The least significant bit of the DATAGRAM frame type is the
+The DATAGRAM frame type takes the form 0b0011000X (or the values 0x30
+and0x31). The least significant bit of the DATAGRAM frame type is the
 LEN bit (0x01). It indicates that there is a Length field present. If this
 bit is set to 0, the Length field is absent and the Datagram Data field extends
 to the end of the packet. If this bit is set to 1, the Length field is present.
-The second least significant bit of the DATAGRAM frame type is the
-FLOW_ID bit (0x02). It indicates that there is a Flow ID field present.
-If this bit is set to 0, the Flow ID field is absent and the Flow ID is
-assumed to be zero. If this bit is set to 1, the Flow ID field is present.
 
 The DATAGRAM frame is structured as follows:
 
 ~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                        [Flow ID (i)]                        ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                        [Length (i)]                         ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -152,12 +146,6 @@ The DATAGRAM frame is structured as follows:
 {: #datagram-format title="DATAGRAM Frame Format"}
 
 DATAGRAM frames contain the following fields:
-
-Flow ID:
-
-: A variable-length integer indicating the Flow ID of the datagram (see
-{{flow-id}}). This field is present when the FLOW_ID bit is set, and is assumed
-to be zero otherwise.
 
 Length:
 
@@ -182,29 +170,11 @@ and can store the contents in memory.
 
 DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 
-## Flow Identifiers {#flow-id}
-
-Flow identifiers represent bidirectional flows of datagrams within a single QUIC
-connection. These are effectively equivalent to UDP ports, that allow basic
-demultiplexing of application data. Whenever one side of a connection
-receives a frame with a Flow ID was was not previously known, it MAY represent
-this to the application as a new flow of datagrams.
-
-The primary role of the QUIC transport towards the flow identifier is to provide
-a standard mechanism for demultiplexing application data flows, which may be
-destined for different processing threads in the application, akin to UDP sockets.
-
-Beyond this, a sender SHOULD ensure that DATAGRAM frames within a single flow
-are transmitted in order relative to one another. If multiple DATAGRAM frames can
-packed into a single packet, the sender SHOULD group them by Flow ID to
-promote fate-sharing within a specific flow and improve the ability to process batches
-of datagram messages efficiently on the receiver.
-
-Applications that do not have a need for the Flow ID can use the value zero on
-their DATAGRAM frames and clear the FLOW_ID bit to omit sending the identifier
-over the wire. If an application uses a mixture of DATAGRAM frames with and
-without the FLOW_ID bit set, the frames without it are assumed to be part of the
-application-level flow with Flow ID zero.
+Application protocols using datagrams might need to differentiate categories or
+flows of datagrams being transmitted over a single QUIC connection.
+Each application protocol is expected to define its mechanism for
+adding flow identifiers or similar mechanisms to the datagram payload
+being sent over the QUIC transport.
 
 ## Acknowledgement Handling
 
@@ -243,7 +213,7 @@ until the window opens.
 
 Implementations can optionally support allowing the application to specify
 a sending expiration time, beyond which a congestion-controlled DATAGRAM
-frame ought to be dropped without transmission.
+frame ought to be dropped without transmission. 
 
 # Security Considerations
 
