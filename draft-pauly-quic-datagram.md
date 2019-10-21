@@ -106,7 +106,7 @@ datagrams.
 # Transport Parameter
 
 Support for receiving the DATAGRAM frame types is advertised by means
-of a QUIC Transport Parameter (name=max_datagram_frame_size, value=0x0020).
+of a QUIC Transport Parameter (name=max_datagram_frame_size, value=0x77DF).
 The max_datagram_frame_size transport parameter is an integer value
 (represented as a variable-length integer) that represents the maximum
 size of a DATAGRAM frame (including the frame type, length, and
@@ -228,7 +228,7 @@ This document registers a new value in the QUIC Transport Parameter Registry:
 
 Value:
 
-: 0x0020 (if this document is approved)
+: 0x77DF (if this document is approved)
 
 Parameter Name:
 
