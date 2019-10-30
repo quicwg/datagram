@@ -26,7 +26,7 @@ body {
   font-weight: bold;
   color: #333;
   line-height: 100%;
-  margin: 1.2em 0 0.3em;
+  margin: 0.8em 0 0.3em;
 }
 .title, #rfc\.title h1 { font-size: 32px; }
 h1, section h1, h2, section h2, section h3, nav h2 { font-size: 20px; }
@@ -78,14 +78,13 @@ table.header td, table#rfc\.headerblock td {
   line-height: 100%;
   margin: 10px 0 32px;
 }
-#rfc\.abstract+p, #rfc\.abstract+p code, #rfc\.abstract+p samp, #rfc\.abstract+p tt {
+#rfc\.abstract+p, #rfc\.abstract p {
   font-size: 20px;
   line-height: 28px;
 }
 
-samp, tt, code, pre, span.tt {
-  font-size: 13.5px;
-  font-family: Consolas, monospace;
+samp, tt, code, pre {
+  font: 15px Consolas, monospace;
   font-size-adjust: none;
 }
 pre {
@@ -166,17 +165,12 @@ a[href]:hover {
   background-color: #eee;
 }
 
-p, ol, ul, li {
+ol, ul, li, p {
   padding: 0;
+  margin: 0.5em 0 0.5em 2em;
 }
-p {
-  margin: 0.5em 0;
-}
-ol, ul {
-  margin: 0.2em 0 0.2em 2em;
-}
-li {
-  margin: 0.2em 0;
+li, p {
+  margin-left: 0;
 }
 address {
   font-style: normal;
@@ -300,14 +294,14 @@ ul.toc li {
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.19.0 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.8.4 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Pauly, T., Kinnear, E., and D. Schinazi" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-pauly-quic-datagram-latest" />
   <meta name="dct.issued" scheme="ISO8601" content="2019-10-30" />
-  <meta name="dct.abstract" content="This document defines an extension to the QUIC transport protocol to add support for sending and receiving unreliable datagrams over a QUIC connection.Discussion of this work is encouraged to happen on the QUIC IETF mailing list quic@ietf.org or on the GitHub repository which contains the draft: https://github.com/tfpauly/draft-pauly-quic-datagram." />
-  <meta name="description" content="This document defines an extension to the QUIC transport protocol to add support for sending and receiving unreliable datagrams over a QUIC connection.Discussion of this work is encouraged to happen on the QUIC IETF mailing list quic@ietf.org or on the GitHub repository which contains the draft: https://github.com/tfpauly/draft-pauly-quic-datagram." />
+  <meta name="dct.abstract" content="This document defines an extension to the QUIC transport protocol to add support for sending and receiving unreliable datagrams over a QUIC connection." />
+  <meta name="description" content="This document defines an extension to the QUIC transport protocol to add support for sending and receiving unreliable datagrams over a QUIC connection." />
 
 </head>
 
@@ -422,6 +416,7 @@ ul.toc li {
 <li>Applications that open both a reliable TLS stream and an unreliable DTLS flow to the same peer can benefit by sharing a single handshake and authentication context between a reliable QUIC stream and flow of unreliable QUIC datagrams. This can reduce the latency required for handshakes.</li>
 <li>QUIC uses a more nuanced loss recovery mechanism than the DTLS handshake, which has a basic packet loss retransmission timer. This may allow loss recovery to occur more quickly for QUIC data.</li>
 <li>QUIC datagrams, while unreliable, can support acknowledgements, allowing applications to be aware of whether a datagram was successfully received.</li>
+<li>QUIC datagrams are subject to QUIC congestion control, allowing applications to avoid implementing their own.</li>
 </ul>
 <p id="rfc.section.2.p.3">These reductions in connection latency, and application insight into the delivery of datagrams, can be useful for optimizing audio/video streaming applications, gaming applications, and other real-time network applications.</p>
 <p id="rfc.section.2.p.4">Unreliable QUIC datagrams can also be used to implement an IP packet tunnel over QUIC, such as for a Virtual Private Network (VPN).  Internet-layer tunneling protocols generally require a reliable and authenticated handshake, followed by unreliable secure transmission of IP packets. This can, for example, require a TLS connection for the control data, and DTLS for tunneling IP packets. A single QUIC connection could support both parts with the use of unreliable datagrams.</p>
@@ -478,7 +473,7 @@ ul.toc li {
 <h1 id="rfc.section.5.3">
 <a href="#rfc.section.5.3">5.3.</a> <a href="#congestion-control" id="congestion-control">Congestion Control</a>
 </h1>
-<p id="rfc.section.5.3.p.1">DATAGRAM frames are subject to a QUIC connection&#8217;s congestion control.  Specifically, if a DATAGRAM frame is enqueued to be sent by the application, but sending a packet with this frame is not allowed by the congestion control window as specified in <a href="#I-D.ietf-quic-recovery" class="xref">[I-D.ietf-quic-recovery]</a>, the packet cannot be sent.  The sender implementation MUST either drop the frame without sending it (at which point it MAY notify the application) or else delay sending the frame until the window opens.</p>
+<p id="rfc.section.5.3.p.1">DATAGRAM frames employ the QUIC connection&#8217;s congestion controller. As a result, a connection may be unable to send a DATAGRAM frame generated by the application until the congestion controller allows it <a href="#I-D.ietf-quic-recovery" class="xref">[I-D.ietf-quic-recovery]</a>. The sender implementation MUST either&#160;delay sending the frame until the controller allows it or drop the frame without sending it (at which point it MAY notify the application).</p>
 <p id="rfc.section.5.3.p.2">Implementations can optionally support allowing the application to specify a sending expiration time, beyond which a congestion-controlled DATAGRAM frame ought to be dropped without transmission.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
@@ -629,4 +624,3 @@ ul.toc li {
 
 </body>
 </html>
-
