@@ -121,7 +121,11 @@ max_datagram_frame_size transport parameter MUST terminate the connection with
 error PROTOCOL_VIOLATION. An endpoint that receives a DATAGRAM frame that is
 strictly larger than the value it sent in its max_datagram_frame_size
 transport parameter MUST terminate the connection with error
-PROTOCOL_VIOLATION.
+PROTOCOL_VIOLATION. Endpoints that wish to use DATAGRAM frames need to ensure
+they send a max_datagram_frame_size value sufficient to allow their peer to
+use them. It is RECOMMENDED to send the value 65536 in the
+max_datagram_frame_size transport parameter as that indicates to the peer that
+this endpoint will accept any DATAGRAM frame that fits inside a QUIC packet.
 
 When clients use 0-RTT, they MAY store the value of the server's
 max_datagram_frame_size transport parameter. Doing so allows the client to send
