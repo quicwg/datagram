@@ -134,6 +134,11 @@ validate that the new value of the max_datagram_frame_size transport parameter
 sent by the server in the handshake is greater or equal to the stored value;
 if not, the client MUST terminate the connection with error PROTOCOL_VIOLATION.
 
+Application protocols that use datagrams MUST define how they react to the
+max_datagram_frame_size transport parameter being missing. If datagram support
+is integral to the application, the application protocol can fail the handshake
+if the max_datagram_frame_size transport parameter is not present.
+
 # Datagram Frame Type
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
