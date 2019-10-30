@@ -2,6 +2,10 @@
 
 This is the working area for the Individual internet-draft, "An Unreliable Datagram Extension to QUIC".
 
+* [Editor's Copy](https://tfpauly.github.io/draft-pauly-quic-datagram/draft-pauly-quic-datagram.html)
+* [Individual Draft](https://tools.ietf.org/html/draft-pauly-quic-datagram)
+* [Compare Editor's Copy to Individual Draft](https://tfpauly.github.io/draft-pauly-quic-datagram/#go.draft-pauly-quic-datagram.diff)
+
 ## Building the Draft
 
 Formatted text and HTML versions of the draft can be built using `make`.
