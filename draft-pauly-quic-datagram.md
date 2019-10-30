@@ -43,6 +43,10 @@ This document defines an extension to the QUIC transport protocol to
 add support for sending and receiving unreliable datagrams over
 a QUIC connection.
 
+Discussion of this work is encouraged to happen on the QUIC IETF mailing list
+<quic@ietf.org> or on the GitHub repository which contains the draft:
+<https://github.com/tfpauly/draft-pauly-quic-datagram>.
+
 --- middle
 
 # Introduction
@@ -61,6 +65,10 @@ a cryptographic and authentication context used for reliable streams.
 
 This document defines four new DATAGRAM QUIC frame types, which
 carry application data without requiring retransmissions.
+
+Discussion of this work is encouraged to happen on the QUIC IETF mailing list
+<quic@ietf.org> or on the GitHub repository which contains the draft:
+<https://github.com/tfpauly/draft-pauly-quic-datagram>.
 
 ## Specification of Requirements
 
