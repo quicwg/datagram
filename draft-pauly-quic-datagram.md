@@ -172,7 +172,7 @@ DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 
 Application protocols using datagrams are responsible for defining the
 semantics of the Datagram Data field, and how it is parsed. If the application
-protocol supports the cohabitation of multiple entities using datagrams inside
+protocol supports the coexistence of multiple entities using datagrams inside
 a single QUIC connection, it may need a mechanism to allow demultiplexing
 between them. For example, using datagrams with HTTP/3 involves prepending
 a flow identifier to all datagrams, see {{?I-D.schinazi-quic-h3-datagram}}.
