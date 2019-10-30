@@ -123,6 +123,17 @@ strictly larger than the value it sent in its max_datagram_frame_size
 transport parameter MUST terminate the connection with error
 PROTOCOL_VIOLATION.
 
+When clients use 0-RTT, they MAY store the value of the server's
+max_datagram_frame_size transport parameter. Doing so allows the client to send
+DATAGRAM frames in 0-RTT packets. When servers decide to accept 0-RTT data,
+they MUST send a max_datagram_frame_size transport parameter greater or equal
+to the value they sent to the client in the connection where they sent them
+the NewSessionTicket message. If a client stores the value of the
+max_datagram_frame_size transport parameter with their 0-RTT state, they MUST
+validate that the new value of the max_datagram_frame_size transport parameter
+sent by the server in the handshake is greater or equal to the stored value;
+if not, the client MUST terminate the connection with error PROTOCOL_VIOLATION.
+
 Application protocols that use datagrams MUST define how they react to the
 max_datagram_frame_size transport parameter being missing. If datagram support
 is integral to the application, the application protocol can fail the handshake
@@ -156,7 +167,8 @@ Length:
 
 : A variable-length integer specifying the length of the datagram in bytes. This field
 is present only when the LEN bit is set. If the LEN bit is not set, the datagram data
-extends to the end of the QUIC packet.
+extends to the end of the QUIC packet. Note that empty (i.e., zero-length)
+datagrams are allowed.
 
 Datagram Data:
 
@@ -175,12 +187,12 @@ and can store the contents in memory.
 
 DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 
-Application protocols using datagrams might need to differentiate categories or
-flows of datagrams being transmitted over a single QUIC connection.
-Each application protocol is expected to define its own mechanism for
-adding flow identifiers or similar mechanisms to the datagram payloads
-being sent over the QUIC connection. For example, the use of datagrams with
-HTTP/3 is defined in {{?I-D.schinazi-quic-h3-datagram}}.
+Application protocols using datagrams are responsible for defining the
+semantics of the Datagram Data field, and how it is parsed. If the application
+protocol supports the coexistence of multiple entities using datagrams inside
+a single QUIC connection, it may need a mechanism to allow demultiplexing
+between them. For example, using datagrams with HTTP/3 involves prepending
+a flow identifier to all datagrams, see {{?I-D.schinazi-quic-h3-datagram}}.
 
 ## Acknowledgement Handling
 
