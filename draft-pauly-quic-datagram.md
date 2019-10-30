@@ -194,6 +194,13 @@ a single QUIC connection, it may need a mechanism to allow demultiplexing
 between them. For example, using datagrams with HTTP/3 involves prepending
 a flow identifier to all datagrams, see {{?I-D.schinazi-quic-h3-datagram}}.
 
+Note that while the max_datagram_frame_size transport parameter places a limit
+on the maximum size of DATAGRAM frames, that limit can be further reduced by
+the max_packet_size transport parameter, and by the Maximum Transmission Unit
+(MTU) of the path between endpoints. DATAGRAM frames cannot be fragmented,
+therefore application protocols need to handle cases where the maximum datagram
+size is limited by other factors.
+
 ## Acknowledgement Handling
 
 Although DATAGRAM frames are not retransmitted upon loss detection, they are
