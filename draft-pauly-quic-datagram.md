@@ -185,11 +185,13 @@ ACK frames (within the limits specified by max_ack_delay) in reponse to receivin
 packets that only contain DATAGRAM frames, since the timing of these
 acknowledgements is not used for loss recovery.
 
-If a sender detects that a packet containing a specific DATAGRAM frame has been
-lost, the implementation MAY notify the application that the datagram was lost.
-Similarly, if a packet containing a DATAGRAM frame is acknowledged, the
-implementation MAY notify the application that the datagram was successfully
-transmitted and received.
+If a sender detects that a packet containing a specific DATAGRAM frame might
+have been lost, the implementation MAY notify the application that it believes
+the datagram was lost. Similarly, if a packet containing a DATAGRAM frame is
+acknowledged, the implementation MAY notify the application that the datagram
+was successfully transmitted and received. Note that, due to reordering, a
+DATAGRAM frame that was thought to be lost could at a later point be received
+and acknowledged.
 
 ## Flow Control
 
