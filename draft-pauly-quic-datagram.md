@@ -171,12 +171,12 @@ and can store the contents in memory.
 
 DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 
-Application protocols using datagrams might need to differentiate categories or
-flows of datagrams being transmitted over a single QUIC connection.
-Each application protocol is expected to define its own mechanism for
-adding flow identifiers or similar mechanisms to the datagram payloads
-being sent over the QUIC connection. For example, the use of datagrams with
-HTTP/3 is defined in {{?I-D.schinazi-quic-h3-datagram}}.
+Application protocols using datagrams are responsible for defining the
+semantics of the Datagram Data field, and how it is parsed. If the application
+protocol supports the coexistence of multiple entities using datagrams inside
+a single QUIC connection, it may need a mechanism to allow demultiplexing
+between them. For example, using datagrams with HTTP/3 involves prepending
+a flow identifier to all datagrams, see {{?I-D.schinazi-quic-h3-datagram}}.
 
 ## Acknowledgement Handling
 
