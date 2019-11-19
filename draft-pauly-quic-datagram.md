@@ -63,7 +63,7 @@ Extending QUIC to support transmitting unreliable application data would
 provide another option for secure datagrams, with the added benefit of sharing
 a cryptographic and authentication context used for reliable streams.
 
-This document defines four new DATAGRAM QUIC frame types, which
+This document defines two new DATAGRAM QUIC frame types, which
 carry application data without requiring retransmissions.
 
 Discussion of this work is encouraged to happen on the QUIC IETF mailing list
