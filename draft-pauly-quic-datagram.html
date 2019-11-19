@@ -299,7 +299,7 @@ ul.toc li {
 
   <meta name="dct.creator" content="Pauly, T., Kinnear, E., and D. Schinazi" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-pauly-quic-datagram-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-10-30" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-11-19" />
   <meta name="dct.abstract" content="This document defines an extension to the QUIC transport protocol to add support for sending and receiving unreliable datagrams over a QUIC connection." />
   <meta name="description" content="This document defines an extension to the QUIC transport protocol to add support for sending and receiving unreliable datagrams over a QUIC connection." />
 
@@ -323,7 +323,7 @@ ul.toc li {
 <td class="right">Apple Inc.</td>
 </tr>
 <tr>
-<td class="left">Expires: May 2, 2020</td>
+<td class="left">Expires: May 22, 2020</td>
 <td class="right">D. Schinazi</td>
 </tr>
 <tr>
@@ -332,7 +332,7 @@ ul.toc li {
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">October 30, 2019</td>
+<td class="right">November 19, 2019</td>
 </tr>
 
     	
@@ -349,7 +349,7 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on May 2, 2020.</p>
+<p>This Internet-Draft will expire on May 22, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -400,7 +400,7 @@ ul.toc li {
 </h1>
 <p id="rfc.section.1.p.1">The QUIC Transport Protocol <a href="#I-D.ietf-quic-transport" class="xref">[I-D.ietf-quic-transport]</a> provides a secure, multiplexed connection for transmitting reliable streams of application data.  Reliability within QUIC is performed on a per-stream basis, so some frame types are not eligible for retransmission.</p>
 <p id="rfc.section.1.p.2">Some applications, particularly those that need to transmit real-time data, prefer to transmit data unreliably. These applications can build directly upon UDP <a href="#RFC0768" class="xref">[RFC0768]</a> as a transport, and can add security with DTLS <a href="#RFC6347" class="xref">[RFC6347]</a>.  Extending QUIC to support transmitting unreliable application data would provide another option for secure datagrams, with the added benefit of sharing a cryptographic and authentication context used for reliable streams.</p>
-<p id="rfc.section.1.p.3">This document defines four new DATAGRAM QUIC frame types, which carry application data without requiring retransmissions.</p>
+<p id="rfc.section.1.p.3">This document defines two new DATAGRAM QUIC frame types, which carry application data without requiring retransmissions.</p>
 <p id="rfc.section.1.p.4">Discussion of this work is encouraged to happen on the QUIC IETF mailing list <a href="mailto:quic@ietf.org">quic@ietf.org</a> or on the GitHub repository which contains the draft: <a href="https://github.com/tfpauly/draft-pauly-quic-datagram">https://github.com/tfpauly/draft-pauly-quic-datagram</a>.</p>
 <h1 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> <a href="#specification-of-requirements" id="specification-of-requirements">Specification of Requirements</a>

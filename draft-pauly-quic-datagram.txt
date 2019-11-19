@@ -5,9 +5,9 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                E. Kinnear
 Intended status: Standards Track                              Apple Inc.
-Expires: May 2, 2020                                         D. Schinazi
+Expires: May 22, 2020                                        D. Schinazi
                                                               Google LLC
-                                                        October 30, 2019
+                                                       November 19, 2019
 
 
                 An Unreliable Datagram Extension to QUIC
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 2, 2020.
+   This Internet-Draft will expire on May 22, 2020.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Pauly, et al.              Expires May 2, 2020                  [Page 1]
+Pauly, et al.             Expires May 22, 2020                  [Page 1]
 
-Internet-Draft               QUIC Datagrams                 October 2019
+Internet-Draft               QUIC Datagrams                November 2019
 
 
    carefully, as they describe your rights and restrictions with respect
@@ -100,7 +100,7 @@ Table of Contents
    datagrams, with the added benefit of sharing a cryptographic and
    authentication context used for reliable streams.
 
-   This document defines four new DATAGRAM QUIC frame types, which carry
+   This document defines two new DATAGRAM QUIC frame types, which carry
    application data without requiring retransmissions.
 
    Discussion of this work is encouraged to happen on the QUIC IETF
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Pauly, et al.              Expires May 2, 2020                  [Page 2]
+Pauly, et al.             Expires May 22, 2020                  [Page 2]
 
-Internet-Draft               QUIC Datagrams                 October 2019
+Internet-Draft               QUIC Datagrams                November 2019
 
 
    contains the draft: https://github.com/tfpauly/draft-pauly-quic-
@@ -165,9 +165,9 @@ Internet-Draft               QUIC Datagrams                 October 2019
 
 
 
-Pauly, et al.              Expires May 2, 2020                  [Page 3]
+Pauly, et al.             Expires May 22, 2020                  [Page 3]
 
-Internet-Draft               QUIC Datagrams                 October 2019
+Internet-Draft               QUIC Datagrams                November 2019
 
 
 3.  Transport Parameter
@@ -221,9 +221,9 @@ Internet-Draft               QUIC Datagrams                 October 2019
 
 
 
-Pauly, et al.              Expires May 2, 2020                  [Page 4]
+Pauly, et al.             Expires May 22, 2020                  [Page 4]
 
-Internet-Draft               QUIC Datagrams                 October 2019
+Internet-Draft               QUIC Datagrams                November 2019
 
 
 4.  Datagram Frame Type
@@ -277,9 +277,9 @@ Internet-Draft               QUIC Datagrams                 October 2019
 
 
 
-Pauly, et al.              Expires May 2, 2020                  [Page 5]
+Pauly, et al.             Expires May 22, 2020                  [Page 5]
 
-Internet-Draft               QUIC Datagrams                 October 2019
+Internet-Draft               QUIC Datagrams                November 2019
 
 
    entities using datagrams inside a single QUIC connection, it may need
@@ -333,9 +333,9 @@ Internet-Draft               QUIC Datagrams                 October 2019
 
 
 
-Pauly, et al.              Expires May 2, 2020                  [Page 6]
+Pauly, et al.             Expires May 22, 2020                  [Page 6]
 
-Internet-Draft               QUIC Datagrams                 October 2019
+Internet-Draft               QUIC Datagrams                November 2019
 
 
    it [I-D.ietf-quic-recovery].  The sender implementation MUST
@@ -389,9 +389,9 @@ Internet-Draft               QUIC Datagrams                 October 2019
 
 
 
-Pauly, et al.              Expires May 2, 2020                  [Page 7]
+Pauly, et al.             Expires May 22, 2020                  [Page 7]
 
-Internet-Draft               QUIC Datagrams                 October 2019
+Internet-Draft               QUIC Datagrams                November 2019
 
 
 9.  References
@@ -445,9 +445,9 @@ Internet-Draft               QUIC Datagrams                 October 2019
 
 
 
-Pauly, et al.              Expires May 2, 2020                  [Page 8]
+Pauly, et al.             Expires May 22, 2020                  [Page 8]
 
-Internet-Draft               QUIC Datagrams                 October 2019
+Internet-Draft               QUIC Datagrams                November 2019
 
 
 Authors' Addresses
@@ -501,4 +501,4 @@ Authors' Addresses
 
 
 
-Pauly, et al.              Expires May 2, 2020                  [Page 9]
+Pauly, et al.             Expires May 22, 2020                  [Page 9]
