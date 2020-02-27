@@ -1,7 +1,7 @@
 ---
 title: An Unreliable Datagram Extension to QUIC
 abbrev: QUIC Datagrams
-docname: draft-pauly-quic-datagram-latest
+docname: draft-ietf-quic-datagram-latest
 date:
 category: std
 
@@ -45,7 +45,7 @@ a QUIC connection.
 
 Discussion of this work is encouraged to happen on the QUIC IETF mailing list
 <quic@ietf.org> or on the GitHub repository which contains the draft:
-<https://github.com/tfpauly/draft-pauly-quic-datagram>.
+<https://github.com/quicwg/datagram>.
 
 --- middle
 
@@ -68,7 +68,7 @@ carry application data without requiring retransmissions.
 
 Discussion of this work is encouraged to happen on the QUIC IETF mailing list
 <quic@ietf.org> or on the GitHub repository which contains the draft:
-<https://github.com/tfpauly/draft-pauly-quic-datagram>.
+<https://github.com/quicwg/datagram>.
 
 ## Specification of Requirements
 
