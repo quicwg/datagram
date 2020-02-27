@@ -1,10 +1,10 @@
 #  An Unreliable Datagram Extension to QUIC
 
-This is the working area for the Individual internet-draft, "An Unreliable Datagram Extension to QUIC".
+This is the working area for the IETF QUIC Working Group internet-draft, "An Unreliable Datagram Extension to QUIC".
 
-* [Editor's Copy](https://tfpauly.github.io/draft-pauly-quic-datagram/draft-pauly-quic-datagram.html)
-* [Individual Draft](https://tools.ietf.org/html/draft-pauly-quic-datagram)
-* [Compare Editor's Copy to Individual Draft](https://tfpauly.github.io/draft-pauly-quic-datagram/#go.draft-pauly-quic-datagram.diff)
+* [Editor's Copy](https://quicwg.org/datagram/draft-ietf-quic-datagram.html)
+* [Working Group Draft](https://tools.ietf.org/html/draft-ietf-quic-datagram)
+* [Compare Editor's Copy to Working Group Draft](https://quicwg.org/datagram/#go.draft-ietf-quic-datagram.diff)
 
 ## Building the Draft
 
@@ -23,7 +23,7 @@ instructions](https://github.com/martinthomson/i-d-template/blob/master/doc/SETU
 Before submitting feedback, please familiarize yourself with our current issues
 list and review the [working group
 documents](https://datatracker.ietf.org/wg/post/documents/) and [mailing
-list discussion](https://mailarchive.ietf.org/arch/browse/post/). If you're
+list discussion](https://mailarchive.ietf.org/arch/browse/quic/). If you're
 new to this, you may also want to read the [Tao of the
 IETF](https://www.ietf.org/tao.html).
 
@@ -32,7 +32,7 @@ terms outlined below.
 
 1. The best way to provide feedback (editorial or design) and ask questions is
 sending an e-mail to our mailing list
-([info](https://www.ietf.org/mailman/listinfo/post)). This will ensure that
+([info](https://www.ietf.org/mailman/listinfo/quic)). This will ensure that
 the entire Working Group sees your input in a timely fashion.
 
 2. If you have **editorial** suggestions (i.e., those that do not change the
