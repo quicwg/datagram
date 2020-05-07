@@ -117,42 +117,46 @@ datagrams.
 # Transport Parameter
 
 Support for receiving the DATAGRAM frame types is advertised by means
-of a QUIC Transport Parameter (name=max_datagram_frame_size, value=0x0020).
-The max_datagram_frame_size transport parameter is an integer value
+of a QUIC Transport Parameter (name=max_datagram_payload_size, value=0x0020).
+The max_datagram_payload_size transport parameter is an integer value
 (represented as a variable-length integer) that represents the maximum
-size of a DATAGRAM frame (including the frame type, length, and
-payload) the endpoint is willing to receive, in bytes. An endpoint that
-includes this parameter supports the DATAGRAM frame types and is willing to
-receive such frames on this connection. Endpoints MUST NOT send DATAGRAM
-frames until they have sent and received the max_datagram_frame_size transport
-parameter. Endpoints MUST NOT send DATAGRAM frames of size strictly larger
-than the value of max_datagram_frame_size the endpoint has received from its
+length of a DATAGRAM frame payload the endpoint is willing to receive, in bytes.
+An endpoint that includes this parameter supports the DATAGRAM frame types and
+is willing to receive such frames on this connection. Endpoints MUST NOT send
+DATAGRAM frames until they have received the max_datagram_payload_size transport
+parameter. Endpoints MUST NOT send DATAGRAM payloads of size strictly larger
+than the value of max_datagram_payload_size the endpoint has received from its
 peer. An endpoint that receives a DATAGRAM frame when it has not sent the
-max_datagram_frame_size transport parameter MUST terminate the connection with
-error PROTOCOL_VIOLATION. An endpoint that receives a DATAGRAM frame that is
-strictly larger than the value it sent in its max_datagram_frame_size
+max_datagram_payload_size transport parameter MUST terminate the connection with
+error PROTOCOL_VIOLATION. An endpoint that receives a DATAGRAM payload that is
+strictly larger than the value it sent in its max_datagram_payload_size
 transport parameter MUST terminate the connection with error
 PROTOCOL_VIOLATION. Endpoints that wish to use DATAGRAM frames need to ensure
-they send a max_datagram_frame_size value sufficient to allow their peer to
+they send a max_datagram_payload_size value sufficient to allow their peer to
 use them. It is RECOMMENDED to send the value 65536 in the
-max_datagram_frame_size transport parameter as that indicates to the peer that
+max_datagram_payload_size transport parameter as that indicates to the peer that
 this endpoint will accept any DATAGRAM frame that fits inside a QUIC packet.
 
+The max_datagram_payload_size transport parameter is a unidirectional limit and
+indication of support of DATAGRAM frames. It is allowable for a protocol to
+specify use of DATAGRAM frames in only a single direction.
+
 When clients use 0-RTT, they MAY store the value of the server's
-max_datagram_frame_size transport parameter. Doing so allows the client to send
+max_datagram_payload_size transport parameter. Doing so allows the client to send
 DATAGRAM frames in 0-RTT packets. When servers decide to accept 0-RTT data,
-they MUST send a max_datagram_frame_size transport parameter greater or equal
+they MUST send a max_datagram_payload_size transport parameter greater or equal
 to the value they sent to the client in the connection where they sent them
 the NewSessionTicket message. If a client stores the value of the
-max_datagram_frame_size transport parameter with their 0-RTT state, they MUST
-validate that the new value of the max_datagram_frame_size transport parameter
+max_datagram_payload_size transport parameter with their 0-RTT state, they MUST
+validate that the new value of the max_datagram_payload_size transport parameter
 sent by the server in the handshake is greater or equal to the stored value;
 if not, the client MUST terminate the connection with error PROTOCOL_VIOLATION.
 
 Application protocols that use datagrams MUST define how they react to the
-max_datagram_frame_size transport parameter being missing. If datagram support
-is integral to the application, the application protocol can fail the handshake
-if the max_datagram_frame_size transport parameter is not present.
+max_datagram_payload_size transport parameter being missing or only sent by one
+of the endpoints. If datagram support is integral to the application, the
+application protocol can fail the handshake if the max_datagram_payload_size
+transport parameter is not present.
 
 # Datagram Frame Type
 
@@ -209,8 +213,8 @@ a single QUIC connection, it may need a mechanism to allow demultiplexing
 between them. For example, using datagrams with HTTP/3 involves prepending
 a flow identifier to all datagrams, see {{?I-D.schinazi-quic-h3-datagram}}.
 
-Note that while the max_datagram_frame_size transport parameter places a limit
-on the maximum size of DATAGRAM frames, that limit can be further reduced by
+Note that while the max_datagram_payload_size transport parameter places a limit
+on the maximum size of DATAGRAM payload, that limit can be further reduced by
 the max_packet_size transport parameter, and by the Maximum Transmission Unit
 (MTU) of the path between endpoints. DATAGRAM frames cannot be fragmented,
 therefore application protocols need to handle cases where the maximum datagram
@@ -273,14 +277,13 @@ Value:
 
 Parameter Name:
 
-: max_datagram_frame_size
+: max_datagram_payload_size
 
 Specification:
 
-: Indicates that the connection should enable support for unreliable DATAGRAM
-frames. An endpoint that advertises this transport parameter can receive
-datagrams frames from the other endpoint, up to and including the length in
-bytes provided in the transport parameter.
+: An endpoint that advertises this transport parameter indicates it can
+receive datagrams frames from the other endpoint, with payload sizes up to
+and including the length in bytes provided in the transport parameter.
 
 This document also registers a new value in the QUIC Frame Type registry:
 
