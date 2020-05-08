@@ -124,7 +124,7 @@ size of a DATAGRAM frame (including the frame type, length, and
 payload) the endpoint is willing to receive, in bytes. An endpoint that
 includes this parameter supports the DATAGRAM frame types and is willing to
 receive such frames on this connection. Endpoints MUST NOT send DATAGRAM
-frames until they have sent and received the max_datagram_frame_size transport
+frames until they have received the max_datagram_frame_size transport
 parameter. Endpoints MUST NOT send DATAGRAM frames of size strictly larger
 than the value of max_datagram_frame_size the endpoint has received from its
 peer. An endpoint that receives a DATAGRAM frame when it has not sent the
@@ -137,6 +137,10 @@ they send a max_datagram_frame_size value sufficient to allow their peer to
 use them. It is RECOMMENDED to send the value 65536 in the
 max_datagram_frame_size transport parameter as that indicates to the peer that
 this endpoint will accept any DATAGRAM frame that fits inside a QUIC packet.
+
+The max_datagram_frame_size transport parameter is a unidirectional limit and
+indication of support of DATAGRAM frames. It is allowable for a protocol to
+specify use of DATAGRAM frames in only a single direction.
 
 When clients use 0-RTT, they MAY store the value of the server's
 max_datagram_frame_size transport parameter. Doing so allows the client to send
