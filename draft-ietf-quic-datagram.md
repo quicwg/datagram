@@ -139,8 +139,8 @@ max_datagram_frame_size transport parameter as that indicates to the peer that
 this endpoint will accept any DATAGRAM frame that fits inside a QUIC packet.
 
 The max_datagram_frame_size transport parameter is a unidirectional limit and
-indication of support of DATAGRAM frames. It is allowable for a protocol to
-specify use of DATAGRAM frames in only a single direction.
+indication of support of DATAGRAM frames. Application protocols that use
+DATAGRAM frames MAY choose to only negotiate and use them in a single direction.
 
 When clients use 0-RTT, they MAY store the value of the server's
 max_datagram_frame_size transport parameter. Doing so allows the client to send
