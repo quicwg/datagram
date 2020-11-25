@@ -1,0 +1,40 @@
+<xml>
+<description>
+Welcome to the Anomaly Protection Layer!
+Datagrams moving from point A to point B can be lost do to an anomaly.  This is why a redundant BGP-like mechanism I call Anomaly Protection must be put in place
+</description>
+<datagram00>
+<header>
+GetHeader = 'true'
+</header>
+<payload>
+GetPayload = 'true'
+</payload>
+</datagram00>
+<datagram01>
+<header>
+GetHeader = 'true'
+</header>
+<payload>
+GetPayload = 'true'
+</payload>
+</datagram01>
+<datagram02>
+<header>
+GetHeader = 'true'
+</header>
+<payload>
+GetPayload = 'true'
+</payload>
+</datagram02>
+<datagram03>
+<header>
+GetHeader = 'true'
+</header>
+<payload>
+GetPayload = 'true'
+</payload>
+</datagram03>
+<comments>
+Applications should leave streams open a bit longer by way of so called Sleep functions to allow this checking of datagrams
+</comments>
