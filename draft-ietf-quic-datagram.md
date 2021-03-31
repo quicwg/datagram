@@ -126,7 +126,7 @@ payload) the endpoint is willing to receive, in bytes.
 The default for this parameter is 0, which indicates that the endpoint
 does not support DATAGRAM frames. A value greater than 0 indicates
 that the endpoint supports the DATAGRAM frame types and is willing to
-receive such rames on this connection.
+receive such frames on this connection.
 
 An endpoint MUST NOT send DATAGRAM frames until it has received the
 max_datagram_frame_size transport parameter with a non-zero value. An
