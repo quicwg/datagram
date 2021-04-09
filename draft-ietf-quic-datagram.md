@@ -4,6 +4,7 @@ abbrev: QUIC Datagrams
 docname: draft-ietf-quic-datagram-latest
 date:
 category: std
+wg: QUIC
 
 ipr: trust200902
 keyword: Internet-Draft
