@@ -1,0 +1,1853 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2021-06-15T23:16:18.675136+00:00",
+  "repo": "quicwg/datagram",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWU1NzIyMzgwODE=",
+      "title": "remind implementors of the \"fun\" parts of no flow control",
+      "url": "https://github.com/quicwg/datagram/issues/1",
+      "state": "OPEN",
+      "author": "DavidSchinazi",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Flow control is painful because getting it wrong is painful.\r\n\r\nNot having flow control doesn't mean having it done right!\r\n\r\nWould be great to have a brief reminder around this in the draft!\r\n\r\n(Issue copied from [individual draft repo](https://github.com/tfpauly/draft-pauly-quic-datagram/issues/33), by @grmocg on 2019-11-19)",
+      "createdAt": "2020-02-27T17:27:58Z",
+      "updatedAt": "2021-03-04T15:08:32Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I expect this may be covered when we add text for #15",
+          "createdAt": "2021-03-04T15:06:02Z",
+          "updatedAt": "2021-03-04T15:08:32Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWU1NzIyMzk0OTQ=",
+      "title": "Consider retransmission bit leakage",
+      "url": "https://github.com/quicwg/datagram/issues/2",
+      "state": "OPEN",
+      "author": "DavidSchinazi",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Rephrasing what I mentioned at the mic, imagine a scenario where an application uses DATAGRAM to send a single fixed message (\"fire the missile\"). An adversary on path can start selectively dropping packets and checking to see whether or not they're retransmitted to learn whether or not this special message was sent. (Retransmission detection could be done by looking at the size of the QUIC packet carrying the DATAGRAM, for example.)\r\n\r\nI don't claim this is easy to do in practice, or useful, but I think it does raise interesting questions about how this new frame affects QUIC's security posture. Perhaps some text in the security considerations is needed?\r\n\r\n(Issue copied from [individual draft repo](https://github.com/tfpauly/draft-pauly-quic-datagram/issues/32), by @chris-wood on 2019-11-19)",
+      "createdAt": "2020-02-27T17:30:15Z",
+      "updatedAt": "2021-03-10T12:34:33Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "[Comment](https://github.com/tfpauly/draft-pauly-quic-datagram/issues/32#issuecomment-589646535) from @mikkelfj on 2020-02-21:\r\n\r\nHow would that be different from streams in ordinary QUIC? Here you can also drop packets and look for retransmissions of a specific size? If there is overlap, this issue belongs to QUIC transport security considerations in general.",
+          "createdAt": "2020-02-27T17:32:57Z",
+          "updatedAt": "2020-02-27T17:32:57Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "NONE",
+          "body": "I think the key here is that, in dropping the special datagram frame and *not* seeing anything retransmitted, one could learn something about what was sent. ",
+          "createdAt": "2020-02-27T17:39:56Z",
+          "updatedAt": "2020-02-27T17:39:56Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "If we take my recommendation in #8 to always at least send out a PING frame/packet for PTOs or losses of DATAGRAM frame/packets then, it may mitigate this leakage some. There would always be something sent out on these selective losses. I'm not sure how hard it would be to determine if the lost packet was a DATAGRAM or not with this behavior. My guess is that it would be implementation dependent.",
+          "createdAt": "2020-05-07T16:35:37Z",
+          "updatedAt": "2020-05-07T16:35:37Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "MEMBER",
+          "body": "PING doesn't really cut it here, because presence and size matter.",
+          "createdAt": "2021-03-10T12:34:33Z",
+          "updatedAt": "2021-03-10T12:34:33Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWU1NzIyMzk1MDg=",
+      "title": "Specify Max Payload Size instead of Max Frame Size",
+      "url": "https://github.com/quicwg/datagram/issues/3",
+      "state": "OPEN",
+      "author": "DavidSchinazi",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Right now, the TP specifies a maximum frame size, including frame type, length and payload. This makes certain values invalid (0, 1?). Also, since this values practically is a kind of flow control, indicating how much data I'm willing to receive at a time, it's the payload length that's important here, not the framing.\r\n\r\nFor these reasons, I'm arguing to change this to specifying a maximum payload length. Then, the question of what a value of zero means. Should a value of 0 be the same thing as not present or should it mean that only 0 length datagrams are allowed? I think it is simpler to say that a value of zero is the same as not present (i.e. disabled).\r\n\r\n(Issue copied from [individual draft repo](https://github.com/tfpauly/draft-pauly-quic-datagram/issues/30), by @nibanks on 2019-11-18)",
+      "createdAt": "2020-02-27T17:30:16Z",
+      "updatedAt": "2021-03-10T13:49:59Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "[Comment](https://github.com/tfpauly/draft-pauly-quic-datagram/issues/30#issuecomment-555278937) from @Ralith on 2019-11-18:\r\n\r\nWasn't the legality of zero-length frames agreed upon in https://github.com/tfpauly/draft-pauly-quic-datagram/issues/19?\r\n\r\nI didn't even realize that the parameter wasn't payload size. Strongly agree that it should be.",
+          "createdAt": "2020-02-27T17:34:34Z",
+          "updatedAt": "2020-02-27T17:34:34Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "[Comment](https://github.com/tfpauly/draft-pauly-quic-datagram/issues/30#issuecomment-555436658) from @mikkelfj on 2019-11-19:\r\n\r\nI agree that is simpler to define zero to mean not allowed, but it is highly confusing to be forced to require a length of one if you specifically only use 0 length datagrams for heatbeats or similar. It would be better to a have separate indicator to reject datagrams altogether.",
+          "createdAt": "2020-02-27T17:35:26Z",
+          "updatedAt": "2020-02-27T17:35:26Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "> It would be better to a have separate indicator to reject datagrams altogether.\r\n\r\nIsn't this indicated by omitting the transport parameter entirely?",
+          "createdAt": "2020-02-28T03:56:13Z",
+          "updatedAt": "2020-02-28T03:56:13Z"
+        },
+        {
+          "author": "mikkelfj",
+          "authorAssociation": "NONE",
+          "body": "@Ralith If omitting the parameter indicates that data frames are not permitted, then this achieves the purpose, yes. So there is no need to have 0 means disabling. Hence it is better to have 0 mean 0 length, but still valid. This is the most natural representation, and there is a an actual meaning ful use of these, namely heartbeats. Further, by making it explicit that length 0 is the only valid, you can have a fast or lightweight implementation.",
+          "createdAt": "2020-03-05T09:39:05Z",
+          "updatedAt": "2020-03-05T09:39:05Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I wonder if we need this limit at all. It introduces implementation complexity and it's unclear why any implementation would like to limit the size of DATAGRAM frames (or payloads) they can receive. We already have `max_packet_size` for implementations that have a limit on their stack size.\r\n\r\nDoes anyone have a use-case where they'd like to limit the size of DATAGRAM frames (or payloads) specifically?",
+          "createdAt": "2020-05-08T22:35:31Z",
+          "updatedAt": "2020-05-08T22:35:31Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "I'm all for removing the limit. As I have it coded up in MsQuic, I always send a max value. It's not even configurable by the app. I don't think \"I have a buffering limit\" a good reason to have a limit. It's limited by a single packet already. That should be enough IMO.",
+          "createdAt": "2020-05-08T22:38:07Z",
+          "updatedAt": "2020-05-08T22:38:07Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "I don't think it's particularly useful to set this smaller than a packet, given that a reasonable buffer is bigger than that, and I'm not sure what a peer could usefully do with the information that the limit is larger than a packet. :+1:",
+          "createdAt": "2020-05-08T22:40:23Z",
+          "updatedAt": "2020-05-08T22:40:23Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "The more I think about it, limiting the size of the QUIC DATAGRAMS (frames or payloads) is weird. In part because there is no wiresignal to describe a max number of DATAGRAMS per packet, and we seem to have discounted the need for an internal API to configure how frames are composed in a packet. I don't hear anyone with use cases; removing the limit removes a whole load of edge cases and/or implementation defined behaviour. I think the simplification would be a win.",
+          "createdAt": "2020-05-13T18:19:08Z",
+          "updatedAt": "2020-05-13T18:19:08Z"
+        },
+        {
+          "author": "mikkelfj",
+          "authorAssociation": "NONE",
+          "body": "@DavidSchinazi One reason you might want to limit Datagrams is if you have a slottet buffering system for datagrams, for example 1K, or 256 bytes per datagram, or a paged system of multiple datagrams. In this case you cannot always fit a whole package into the buffering. For streams you have an entirely different mechanism, and other frames are generally not large.",
+          "createdAt": "2020-06-10T07:56:29Z",
+          "updatedAt": "2020-06-10T07:56:29Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@mikkelfj that's an interesting thought - is this something you're planning on implementing and have a use for, or is it more of a thought experiment?",
+          "createdAt": "2020-06-10T19:10:21Z",
+          "updatedAt": "2020-06-10T19:10:21Z"
+        },
+        {
+          "author": "mikkelfj",
+          "authorAssociation": "NONE",
+          "body": "@DavidSchinazi Unfortunately I've had to push back on my QUIC dev, but I did work with an emulation of netmap, on top of select / poll, that uses slots to receive packets from the OS without context switching. Sometimes a packet needs to span multiple slots, but often it just drops into a 2K slot or so. I could imagine many use cases where datagrams are redistributed to other threads or processes in a similar manner without having an explicit use case. I believe there are now several kernel interfaces that uses a similar approach.",
+          "createdAt": "2020-06-10T19:43:41Z",
+          "updatedAt": "2020-06-10T19:43:41Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "As far as I know, those kernel interfaces all use slots that are larger than the interface MTU, so I don't think they'd require reducing the payload size. Am I missing something?",
+          "createdAt": "2020-06-10T20:13:12Z",
+          "updatedAt": "2020-06-10T20:13:12Z"
+        },
+        {
+          "author": "mikkelfj",
+          "authorAssociation": "NONE",
+          "body": "Well, I can only speak for netmap, but it works by having the user specify one large memory block divided into a number of equal sized slots of a user specified size. Each slot has a control record with some flags. A record can indicate that the slot is partial and reference the next slot in the packet. So you can can choose a slot of 64K and waste a lot of memory, or choose a slot of 512 bytes and frequently have to deal with fragmenting. Or chose 2K for a use case where you know that you will not have larger payload and can afford the space overhead.\r\n\r\nEDIT: to clarify, it is the network driver that chooses to link data and update the control record when receiving, and the user process when writing.\r\n\r\nI'm not sure exactly how the other kernel interfaces behave but from memory it is rather much the same.\r\n\r\nFor QUIC datagrams it is a bit different in that you likely want to avoid fragmentation at all cost due to the added complexity and the non-stream nature of the data. If you could afford fragmentation it would make less sense to have a limit on the size.",
+          "createdAt": "2020-06-10T20:20:53Z",
+          "updatedAt": "2020-06-10T20:27:09Z"
+        },
+        {
+          "author": "dtikhonov",
+          "authorAssociation": "NONE",
+          "body": "I support switching to TP specifying max payload size.",
+          "createdAt": "2020-08-09T22:46:10Z",
+          "updatedAt": "2020-08-09T22:46:10Z"
+        },
+        {
+          "author": "vasilvv",
+          "authorAssociation": "NONE",
+          "body": "> I wonder if we need this limit at all. It introduces implementation complexity and it's unclear why any implementation would like to limit the size of DATAGRAM frames (or payloads) they can receive. We already have max_packet_size for implementations that have a limit on their stack size.\r\n\r\nIIRC, the original reason this limit was introduced is to allow QUIC proxies to communicate the max datagram size it gets from the MTU between itself and the backend.",
+          "createdAt": "2021-02-26T17:48:50Z",
+          "updatedAt": "2021-02-26T17:48:50Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "In my experience, a MASQUE proxy doesn't know that information at the time it opens a listening QUIC connection., and there is nothing to say that all backends would share the same value.",
+          "createdAt": "2021-02-26T17:53:25Z",
+          "updatedAt": "2021-02-26T17:53:25Z"
+        },
+        {
+          "author": "vasilvv",
+          "authorAssociation": "NONE",
+          "body": "This is not for MASQUE, but for a direct QUIC-to-QUIC proxy.",
+          "createdAt": "2021-02-26T17:58:35Z",
+          "updatedAt": "2021-02-26T17:58:35Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "OK, do you expect the max DATAGRAM frame size a backend expects to receive is smaller than the QUIC packet size it is willing to receive?",
+          "createdAt": "2021-02-26T18:09:59Z",
+          "updatedAt": "2021-02-26T18:09:59Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If we do have a max frame/perhaps size still defined, perhaps it makes sense to let this be updated by a new frame (MAX_DATAGRAM_SIZE).",
+          "createdAt": "2021-03-04T18:07:50Z",
+          "updatedAt": "2021-03-04T18:07:50Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "A MAX_DATAGRAM_SIZE frame would be tricky because of reordering. In QUIC, all the MAX_FOOBAR frames can only increase limits, but here I suspect for this to be useful we'd want to be able to lower the limit which greatly increases complexity.",
+          "createdAt": "2021-03-04T18:17:42Z",
+          "updatedAt": "2021-03-04T18:17:42Z"
+        },
+        {
+          "author": "vasilvv",
+          "authorAssociation": "NONE",
+          "body": "> OK, do you expect the max DATAGRAM frame size a backend expects to receive is smaller than the QUIC packet size it is willing to receive?\r\n\r\nI expect this to be fairly uncommon, but whenever this does happen, it would make the entire connection unreliable for datagrams, meaning the applications would have to do their own MTU discovery on top of the one QUIC already does.",
+          "createdAt": "2021-03-05T15:04:15Z",
+          "updatedAt": "2021-03-05T15:04:15Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "The default ought to be \"whatever fits in the PMTU\". ",
+          "createdAt": "2021-03-10T12:56:11Z",
+          "updatedAt": "2021-03-10T12:56:11Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "MEMBER",
+          "body": "Yes, you have to do PMTUD.  (What is pernicious here is that if you get too good at that, the value that you resolve to might not be good forever because your varints will use more bytes over time and so reduce available space.)",
+          "createdAt": "2021-03-10T12:58:59Z",
+          "updatedAt": "2021-03-10T12:58:59Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@martinthomson which varints will use more bytes here?",
+          "createdAt": "2021-03-10T13:38:02Z",
+          "updatedAt": "2021-03-10T13:38:02Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "MEMBER",
+          "body": "I was thinking about flow IDs.  If you are not reusing flow IDs, there is a good chance that those will get bigger over time.  But I guess that assumes use of flow IDs.\r\n\r\nMostly, I guess that DATAGRAM can be each sent in their own packet/datagram, so the size of other frames won't affect the space that is available.",
+          "createdAt": "2021-03-10T13:45:14Z",
+          "updatedAt": "2021-03-10T13:45:14Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yeah the flow ID is part of the payload as far as this document is concerned.\r\n\r\nOur implementation will try to coalesce DATAGRAM frames with other frames, but that doesn't impact the max possible payload size because if the DATAGRAM frame doesn't fit with other frames we just send it in its own packet.",
+          "createdAt": "2021-03-10T13:49:59Z",
+          "updatedAt": "2021-03-10T13:49:59Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "MDU6SXNzdWU1ODAyNjYzNzg=",
+      "title": "Instances of lowercase \"may\" ",
+      "url": "https://github.com/quicwg/datagram/issues/4",
+      "state": "CLOSED",
+      "author": "LPardue",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "There are several instances of lowercase \"may\" in this document. It is ambiguous if these are normative requirements or not.",
+      "createdAt": "2020-03-12T22:49:28Z",
+      "updatedAt": "2021-03-04T14:34:33Z",
+      "closedAt": "2021-03-04T14:34:33Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Could you elaborate on why it's ambiguous? We have a reference to RFC 8174.",
+          "createdAt": "2020-03-12T22:53:54Z",
+          "updatedAt": "2020-03-12T22:53:54Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "I sometimes assume typos :) If you're happy the present document is correct, I will close this issue",
+          "createdAt": "2020-03-12T23:01:39Z",
+          "updatedAt": "2020-03-12T23:01:58Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm not aware of errors like this, do you have any specific ones in mind?",
+          "createdAt": "2020-03-12T23:53:42Z",
+          "updatedAt": "2020-03-12T23:53:42Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "Gah, fat fingered accidental close.\r\n\r\nThe example that triggered opening this issue is below, I had to read this several times. Perhaps that's just a sign that editorial tweaks would help, regardless of the exact words in use\r\n\r\n> The risk associated with not providing flow control for DATAGRAM frames is that a receiver may not be able to commit the necessary resources to process the frames. For example, it may not be able to store the frame contents in memory. However, since DATAGRAM frames are inherently unreliable, they MAY be dropped by the receiver if the receiver cannot process them.",
+          "createdAt": "2020-03-13T00:01:04Z",
+          "updatedAt": "2020-03-13T00:01:04Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I can fix this",
+          "createdAt": "2021-03-03T23:30:50Z",
+          "updatedAt": "2021-03-03T23:30:50Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "MDU6SXNzdWU1OTE0OTk2NDc=",
+      "title": "Anti-affinity for unreliable datagrams",
+      "url": "https://github.com/quicwg/datagram/issues/5",
+      "state": "CLOSED",
+      "author": "LPardue",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Coming out of some discussion at the WebTransport BoF during IETF 107, @enygren created an issue on the WebTransport API https://github.com/WICG/web-transport/issues/109#issue-589450400:\r\n\r\n> There should be a way to specify that unreliable datagrams do not end up in the same packet, at least when the underlying QUIC or HTTP/3 interface is used. For HTTP/2, an equivalent behavior may be a way to indicate which packets get dropped or thinned when this is needed (eg, to disprefer adjacent packets from being dropped).\r\n\r\nWhile I don't think the DATAGRAM draft itself should concern itself with the API too much, I do wonder if there are some guidance or considerations that could be captured about coalescing of DATAGRAM frames in packets.",
+      "createdAt": "2020-03-31T23:17:27Z",
+      "updatedAt": "2020-05-07T17:37:25Z",
+      "closedAt": "2020-05-07T17:37:25Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm not sure what the value-add is here. Losses are often bursty so having two DATAGRAM frames in the same QUIC packet or in two separate QUIC packets sent back-to-back is likely to produce the same result.",
+          "createdAt": "2020-03-31T23:48:02Z",
+          "updatedAt": "2020-03-31T23:48:02Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "I tend to agree with @DavidSchinazi here. Assuming tail loss, which usually happens because a node in the path doesn't have enough buffer for in incoming packet that it must forward along, having all the data in one contiguous packet, or two separate, back to back packets would likely result in the same loss pattern.\r\n\r\nEither way, this seems like an implementation design decision (do I expose a knob for this or not?) and not really a spec decision.",
+          "createdAt": "2020-05-07T16:41:19Z",
+          "updatedAt": "2020-05-07T16:41:19Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "The problem I saw was that, being aware that losses happen and they can be bursty, and that the frames are unrecoverable, there are slightly different tradeoffs when deciding how to pack DATAGRAM frames vs how to pack STREAM frames.\r\n\r\nWhen frames per packet is roughly equal to the packet lost count, there is negligible difference I agree. When the frames-per-packet count gets larger there is greater risk from losses and so I think there is a problem but I've mostly convinced myself that the DATAGRAM draft cannot offer useful specific advice. Application protocols might be able to give specific guidance and there is nothing stopping them from doing so in a different spec,  and implementations will just do whatever they deem most optimal.\r\n\r\nClosing the issue, cheers.",
+          "createdAt": "2020-05-07T17:37:25Z",
+          "updatedAt": "2020-05-07T17:37:25Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "MDU6SXNzdWU2MDQ4NTYyMjM=",
+      "title": "No streams in datagrams?",
+      "url": "https://github.com/quicwg/datagram/issues/6",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I finally sat down and read this draft (nice work, BTW) and was somewhat sad to learn that QUIC won't natively support stream multiplexing for datagrams.\r\n\r\nIt is true that applications can implement this if they choose. But one nice thing about QUIC is that it takes care of this machinery on behalf of the application. This is a somewhat aesthetic concern, but it feels awkward to have one layer of stream multiplexing in QUIC and then another layer in the application. It would be ugly in our implementation, at least.\r\n\r\nMoving on to non-aesthetic issues: I don't have a full grasp of all the use cases for DATAGRAM, but if stream multiplexing is a common requirement, it would be good to move this into the transport. Applications that don't need this are free to do it all over one stream at a tiny loss in wire efficiency, or we could have a stream-less version if people are deeply concerned about one byte per frame.",
+      "createdAt": "2020-04-22T15:37:41Z",
+      "updatedAt": "2021-03-11T03:24:39Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "The argument for taking it out effectively identified that there is little point in putting something in the transport that the transport can't help with",
+          "createdAt": "2020-04-22T15:41:31Z",
+          "updatedAt": "2020-04-22T15:41:31Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "While HOL blocking advantages don't apply here, I'm not sure that it's true that the transport couldn't help. For example, a stream construct would make it much easier to handle priority of DATAGRAMs in the send buffer. There are other ways to solve this, but with streams we could use existing QUIC priority APIs.",
+          "createdAt": "2020-04-22T15:51:40Z",
+          "updatedAt": "2020-04-22T15:51:40Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "In Montreal I also argued for a design that could be used for streaming, but was out numbered at the time. @martinduke, I agree with your opinion that it would be best for the transport to provide this kind of interface, rather than requiring every app/protocol to implement it on top of this extension. I think the best path forward would be make a separate draft for unreliable streams.",
+          "createdAt": "2020-04-22T15:56:39Z",
+          "updatedAt": "2020-04-22T15:56:39Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "I guess I find this prioritization example confusing because the transport protocol doesn't include an expression of the priority on the wire. How does telling the remote endpoint the DATAGRAM flow ID (as we referred to it in previous discussions) help with things that are a concern for transport RX.",
+          "createdAt": "2020-04-22T16:04:25Z",
+          "updatedAt": "2020-04-22T16:04:25Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "As with reliable streams, all the priority negotiation is at the application layer and indeed, whether the multiplexing is in the transport or application doesn't matter.\r\n\r\nHowever, in the reliable case it is certainly useful for the transport to have the notion of streams so that it can send the highest-priority streams first. It is certainly possible to build a QUIC API that accepts datagram priority in the absence of transport streams, but it seems a lot more convenient to reuse the existing semantics.\r\n\r\nIf I'm in the rough here, this is not going to break the protocol. But it feels like a recipe for writing a bunch more code.",
+          "createdAt": "2020-04-22T16:22:37Z",
+          "updatedAt": "2020-04-22T16:22:37Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "I do understand what you're saying and it sounds valid but I'm attempting to channel some counter arguments back here. One main services the transport provides for streams is accounting of data stream data flow windows and stream IDs.\r\n\r\nDATAGRAM is attractive to applications that don't require the reliability that streams provide and the lack of a flow ID means it also doesn't come with the overhead of accounting mechanisms that aren't so useful for single-use atomic messages. \r\n\r\nI do think DATAGRAM draft would benefit from some clarification about the expectations of prioritizing DATAGRAM data, especially against STREAMS. But I don't think the flow ID is a requirement for that. \r\n\r\n\r\n",
+          "createdAt": "2020-04-22T17:12:31Z",
+          "updatedAt": "2020-04-22T17:12:31Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "A QUIC implementation could easily provide exactly the same API for managing datagram priority that it does for streams; neither need to be specified in detail by the draft, let alone present on the wire. I don't think adding a field to the wire representation could possibly save any code here; it's *more* complexity for every implementer, not less.",
+          "createdAt": "2020-04-22T17:17:56Z",
+          "updatedAt": "2020-04-22T17:17:56Z"
+        },
+        {
+          "author": "skissane",
+          "authorAssociation": "NONE",
+          "body": "I agree with @nibanks point about not requiring every higher level protocol that needs it to separately implement flow IDs. The [Using QUIC Datagrams with HTTP/3](https://tools.ietf.org/html/draft-schinazi-quic-h3-datagram-03) spec provides flow IDs. What if I am designing some new protocol to run on top of QUIC, other than HTTP/3, and I also have the need for multiple datagram flows? If the facility is in QUIC datagrams, then the QUIC library my protocol's implementors will be using is going to provide it to them for free. If the facility is in HTTP/3, few or no HTTP/3 implementations are going to allow just using bits of HTTP/3 in isolation from the rest of it. So it would force the implementors of my higher level protocol to reimplement this facility (or else I might just decide to base my protocol on top of HTTP/3 instead of QUIC \u2013 but that then gets away from the idea that QUIC is usable for more than just HTTP.)\r\n\r\nCouldn't the stuff about flow ID management in the HTTP/3 datagram spec just get moved to this spec instead? ",
+          "createdAt": "2020-06-21T09:23:36Z",
+          "updatedAt": "2020-06-21T09:23:36Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "One of the earlier drafts did have them combined exactly like that. The consensus of the group was to keep them separate. The main issue is that there is nothing at the transport layer that the flow ID influences, only the application. There\u2019s nothing saying APIs can\u2019t make this convenient to use, etc, but it doesn\u2019t necessarily belong in the fundamental wire image of the datagram. ",
+          "createdAt": "2020-06-21T21:09:56Z",
+          "updatedAt": "2020-06-21T21:09:56Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "To satisfy the flow ID allocation requirement of H3-datagram all that is needed is something like\r\n\r\n```\r\nglobal_flow_id_counter = [0 | 1]; //client even, server odd]\r\n\r\nget_unique_flow_id() {\r\n  r = global_flow_id;\r\n  global_flow_id += 1;\r\n  return r;\r\n}\r\n```\r\n\r\n*How* flow IDs are used is up to the application. And at that point, you're going to really benefit from well-formed application protocol and or/application-mapping. For example, there is no single answer to whether flow IDs are required nor how to bind flow IDs. So, IMO there really not a generic service that a QUIC library can provide to applications.",
+          "createdAt": "2020-06-22T10:55:39Z",
+          "updatedAt": "2020-06-22T10:55:53Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "> So, IMO there really not a generic service that a QUIC library can provide to applications.\r\n\r\nI personally disagree. The API for a library does more than just implement the protocol. It provides efficient ways to build application logic on top of protocol behavior too. Having the flow-ID at the protocol/library layer allows the API to provide a per-flow abstraction object, similar to a Stream object. This can allow for the app to associate different logic/context to different datagram flows (e.g. register a different receive callback for audio & video flows).\r\n\r\nIMO, this will be a very common usage on top of datagrams and will end up being reimplemented for every app/protocol built on top of datagrams. One of the primary points of the library/API to to implement logic once so that it may be reused for many different apps.\r\n\r\nAdditionally, I don't believe this kind of abstraction layer should be in the library/API unless it's also in the protocol. The goal of the API is to be cross-compatible with other implementations, generically. If my implementation has some custom flow-ID logic, but no other API does, what's the likelihood of interop issues?",
+          "createdAt": "2020-06-22T14:43:06Z",
+          "updatedAt": "2020-06-22T14:43:06Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "I could implement the same behaviour by registering a predicate to the QUIC library e.g. if N bytes of the QUIC DATAGRAM payload matches this pattern, visit this callback function. I don't have that today on the receive side but I do have that for purging pending items in my send queue, see https://github.com/LPardue/quiche/blob/datagram-frame-alt/src/lib.rs#L3090\r\n\r\n> IMO, this will be a very common usage on top of datagrams and will end up being reimplemented for every app/protocol built on top of datagrams. One of the primary points of the library/API to to implement logic once so that it may be reused for many different apps.\r\n\r\n> Additionally, I don't believe this kind of abstraction layer should be in the library/API unless it's also in the protocol. The goal of the API is to be cross-compatible with other implementations, generically. If my implementation has some custom flow-ID logic, but no other API does, what's the likelihood of interop issues?\r\n\r\nI agree. If I added my predicate-style generic method to my QUIC library, I could build on top of it to support the H3-Datagram flow IDs as a first-class API property. It's the job of the application mapping implementation to write the correct predicate, and any additional logic that may be needed such as only accepting flows that have been permitted by some other form of negotiation (such as a CONNECT-UDP method).\r\n\r\nJust adding a flow ID field leaves open a lot of questions, and I don't think they can be answered commonly across all the potential applications.",
+          "createdAt": "2020-06-22T15:46:04Z",
+          "updatedAt": "2020-06-22T15:46:04Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "From an API perspective, it is certainly useful to have the transport layer help demultiplex and put different flows in different send/receive queues in the application. To that end, I totally agree with you, @nibanks.\r\n\r\nHowever, the diversity of use cases for tracking datagram flows, and the possible ways that this could be usefully exposed to the application, means that building in one interpretation of demultiplexing based on a flow ID without a use for the transport itself may be unnecessarily limiting.\r\n\r\nThis is a common issue for how to do demultiplexing of application flows on top of a transport. In TAPS, we use protocol framers for the same thing, as a way for the application to tell the transport API \"I want to separate messages based on this, and pull out these fields as special markers (like a flow ID)\". (https://www.ietf.org/id/draft-ietf-taps-interface-06.html#name-message-framers) I imagine that a QUIC API should follow this model if it wants to make it easy for datagram applications to demultiplex without having to build their own demux layers.",
+          "createdAt": "2020-06-22T16:18:10Z",
+          "updatedAt": "2020-06-22T16:18:10Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "I confess to having a primarily aesthetic objection to having two different\nlayers of stream multiplexing in the stack, but I've been trying to figure\nout a reason streams might matter for the transport. I certainly can't come\nup with a killer app for transport streams. The best I can find are purely\nsend-side, so in theory they can be done with sufficiently rich APIs rather\nthan something on the wire. I guess the question is whether or not this is\ntoo much load to put on the QUIC API:\n\n- Priority. Without a transport-layer stream, the datagram API will have to\nspecify priority on a per-datagram basis.\n- Ordering. The draft should probably say a little more about ordering\nexpectations, but obviously there are no firm guarantees here. I can\ncertainly imagine QUIC reordering datagrams for its own reasons (e.g.\nsending a smaller packet first based on space available), and it might be\ngood for the application to specify that a certain subset of datagrams\nSHOULD be delivered in order. To do this without transport-layer datagram\nstreams, the API would have to provide some sort of datagram identifier\nthat could be ordered with respect to other datagram identifiers. It sounds\nclunky, if this use case could conceivably matter to anyone. Of course, the\nhigher-assurance way to do ordered delivery is to put a sequence number in\nthe application datagram frame and discard OOO datagrams at the receiver.\nbut it would be nice if QUIC didn't make things worse for these\napplications by arbitrary reordering.\n\nMartin\n\n\nOn Mon, Jun 22, 2020 at 9:18 AM Tommy Pauly <notifications@github.com>\nwrote:\n\n> From an API perspective, it is certainly useful to have the transport\n> layer help demultiplex and put different flows in different send/receive\n> queues in the application. To that end, I totally agree with you, @nibanks\n> <https://github.com/nibanks>.\n>\n> However, the diversity of use cases for tracking datagram flows, and the\n> possible ways that this could be usefully exposed to the application, means\n> that building in one interpretation of demultiplexing based on a flow ID\n> without a use for the transport itself may be unnecessarily limiting.\n>\n> This is a common issue for how to do demultiplexing of application flows\n> on top of a transport. In TAPS, we use protocol framers for the same thing,\n> as a way for the application to tell the transport API \"I want to separate\n> messages based on this, and pull out these fields as special markers (like\n> a flow ID)\". (\n> https://www.ietf.org/id/draft-ietf-taps-interface-06.html#name-message-framers)\n> I imagine that a QUIC API should follow this model if it wants to make it\n> easy for datagram applications to demultiplex without having to build their\n> own demux layers.\n>\n> \u2014\n> You are receiving this because you were mentioned.\n> Reply to this email directly, view it on GitHub\n> <https://github.com/quicwg/datagram/issues/6#issuecomment-647625014>, or\n> unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AF2EYEPSTB3HDKXBDQ4IBDLRX575FANCNFSM4MOIZPAQ>\n> .\n>\n",
+          "createdAt": "2020-06-22T18:26:55Z",
+          "updatedAt": "2020-06-22T18:26:55Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "Let's not conflate \"things it would be useful for a QUIC implementation to expose in its API\" with \"things that need to be mandated as part of the wire format.\" There can be discussion of options (not requirements) for the former in the text. Adding extra constraints to the wire format complicates *all* implementations, and makes applications with different requirements awkward.",
+          "createdAt": "2020-06-22T22:42:56Z",
+          "updatedAt": "2020-06-22T22:42:56Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "> To do this without transport-layer datagram streams, the API would have to provide some sort of datagram identifier that could be ordered with respect to other datagram identifiers.\r\n\r\nPurely API-level stream identifiers would work fine for this, as I [discussed previously](https://github.com/quicwg/datagram/issues/6#issuecomment-617914944). This would be pretty convenient and I think is a sensible thing for the draft to suggest (but not require).\r\n\r\nThe datagram extension as currently written is useful in part because it is so content-agnostic; there's plenty of room for more specialized extensions in the future if certain applications would benefit from a more complex wire format.",
+          "createdAt": "2020-06-22T22:49:16Z",
+          "updatedAt": "2020-06-22T22:49:16Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "Yes, I agree that would solve the problem.\n\nOn Mon, Jun 22, 2020 at 3:49 PM Benjamin Saunders <notifications@github.com>\nwrote:\n\n> To do this without transport-layer datagram streams, the API would have to\n> provide some sort of datagram identifier that could be ordered with respect\n> to other datagram identifiers.\n>\n> Purely API-level stream identifiers would work fine for this, as I discussed\n> previously\n> <https://github.com/quicwg/datagram/issues/6#issuecomment-617914944>.\n> This would be pretty convenient and I think is a sensible thing for the\n> draft to suggest (but not require).\n>\n> The datagram extension as currently written is useful in part because it\n> is so content-agnostic; there's plenty of room for more specialized\n> extensions in the future if certain applications would benefit from a more\n> complex wire format.\n>\n> \u2014\n> You are receiving this because you were mentioned.\n> Reply to this email directly, view it on GitHub\n> <https://github.com/quicwg/datagram/issues/6#issuecomment-647807171>, or\n> unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AF2EYEMNWFQM3YMTTY4K5SDRX7NXTANCNFSM4MOIZPAQ>\n> .\n>\n",
+          "createdAt": "2020-06-22T22:57:00Z",
+          "updatedAt": "2020-06-22T22:57:00Z"
+        },
+        {
+          "author": "Ericson2314",
+          "authorAssociation": "NONE",
+          "body": "I like this status quo. I've been mulling whether in fact all streaming an multiplexing could be done top of a QUIC connection used just for datagrams without loss of QOS. It's certainly not the path taken so far, but I like this datagram extension being pretty minimal to keep the future wider open.",
+          "createdAt": "2020-10-07T20:09:44Z",
+          "updatedAt": "2020-10-07T20:09:44Z"
+        },
+        {
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "body": "> Adding extra constraints to the wire format complicates all implementations, and makes applications with different requirements awkward.\r\n@Ralith I'm not sure that's the case here, the original design had an optional flow ID specified by the frame type, IIRC.",
+          "createdAt": "2020-10-07T20:49:33Z",
+          "updatedAt": "2020-10-07T20:49:33Z"
+        },
+        {
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "body": "I tend to agree that this is something that almost every user of datagrams is going to need to specify, and being able to interoperate multiple different protocols using datagrams on a single QUIC connection has come up quite a bit. We handled this before by punting it to H3 and saying that you need H3 to be involved to get that mux-ing, but it's been noted in this thread that you might not always have H3 involved.\r\n\r\nPreviously, this led us down into a conversation before we had figured out what alpn meant for QUIC, but at this point I think we've moved past that enough to not want each possible permutation of protocols in use/defined by a new alpn string to have a slightly different mechanism for handling flow identifiers, some of which might be compatible.\r\n\r\nIf we think that introduces too much complexity/other problems to tackle, then right now we've just moved that complexity into H3, which means we (a) still need to solve it, but (b) now everyone else cannot take advantage of that solution.",
+          "createdAt": "2020-10-07T20:51:18Z",
+          "updatedAt": "2020-10-07T20:51:18Z"
+        },
+        {
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "body": "To @tfpauly's TAPS comment, I think the question about having an additional [de]mux layer in between is the same as punting it to H3 -- we still need to figure out how to make that work, the question is just where do we group that effort and who can take advantage of it once that work has been done. If everyone always uses datagrams + demux-protocol, then that seems like a not-unreasonable outcome too.",
+          "createdAt": "2020-10-07T20:53:41Z",
+          "updatedAt": "2020-10-07T20:53:41Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": ">  @Ralith I'm not sure that's the case here, the original design had an optional flow ID specified by the frame type, IIRC.\r\n\r\nA design decision having been present in a prior draft does not cause it to not be a source of avoidable complication.\r\n\r\n> I tend to agree that this is something that almost every user of datagrams is going to need to specify.\r\n\r\nAs a user of datagrams, I do not need this.",
+          "createdAt": "2020-10-08T20:32:51Z",
+          "updatedAt": "2020-10-08T20:32:51Z"
+        },
+        {
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "body": "> A design decision having been present in a prior draft does not cause it to not be a source of avoidable complication.\r\n\r\nHmm, I think the key to the statement above was the _optionality_ of the flow ID, meaning that for use cases that did not require a flow ID, there was no additional space space taken and minimal complexity, since the behavior was exactly as it is today without flow IDs. ",
+          "createdAt": "2020-10-14T23:23:59Z",
+          "updatedAt": "2020-10-14T23:23:59Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "IIRC, support for both modes was mandatory for implementations, i.e. if you negotiated support for the extension during the handshake then you must accept flow IDs. That means it's additional implementation complexity.",
+          "createdAt": "2020-10-14T23:42:52Z",
+          "updatedAt": "2020-10-14T23:42:52Z"
+        },
+        {
+          "author": "skissane",
+          "authorAssociation": "NONE",
+          "body": "@Ralith if both modes were brought back, then support for the flow ID extension could be made optional for implementations, so those who didn't want to implement it didn't have to. However, I think in practice, most implementations would implement it if it existed. Optional features in protocols, if sufficiently widely implemented, end up becoming *de facto* mandatory. And if the most common higher level protocols were to require flow IDs (e.g. H3 datagrams), then almost all implementations would implement it even if it were technically optional.",
+          "createdAt": "2020-10-15T05:28:11Z",
+          "updatedAt": "2020-10-15T21:52:39Z"
+        },
+        {
+          "author": "quartzjer",
+          "authorAssociation": "NONE",
+          "body": "In the latest H3 QUIC DATAGRAM draft at https://tools.ietf.org/html/draft-schinazi-masque-h3-datagram-04#section-3 (bolding is mine):\r\n\r\n> Implementations of HTTP/3 that support the DATAGRAM extension MUST\r\n   provide a flow identifier allocation service.  That service will\r\n   allow **applications co-located with HTTP/3 to request a unique flow\r\n   identifier** that they can subsequently use for their own purposes.\r\n   The HTTP/3 implementation will then parse the flow identifier of\r\n   incoming DATAGRAM frames and use it to deliver the frame to the\r\n   appropriate application.\r\n\r\nI think this is an important point as to why the Flow ID should be moved to this spec instead as @skissane suggests.\r\n\r\nEvery single application that utilizes DATAGRAM must decide if it wants to support being \"co-located\" with others, and if it does it will more-than-likely be with HTTP/3 and use the Flow IDs specified there.  That may be sufficient to keep from there being incompatible approaches, but the more we can do to minimize diverging implementations the better IMO.\r\n\r\nBy adding it as an OPTIONAL section to this spec instead gives it increased visibility for implementers.  It doesn't restrict those that definitely do not need to make use of it, but it does provide a strong reference point for those that do and is relevant to their non-HTTP/3 applications.\r\n\r\nThere seems to be some consensus in this thread that such a compromise is acceptable?\r\n",
+          "createdAt": "2021-02-26T21:25:19Z",
+          "updatedAt": "2021-02-26T21:25:19Z"
+        },
+        {
+          "author": "vrubleg",
+          "authorAssociation": "NONE",
+          "body": "I was quite surprised that this spec doesn't specify a mandatory flow ID field. It is inconsistent with the main QUIC spec where having a lot of different flows through one QUIC connection is one of the main features.\r\n\r\nI think that the flow ID must be a mandatory field in this spec, to make all the QUIC based protocols extensible by default, just to let people to mux a few different QUIC based protocols into one QUIC connection easier.",
+          "createdAt": "2021-02-27T07:20:02Z",
+          "updatedAt": "2021-02-27T08:49:39Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "I'm still happy with having no flow ID in the frame. I've not heard a strong concrete case where the wire format needs this information.\r\n\r\nI'd like to circle back to the points on priority. QUIC is purposefully quiet on the point of signalling stream priority, this is something that every application mapping will have to reinvent, and we are happy with that design decision. Many potential clients for a feature doesn't mean we need to provide it.",
+          "createdAt": "2021-02-27T11:00:37Z",
+          "updatedAt": "2021-02-27T11:00:37Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "I tried to put together a list of all the scenarios that I think would make use of unreliable data delivery. I came up with the following:\r\n\r\n- VPN/tunneling\r\n- Audio/video streaming\r\n- Gaming\r\n- App-layer keep alives\r\n- Status updates (e.g. latest temp reading)\r\n\r\nFor every one of these scenarios I can imagine some level of multiplexing being used. For that reason, I personally think QUIC should provide the (optional) multiplexing functionality natively and **not** require the application layers to continually reinvent the wheel.\r\n\r\nTo @LPardue's comparison to priorities, I disagree with the analogy. I don't think that all QUIC-based application protocols actually need priorities, and even few need to explicitly signal them to the peer; so keeping priority signals out of the QUIC layer makes sense. In contrast, multiplexing (whether over streams or datagrams) is a **core** functionality for QUIC, and I strongly believe that should extend to unreliable data delivery.\r\n\r\nSo, since most application protocols would use it (IMO), we should include (as an option) a flow ID in datagrams to support multiplexing.",
+          "createdAt": "2021-02-27T17:33:09Z",
+          "updatedAt": "2021-02-27T17:33:09Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "I agree there are application use cases that can benefit from different logical flows. But the question that is at hand is, what services does the transport provide to those flows. There has to be a reason that it exists there. Do you want flow concurrency limits, do you want per-flow buffering etc\r\n\r\nOf the adopted work I am aware of in the IETF, to make multiplexing actually work, you need an application-layer signalling mechanism. This has been achieved using HTTP/3, to suit how HTTP uses QUIC. Are the needs of other application types similar?I think a lot of the work people anticipate needs doing can't be commonly solved; we risk tying up progress on DATAGRAM by designing an abstraction for loose requirements. ",
+          "createdAt": "2021-02-27T17:54:01Z",
+          "updatedAt": "2021-02-27T17:54:27Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "I agree there are different ways to possibly treat/view multiplexed unreliable delivery. On one extreme it is a fire and forget flow identifier and (unfragmented) byte blob; At the other extremely you have \"streams\" with unreliable delivery, and everything that goes with it (flow ID FC; per-flow FC; fragmentation/reassembly?). I **do not** think the datagram extension should encompass unreliable \"streams\". That is a far more complicated topic and should be left to it's own extension.\r\n\r\nI do believe this extension should encompass the first scenario. Just allow for an optional flow ID. As far as on the wire efficiency, it's cheapest to do it at the QUIC layer. We just use a separate code point for datagrams with flow ID and those without (as we had originally, right?). For the application layer to implement such optional behavior would require more space.\r\n\r\nPerhaps another way to look at i:. If enough people feel strongly about wanting this, but we can't get agreement here, would you really prefer a completely different extension (and associated draft) just to duplicate what's here but adds the flow ID? IMO, that seems like overkill. Worst case, I'd prefer to have two separate TPs in this draft to indicate support/negotiation for the two different types of datagram frames.",
+          "createdAt": "2021-02-27T18:06:52Z",
+          "updatedAt": "2021-02-27T18:19:26Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "Nick, this is a good spectrum of options / requirements. Thanks for pulling on this thread. \r\n\r\nFor the record, this is my individual opinion based on my own individual implementation experience. I feel DATAGRAM is close to done and revisiting a core design decision at a late stage is unfortunate. But if its the right thing to do then it pays to really probe this and make a decision we can agree to never revisit. \r\n\r\nI don't know if everyone would agree with your pick on the spectrum. Establishing consensus on what a transport Flow ID should provide is important.\r\n\r\nJust adding a varint to the payload of the current DATAGRAM frame is easy. An application mapping can copy the blueprint of HTTP/3 DATAGRAM. \r\n\r\nI will highlight that providing more options adds some complexity to application mappings. You'll be asking them to have to decide if they want to use a flow ID or not. For example, iff a flow-ID containing transport frame were added, then H3 DATAGRAM needs to be updated to prohibit 2 of the frame types; or MASQUE need to be updated to do the same.\r\n\r\nOn balance, I think the pros/cons of the current design are evenly balanced with the alternative (plus its knock on effects).",
+          "createdAt": "2021-02-27T18:26:47Z",
+          "updatedAt": "2021-02-27T18:27:37Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "One option is to define a new frame (`MULTIPLEXED_DATAGRAM`?) and associated TP, and just keep it logically separate from the `DATAGRAM` frame and TP. HTTP/3 could continue to only use the `DATAGRAM` frame/functionality, and H3/QUIC implementations could get away with not ever supporting the multiplexed variant. If we went with that approach, would you prefer a completely separate draft for that? IMO, that would entail a lot of duplication of the non-framing specific text.",
+          "createdAt": "2021-02-27T18:32:47Z",
+          "updatedAt": "2021-02-27T18:33:07Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "I think that because there is so much overlap between the two types that, whether they are in one document or two, aapplication mappings and implementers would face the same challenge either way.\r\n\r\nSo, personally, I remain to be convinced that such a design is needed. But if there is consensus to do so, a single document for both - that covers the tradeoffs - is a better way to spec it.",
+          "createdAt": "2021-02-27T18:41:14Z",
+          "updatedAt": "2021-02-27T18:41:42Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "Makes sense. A lot of this just comes down to folks' personal opinions. As the owner of a generic QUIC stack (and not any HTTP specific code) I prefer to support it at the QUIC layer, where we already have all the multiplexing abstraction code. I also really like the \"implement once\" property as well. IMO it generally leads to a cleaner API design and fewer bugs overall.\r\n\r\nOne final data point: I have had discussion with teams at Microsoft that have non-HTTP based protocols that are looking to move to QUIC, and I do believe they would benefit from native multiplexed unreliable delivery support in QUIC. Obviously they (and any protocol) can do it themselves, but it doesn't mean they should.",
+          "createdAt": "2021-02-27T18:49:16Z",
+          "updatedAt": "2021-02-27T18:49:16Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "Understood. As a maintainer of a generic QUIC stack I want to know if the only service people want from me is basically variable-integer flow ID handling or if they want more.  I can expose varint handling helper functions but more complicated things are harder.",
+          "createdAt": "2021-02-27T19:07:59Z",
+          "updatedAt": "2021-02-27T19:07:59Z"
+        },
+        {
+          "author": "quartzjer",
+          "authorAssociation": "NONE",
+          "body": "As someone working on multiple applications that use DATAGRAM but not H3, I want to ensure that they all can be composed together on one connection compatibly and easily.\r\n\r\nIf I implement the Flow portion of the H3 DATAGRAM independently in each application then I will also have to implement my own shim layer to manage the Flow IDs compatibly when the underlying QUIC library doesn't provide it, and hope that H3-supporting libraries also expose compatible APIs for multiplexing with HTTP.\r\n\r\nNone of that is very difficult really, but it seems that a likely byproduct is pressure on DATAGRAM supporting QUIC libraries to provide the Flow ID counters in a central place independent from any H3 support.\r\n\r\nI'm not suggesting that it must be added here, but a clear (if small) specification of Flow IDs separate from the H3 DATAGRAM spec could really aid in ensuring compatible implementations and application APIs for all QUIC DATAGRAM libraries that intend to support multiple applications over one connection.",
+          "createdAt": "2021-02-27T22:14:12Z",
+          "updatedAt": "2021-02-27T22:14:12Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "Multiplexing different application mappings inside a single QUIC connection has a bunch of complexity not confidend to DATAGRAM. For instance, QUIC provides stream IDs but the way that H3 chooses to use them means that it can't be multiplexed with other applications without some form of shim. MASQUE is one such shim, which links flow ID allocation to HTTP signalling. There's other ways to do it this of course.\r\n\r\nIt sounds like @quartzjer is asking for something similar to QUICs Stream ID management. This covers (among other things) stream ID allocation and enforcement of stream ID usage, which is a transport interoperability feature. To do the same for DATAGRAM flow IDs would require additional signalling like \"max_initial_flowd\" TP, and MAX_FLOWS frame. This might be something people want but I don't really know. However, even if a connection-wide transport flow ID manager existed then, just like with stream IDs, there would still be competition between application protocols that want to multiplex themselves together in the shared flow ID space. The hard problem would remain unsolved.\r\n\r\nThe difficulties with sharing stream ID and flow ID space is already manifest in the WebTransport group. Demonstrating that even pooling together multiple instances of the same application mapping has challenges. ",
+          "createdAt": "2021-02-28T01:04:27Z",
+          "updatedAt": "2021-02-28T01:05:29Z"
+        },
+        {
+          "author": "mjoras",
+          "authorAssociation": "NONE",
+          "body": "With an individual hat on - I agree with @LPardue on pretty much all of his points. There's definitely advantages to having a flow id at the transport, and it seems pretty straightforward at first glance. That being said there's a lot of complexity with actually managing those flow ids in a generic way. Once we put them in the transport we also have to be in the business of managing those flow ids. I agree that many applications will want to have some sort of flow id -- but I can also foresee those applications being rather opinionated about how those flow ids should behave, and I'd rather not have the transport try to meet those requirements in the generic extension.",
+          "createdAt": "2021-03-01T22:24:26Z",
+          "updatedAt": "2021-03-01T22:24:26Z"
+        },
+        {
+          "author": "quartzjer",
+          "authorAssociation": "NONE",
+          "body": "I am better appreciating the complexity of adding even an optional basic transport-managed Flow ID, I'd rather see DATAGRAM be a simple standard as-is.\r\n\r\nIf there's consensus, the simplest resolution to this issue might be to just take the paragraph mentioning HTTP/3's flow identifier and make it a ## section to draw more attention to it for application and transport implementers to consider.  Possibly even expanding the text to highlight the choice applications will have to make if they want to share a connection with other DATAGRAM apps.",
+          "createdAt": "2021-03-02T06:45:26Z",
+          "updatedAt": "2021-03-02T06:45:26Z"
+        },
+        {
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "body": "Discussed at IETF 110: Conversation in the room proposed that we point to H3 datagram as an example of what upper layers can do and indicate that other ALPNs should add something similar. Still didn't belong in the QUIC datagram itself, and if we find that many ALPNs repeat a pattern, they can share another extension / definition document.",
+          "createdAt": "2021-03-10T12:59:50Z",
+          "updatedAt": "2021-03-10T12:59:50Z"
+        },
+        {
+          "author": "skissane",
+          "authorAssociation": "NONE",
+          "body": "I think it would be great if the text of the spec could include some brief rationale explaining the reasons for the decision reached. I think it would be helpful for readers to give some brief explanation of why the spec is the way it is on this topic, instead of having to dig through PRs / mailing list archives / etc in order to discover that.",
+          "createdAt": "2021-03-11T02:27:12Z",
+          "updatedAt": "2021-03-11T02:27:12Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "Personally, I think an effective way of framing the rationale that @skissane is seeking is a direct comparison to streams (as set out in transport section 2 and 3). Datagram is another application-data carrying primitive, highlighting the core differences could help avoid people needing to ask these questions when they puzzle about how to write application mappings. The suggestion that Eric made would be a piece of such framing.",
+          "createdAt": "2021-03-11T03:24:39Z",
+          "updatedAt": "2021-03-11T03:24:39Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "MDU6SXNzdWU2MTQxNzgwNDU=",
+      "title": "Is max_datagram_frame_size Unidirectional Configuration?",
+      "url": "https://github.com/quicwg/datagram/issues/7",
+      "state": "CLOSED",
+      "author": "nibanks",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "The spec clearly states the following:\r\n\r\n> The max_datagram_frame_size transport parameter is an integer value (represented as a variable-length integer) that represents the maximum size of a DATAGRAM frame (including the frame type, length, and payload) the endpoint is willing to receive, in bytes.\r\n\r\nBut it's not completely clear what happens if both sides send different values. Is the value purely a unidirectional configuration? For instance, if the server advertises a value of 500, and the client advertises a value of 100, can the client still send 500 byte datagrams? Or does this essentially negotiate the max value either side can use to 100?\r\n\r\nIf this is a unidirectional configuration, why require the peer to send the TP at all, if all they want to do is send datagrams, and not receive them? I'm loosely basing my thoughts on what the design could be on how we negotiate the number of streams an endpoint is willing to accept. Following that model, I'd recommend a design where, if an endpoint is willing to receive datagrams, it advertises a `max_datagram_frame_size` it's willing to accept. The TP has absolutely no meaning for the send direction. The protocol on top of QUIC decides how to interpret only a single direction allowing datagrams to be sent.",
+      "createdAt": "2020-05-07T16:12:11Z",
+      "updatedAt": "2020-05-08T22:32:04Z",
+      "closedAt": "2020-05-08T22:32:04Z",
+      "comments": [
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "I agree with @nibanks, principly due to this clause in the present draft:\r\n\r\n```\r\nEndpoints MUST NOT send DATAGRAM frames until they have sent and received the max_datagram_frame_size transport parameter.\r\n```\r\n\r\nMy read of the current text is that it is unidirectional. An endpoint tells it's peer that it is willing to receive a DATAGRAM up to size N by using `max_datagram_frame_size`. Having asymmetric values is fine because the paths can be asymmetric and other TPs also behave asymmetrically.\r\n\r\nThe draft also says:\r\n\r\n```\r\nApplication protocols that use datagrams MUST define how they react to the max_datagram_frame_size transport parameter being missing.\r\n```\r\n\r\nFor an application protocol like siduck, both ends need to support reception of DATAGRAM or else the application will fail. For something like an IoT sensor feed, it might be fine to support a send-only/receive-only model. The current text basically requires the application protocol to mandate that `max_datagram_frame_size` is 0 on the side that is send-only AND to describe what happens if the TP is missing - that seems like it will cause a duplication of effort.\r\n\r\n",
+          "createdAt": "2020-05-07T17:13:36Z",
+          "updatedAt": "2020-05-07T17:13:36Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree that we should make this purely unidirectional. I would resolve this by replacing\r\n\r\n`Endpoints MUST NOT send DATAGRAM frames until they have sent and received the max_datagram_frame_size transport parameter.`\r\n\r\nwith\r\n\r\n`Endpoints MUST NOT send DATAGRAM frames until they have received the max_datagram_frame_size transport parameter.`",
+          "createdAt": "2020-05-08T01:19:48Z",
+          "updatedAt": "2020-05-08T01:19:48Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "MDU6SXNzdWU2MTQxODYyNzk=",
+      "title": "Text on Datagram's Interaction with Loss Recovery is a bit Light",
+      "url": "https://github.com/quicwg/datagram/issues/8",
+      "state": "OPEN",
+      "author": "nibanks",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft has some good text in the \"Acknowledgement Handling\" and \"Congestion Control\" sections that essentially is stating that DATAGRAM is just like any other ACK-eliciting packet, but is not automatically retransmitted by the transport. That's all reasonable, but I think there needs to be more text on how the (suspected) loss of a packet with a DATAGRAM frame or a PTO with only an outstanding DATAGRAM packet should be handled.\r\n\r\nI can see two possible models:\r\n\r\n1. It's just like any other packet. The goal is to elicit some ACK from the peer to get accurate loss information about the outstanding packet as soon as possible. If there is nothing outstanding we could use to send in a new packet, just send a PING frame.\r\n\r\n2. It's special. Because we don't necessarily intend to retransmit the data in the packet if it is actually lost, we don't actually care about immediate loss information/feedback. Don't force anything to be sent immediately to elicit the ACK.\r\n\r\nSo far as I have it coded up in MsQuic, I've assumed (1). This essentially results in an immediate PING frame/packet being sent out if I have nothing else to retransmit to try to elicit an ACK for the DATAGRAM frame/packet. This could result in a slightly noisier connection if the app doesn't care about all loss information about their datagrams, but, IMO makes for a cleaner design. I don't know what the general consequences to congestion control might be if we don't do this.\r\n\r\nAssuming folks are in agreement, we should have some text on this topic in the draft.",
+      "createdAt": "2020-05-07T16:25:06Z",
+      "updatedAt": "2021-03-10T12:51:46Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@ianswett @janaiyengar as authors of the recovery draft do you have an opinion here?",
+          "createdAt": "2020-05-08T01:15:43Z",
+          "updatedAt": "2020-05-08T01:15:43Z"
+        },
+        {
+          "author": "ianswett",
+          "authorAssociation": "NONE",
+          "body": "I support @nibanks choice of 1 and it aligns with the recovery draft.  It also matches our implementation. \r\n\r\nAdding clarifying text around this SG and I'd be happy to review it.",
+          "createdAt": "2020-05-08T17:19:21Z",
+          "updatedAt": "2020-05-08T17:19:21Z"
+        },
+        {
+          "author": "janaiyengar",
+          "authorAssociation": "NONE",
+          "body": "I agree -- choice (1) is cleanest and I would argue that choice(2) is really not principled.",
+          "createdAt": "2020-05-14T06:23:17Z",
+          "updatedAt": "2020-05-14T06:23:17Z"
+        },
+        {
+          "author": "MikeBishop",
+          "authorAssociation": "NONE",
+          "body": "Late to the issue, but I think (1) is the right choice here.  It's not simply that datagrams aren't retransmitted, but that they _might_ be retransmitted by the application if they're declared lost.  If you don't have prompt feedback, that scenario suffers.",
+          "createdAt": "2020-11-16T11:07:55Z",
+          "updatedAt": "2020-11-16T11:07:55Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Seems like we have good agreement on this, just need to write the text",
+          "createdAt": "2021-03-03T23:35:09Z",
+          "updatedAt": "2021-03-03T23:35:09Z"
+        },
+        {
+          "author": "janaiyengar",
+          "authorAssociation": "NONE",
+          "body": "@tfpauly -- To @ianswett 's comment at the mic, you should cite [Section 6.2.4 in the recovery draft](https://quicwg.org/base-drafts/draft-ietf-quic-recovery.html#section-6.2.4).",
+          "createdAt": "2021-03-10T12:51:46Z",
+          "updatedAt": "2021-03-10T12:51:46Z"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "MDU6SXNzdWU2MTQyMDY5NjI=",
+      "title": "Nit picking error condition for supported but not enabled",
+      "url": "https://github.com/quicwg/datagram/issues/9",
+      "state": "CLOSED",
+      "author": "LPardue",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Sorry/not sorry for being pernickety. The current draft says:\r\n\r\n```\r\nAn endpoint that includes this parameter supports the DATAGRAM frame types and is willing to receive such frames on this connection.\r\n```\r\n\r\nand\r\n\r\n```\r\nAn endpoint that receives a DATAGRAM frame when it has not sent the max_datagram_frame_size transport parameter MUST terminate the connection with error PROTOCOL_VIOLATION.\r\n```\r\n\r\nwhich is slightly ambiguous if we consider an vanilla QUIC endpoint that does not implement this extension at all. Absence of the TP can indicate the parameter is totally unsupported, or is supported but is not desired for the current connection.  In the totally unsupported case, the receiving endpoint is likely to act according to transport Section 12.4 which says\r\n\r\n```\r\nAn endpoint MUST treat the receipt of a frame of unknown type as a\r\nconnection error of type FRAME_ENCODING_ERROR.\r\n```\r\n\r\nMaybe this doesn't need to be fixed because one shouldn't expect the requirements of an extension to apply if it is not implemented. But perhaps some editorial tweaks could tighten things up.\r\n\r\nFor the case of an endpoint does support DATAGRAM. You might also want to consider a wire message that more clearly describes the error condition of \"extension supported but not enabled\". This could be a new error code, or a reason phrase.\r\n",
+      "createdAt": "2020-05-07T16:59:19Z",
+      "updatedAt": "2020-05-08T01:45:36Z",
+      "closedAt": "2020-05-08T01:45:36Z",
+      "comments": [
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "It does seem to make sense to just to follow the guidance from the transport draft and use `FRAME_ENCODING_ERROR`. If folks want to add a reason phrase too, feel free, but that seems to be a implementation decision to me.",
+          "createdAt": "2020-05-07T17:15:52Z",
+          "updatedAt": "2020-05-07T17:15:52Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "The problem with reusing `FRAME_ENCODING_ERROR` is then it is completely ambiguous if the endpoint supports the extension but didn't enable it, or the endpoint doesn't support the extension at all. To me there is value in using different error codes for those conditions (we can't rely on endpoints populating or recording the reason phrase, as you say). The issue with `PROTOCOL_ERROR` is that it is different to `FRAME_ENCODING_ERROR` but is also the catch all bucket.",
+          "createdAt": "2020-05-07T17:21:42Z",
+          "updatedAt": "2020-05-07T17:21:42Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm not sure I understand this issue. If a QUIC implementation does not support this specification, it is not bound by any of the requirements in this specification. So it'll happily use `FRAME_ENCODING_ERROR`.\r\n\r\nThis specification defines an extension to QUIC, and it can supersede any normative text in the QUIC specs. Therefore, if an implementation supports this extension, then it'll send `PROTOCOL_VIOLATION`.\r\n\r\nI don't see any ambiguity here.",
+          "createdAt": "2020-05-08T01:23:32Z",
+          "updatedAt": "2020-05-08T01:23:32Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "I still see it but I think it all degenerates to \"we can't protect against stupid\" and that a more specific error code likely won't help a dumb client that sends DATAGRAMs in spite of not receiving the required TP. The strong signal of connection close is probably good enough, so let's close this and revisit if interop so reveals it to be useful.",
+          "createdAt": "2020-05-08T01:45:35Z",
+          "updatedAt": "2020-05-08T01:45:35Z"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "MDU6SXNzdWU2NDI1MjgxNjk=",
+      "title": "Question about scope: why only unreliable datagrams? Why not reliable datagrams too?",
+      "url": "https://github.com/quicwg/datagram/issues/12",
+      "state": "OPEN",
+      "author": "skissane",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Some applications might want to send messages, and not care about the order of delivery, but still get reliability.\r\n\r\nQUIC streams give them reliability, but within a stream it enforces order of delivery.\r\n\r\nThis datagram proposal gives unordered delivery of messages, but without reliability.\r\n\r\nWhy not provide datagrams with optional (opt-in) reliability?\r\n\r\nIt shouldn't be a lot of extra work for QUIC implementors to provide reliable datagrams as well as unreliable, given that retransmission is already there for QUIC streams.\r\n\r\n(I guess an application could create a separate QUIC stream for each unordered reliable message. That might work, but seems ugly and may have some overhead.)",
+      "createdAt": "2020-06-21T09:25:00Z",
+      "updatedAt": "2020-06-22T00:52:47Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "What you describe can already be accomplished using streams: each \u201creliable datagram\u201d is its own stream. That provides reliable delivery without ordering between independent datagrams. I don\u2019t think we need to add optional reliability to the datagram spec.",
+          "createdAt": "2020-06-21T17:34:33Z",
+          "updatedAt": "2020-06-21T17:34:33Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "> I guess an application could create a separate QUIC stream for each unordered reliable message. That might work, but seems ugly and may have some overhead\r\n\r\nStreams are very lightweight, and well suited to this task. Beware applying intuition from TCP too heavily.",
+          "createdAt": "2020-06-21T18:11:25Z",
+          "updatedAt": "2020-06-21T18:11:25Z"
+        },
+        {
+          "author": "skissane",
+          "authorAssociation": "NONE",
+          "body": "So, here's a suggestion then: since I'm sure I'm not the only person who is going to think of this, maybe add some verbiage to the spec explaining why supporting reliable datagrams is unnecessary?",
+          "createdAt": "2020-06-22T00:04:39Z",
+          "updatedAt": "2020-06-22T00:04:39Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Sounds good. We can keep this issue open as requesting an editorial change.",
+          "createdAt": "2020-06-22T00:52:46Z",
+          "updatedAt": "2020-06-22T00:52:46Z"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "MDU6SXNzdWU3NDE5NzUxMjQ=",
+      "title": "Why is the recommended `max_datagram_frame_size` 65536?",
+      "url": "https://github.com/quicwg/datagram/issues/13",
+      "state": "CLOSED",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Current text says:\r\n\r\n> It is RECOMMENDED to send the value 65536 in the max_datagram_frame_size transport parameter as that indicates to the peer that this endpoint will accept any DATAGRAM frame that fits inside a QUIC packet.\r\n\r\nThis is nice, but I'm wondering if it should be 65535. The max UDP payload for a QUIC packet is 65527, which is lower than both. It's nice for an implementation to only need to store 16-bit integers for max datagram size to avoid excess memory, and it's of course easy to round down from 65536 to 65535, but it just seems arbitrary to have it be 1 more than the max value for a 16-bit integer...",
+      "createdAt": "2020-11-12T22:31:19Z",
+      "updatedAt": "2020-11-13T03:32:20Z",
+      "closedAt": "2020-11-13T03:32:20Z",
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@DavidSchinazi  thoughts?",
+          "createdAt": "2020-11-12T22:31:31Z",
+          "updatedAt": "2020-11-12T22:31:31Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That sounds reasonable, 65535 is fine by me. (as long as the 1s don't take longer to travel than the 0s \ud83e\udd23)",
+          "createdAt": "2020-11-12T22:39:15Z",
+          "updatedAt": "2020-11-12T22:39:15Z"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "MDU6SXNzdWU3NDM3NTQzNzU=",
+      "title": "Exposing datagram acknowledgements",
+      "url": "https://github.com/quicwg/datagram/issues/15",
+      "state": "OPEN",
+      "author": "kixelated",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "An issue came up in discussions around WebTransport: https://github.com/w3c/webtransport/issues/168\r\n\r\nThe problem is that datagram frames may be acknowledged for the sake of congestion control, but dropped for the sake of flow control. \r\n\r\nA receiver with a full datagram buffer would have two choices:\r\n1. Drop any packets with datagram frames and do not acknowledge them.\r\n2. Drop the datagram frames but acknowledge the packets.\r\n\r\nThe first approach seems terrible because it drop any other frames bundled with the datagram (ex. STREAM) and cause retransmissions. It would also be treated as network congestion by the sender, causing limited bandwidth for otherwise unrelated STREAM frames.\r\n\r\nThe second approach has ramifications for any implementations that MAY expose datagram acknowledgements. Specifically, the sender would believe that the datagram has been received (although not necessary processed), when in reality it could have been dropped and will never be processed.",
+      "createdAt": "2020-11-16T11:21:33Z",
+      "updatedAt": "2021-03-10T20:24:54Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "kixelated",
+          "authorAssociation": "NONE",
+          "body": "I suggest that we remove the recommendation that datagram acknowledgements can be exposed to the application, and possibly even prohibit it.",
+          "createdAt": "2020-11-16T11:23:45Z",
+          "updatedAt": "2020-11-16T11:23:45Z"
+        },
+        {
+          "author": "kixelated",
+          "authorAssociation": "NONE",
+          "body": "Alternatively, this problem could be avoided if there was explicit flow control for datagrams. This would avoid a full datagram buffer and may have other benefits.",
+          "createdAt": "2020-11-16T11:26:17Z",
+          "updatedAt": "2020-11-16T11:26:17Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "Adding flow control to DATAGRAM seems like a problem for use cases that don't want that, like tunneling of UDP-based transports that provide their own flow control",
+          "createdAt": "2020-11-16T12:04:18Z",
+          "updatedAt": "2020-11-16T12:04:18Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "I may be wrong, but this seems very implementation specific, but IMO flow control is unnecessary so long as datagrams are indicated to the application layer inline (no buffering).\r\n\r\nFor instance, MsQuic only acknowledges a packet with a datagram frame if it's able to successfully process it (datagram frame processing [here](https://github.com/microsoft/msquic/blob/main/src/core/connection.c#L4411)). Additionally, \"processing\" a datagram frame **includes** indicating it up (inline indication [here](https://github.com/microsoft/msquic/blob/main/src/core/datagram.c#L575)) to the application layer. There is absolutely no buffering at the datagram frame layer in MsQuic; so flow control is not a really issue.\r\n\r\nIt's possible the application layer then does some buffering and would require flow control, but that's completely up to the application layer. If there is a scenario where the application layer may drop data (due to buffering constraints or something else) it should be up to the application layer to decide if the peer needs to know that information; and if so, inform them appropriately at their layer.",
+          "createdAt": "2020-11-16T18:06:25Z",
+          "updatedAt": "2020-11-16T18:06:25Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "> Adding flow control to DATAGRAM seems like a problem for use cases that don't want that\r\n\r\nSurely that could be addressed by specifying arbitrarily large or infinite flow control limits? Would still complicate the spec, which seems unfortunate.\r\n\r\n> IMO flow control is unnecessary so long as datagrams are indicated to the application layer inline\r\n\r\nThat's a really cool solution. It's not a small constraint on the receiver's implementation, but it's certainly a case where we forbidding application-visible ACKs would be a harmful restriction.",
+          "createdAt": "2020-11-16T18:37:22Z",
+          "updatedAt": "2020-11-16T18:37:22Z"
+        },
+        {
+          "author": "kixelated",
+          "authorAssociation": "NONE",
+          "body": "Inline datagram processing is a cool idea and removes the need for flow control.\r\n\r\nUnfortunately, it's the sender that exposes acknowledgements to the application, but it's the receiver that would need to process and acknowledge datagrams inline. The sender would not be able to assume the receiver uses a particular implementation.",
+          "createdAt": "2020-11-16T18:49:39Z",
+          "updatedAt": "2020-11-16T18:49:39Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "The capability to do inline indications on the receive side could be negotiated with the transport parameter. \"Hey, I receive datagrams, **and** I don't buffer them.\" Then the sender side can decide how they want to handle ACKs based on that state. Though, it's not great that they still have to handle the scenario of \"I do buffer, and I might throw them away\" so long as any peer they communicate with might buffer.\r\n\r\nPersonally, I'd just like to say that we require guaranteed app delivery for acknowledged QUIC packets with datagram frames, and then let QUIC implementations sort it out, but I realize that's not easily done for most implementations without significant refactoring. But if we don't do this, I do see it as a **major bummer** that buffering on the receiver side could effectively make QUIC layer acknowledgements worthless to the app (which IMO was the best advantage to this solution).",
+          "createdAt": "2020-11-16T18:55:23Z",
+          "updatedAt": "2020-11-16T18:55:40Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "My only other thought would be to have a new frame (e.g. DATAGRAM_DROPPED) that a receiver sends if it drops DATAGRAM frame; but to accurately identify which that were dropped, each datagram would need a unique identifier and that further complicates all this. So I definitely wouldn't prefer this solution.",
+          "createdAt": "2020-11-16T19:00:44Z",
+          "updatedAt": "2020-11-16T19:00:44Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "> \"Hey, I receive datagrams, and I don't buffer them.\"\r\n\r\nOr, in more explicit terms, \"My ACKs guarantee delivery of datagram frames to the application.\"\r\n\r\n> it's not great that they still have to handle the scenario of \"I do buffer, and I might throw them away\"\r\n\r\nIs this any different from handling the scenario of a peer that doesn't support datagram frames at all?",
+          "createdAt": "2020-11-16T19:45:59Z",
+          "updatedAt": "2020-11-16T19:45:59Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree with @nibanks's earlier comment that this sounds very implementation-specific. Our implementation also would not drop any datagram frames that have been received and ack'ed, since we process the data immediately and send it inline.\r\n\r\nI'd almost prefer to just have a SHOULD NOT drop datagram frames if they've been received and ack'ed. This will certainly influence API design, and means that you'll have a rougher time if you just try to imitate a UDP socket buffer.",
+          "createdAt": "2020-11-16T20:05:38Z",
+          "updatedAt": "2020-11-16T20:05:38Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "> Is this any different from handling the scenario of a peer that doesn't support datagram frames at all?\r\n\r\nYes, there is a difference. If the peer doesn't support datagram frames at all, the protocol might not work at all, and the app layer will just reject the connection outright. If the app supports datagram frames, but it's implementation may or may not buffer. In that case, depending on the app protocol, it may or may not then need additional app layer acknowledgements or accounting.\r\n\r\nFor instance, perhaps some game protocol that has a fire-and-forget \"current player state\" datagram payload could care less about acknowledgements, so it doesn't care if buffering drops a frame. All it needs is datagram support.",
+          "createdAt": "2020-11-16T20:05:50Z",
+          "updatedAt": "2020-11-16T20:06:33Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "> I'd almost prefer to just have a SHOULD NOT drop datagram frames if they've been received and ack'ed. This will certainly influence API design, and means that you'll have a rougher time if you just try to imitate a UDP socket buffer.\r\n\r\nI would also prefer this approach.",
+          "createdAt": "2020-11-16T20:08:32Z",
+          "updatedAt": "2020-11-16T20:08:32Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "For an implementation that doesn't expose the contents of QUIC packets to an application, exposing the ACKs has little value. The flow control issue is then a little moot. I would push back on any strict requirements as mentioned, it presupposes that implementations will provide a single style of processing or API.\r\n\r\nSHOULD NOT seems acceptable because I _would_ drop them based on some criteria and the text probably encourages me to document this aspect.",
+          "createdAt": "2020-11-16T20:30:36Z",
+          "updatedAt": "2020-11-16T20:30:36Z"
+        },
+        {
+          "author": "kixelated",
+          "authorAssociation": "NONE",
+          "body": "In the context of WebTransport, datagrams are processed at the Javascript level. Browsers are understandably not going to execute and block on inline Javascript callbacks for every received datagram. ",
+          "createdAt": "2020-11-16T20:40:45Z",
+          "updatedAt": "2020-11-16T20:40:45Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "> If the app supports datagram frames, but it's implementation may or may not buffer. In that case, depending on the app protocol, it may or may not then need additional app layer acknowledgements or accounting.\r\n\r\nWhy can't the app layer reject the connection outright if the peer's transport parameters indicate that it does not support reliable acknowledgement for datagrams, just as it would if they indicate no support for datagrams at all? An app which doesn't care about ACKs obviously wouldn't do so, but those that do, can. Or they could apply app-layer mitigations, but that's more options, not fewer.",
+          "createdAt": "2020-11-16T21:04:01Z",
+          "updatedAt": "2020-11-16T21:05:06Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "+1 to https://github.com/quicwg/datagram/issues/15#issuecomment-728315700 . There is a process hop between the QUIC code and the JavaScript code, and the QUIC code needs to send ACKs quickly (especially if that packet contains a STREAM frame next to a DATAGRAM frame) so it's simply not possible to wait on JavaScript before sending the ACK. You could buffer datagrams indefinitely after ACking them to ensure that the application gets them, but that goes against the entire philosophy of DATAGRAMs by increasing latency unboundedly. \"SHOULD NOT drop DATAGRAM frames\" sounds completely unrealistic to me.",
+          "createdAt": "2020-11-16T21:05:15Z",
+          "updatedAt": "2020-11-16T21:05:15Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "> For an implementation that doesn't expose the contents of QUIC packets to an application, exposing the ACKs has little value.\r\n\r\n@LPardue You don't need to expose how a datagram frame buffer from the app is put in a QUIC packet in order to give them information back about the receipt (or not) of an acknowledgement of their data. MsQuic allows the app to give a context pointer along with the buffer they send. We then indicate acknowledgement or suspected loss information back to the app for that context (event [here](https://github.com/microsoft/msquic/blob/main/src/inc/msquic.h#L811)).\r\n\r\n> Browsers are understandably not going to execute and block on inline Javascript callbacks for every received datagram.\r\n\r\n@kixelated and @DavidSchinazi I totally agree that it's unreasonable to expect every layer above QUIC in the WebTransport scenario to do inline delivery, but that isn't the only scenario, and having that one scenario's requirement for buffering shouldn't make us throw our hands up and say no scenarios will be able to use a zero buffering approach. Protocols directly on top of QUIC should be able to do whatever they want.\r\n\r\nThe \"SHOULD NOT drop DATAGRAM frames\" purely at the QUIC layer is not unrealistic IMO. What the layers on top of QUIC do are totally up to them to define and implement. WebTransport datagrams processed at the Javascript layer will need application layer acknowledgements if the protocol requires info on exactly which datagrams were delivered.",
+          "createdAt": "2020-11-16T23:01:15Z",
+          "updatedAt": "2020-11-16T23:01:15Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks Nick, that makes more sense. I do wonder though how useful it acks are if you're talking to my endpoint who might, in some conditions, drop the occasional DATAGRAM on the floor.\r\n\r\n\r\n",
+          "createdAt": "2020-11-16T23:54:53Z",
+          "updatedAt": "2020-11-16T23:54:53Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@nibanks I was thinking of this in terms of WebTransport since that was really top of mind. I agree that different applications have different needs, and some might be able to do this inline ACKing more than others. That said, I'm really not sure what the point of this SHOULD NOT is, it's like saying \"an IP router SHOULD NOT drop IP packets\" - most router implementors know that they shouldn't drop packets unless they have a good reason such as having nowhere to put the packet.",
+          "createdAt": "2020-11-17T01:14:12Z",
+          "updatedAt": "2020-11-17T01:14:12Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "> it's like saying \"an IP router SHOULD NOT drop IP packets\" \r\n\r\n@DavidSchinazi I do agree somewhat with that sentiment, but it's a bit different because the transport is saying \"Yes, I got the packet and was able to successfully process it.\". If it's possible/allowable for the transport to then just drop it on the floor, is there really any reason to acknowledge datagram frames at all, beyond just another RTT estimate?\r\n\r\nI just feel it would be a big shame that we have all this ACK machinery built into QUIC, but it gets wasted on datagrams. Not only that, it has to be rebuilt completely by the app to duplicate all the work QUIC already does.",
+          "createdAt": "2020-11-17T02:45:45Z",
+          "updatedAt": "2020-11-17T02:45:45Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@nibanks the way I see it, there are only two ways to perform queueing when you have one input and one output:\r\n- option 1: you buffer things indefinitely forever\r\n- option 2: you don't\r\n\r\nI really don't see any other way. I think you're suggesting that transports should buffer DATAGRAMs infinitely if the application is busy, and that doesn't sound like a good idea to me.",
+          "createdAt": "2020-11-17T05:35:20Z",
+          "updatedAt": "2020-11-17T05:35:20Z"
+        },
+        {
+          "author": "janaiyengar",
+          "authorAssociation": "NONE",
+          "body": "There are two questions here:\r\n- who owns the buffers -- QUIC, or the application; and\r\n- what are the application's reliability requirements.\r\n\r\nI would argue that for maximizing generality of a DATAGRAM receiver implementation -- so that multiple application behaviors are possible -- you want the application to own these buffers. Whether these buffers are implemented in QUIC or at the application or somewhere in between doesn't matter; it is meant for the application.\r\n\r\nFor an application that wants some notion of reliability, there are two choices in how a receiver manages its buffers:\r\n- it signals delivery out of the buffers and/or loss (ACKs/NACKs/gaps);\r\n- it signals buffer size explicitly to avoid any loss (flow control)\r\n\r\nAn app that sits on top of QUIC DATAGRAMs thus has two choices:\r\n- use explicit Application ACKs to signal receipt (and gaps or NACKs to signal loss), since the sender might have caused the application buffer to overflow;\r\n- use explicit flow control to disallow application buffer overflowing. Doing this has the nice property that QUIC ACKs can then be treated as application ACKs, since application flow control will ensure that this data does not get dropped at the receiver between QUIC and the app.\r\n\r\nIn either case, it's a decision that is both application- and implementation-dependent. An app that cannot know the buffer size will have to rely on using explicit application ACKs. An app that is ok with data loss can allow loss to happen, and may or may not signal this back. An app that wants to avoid buffer overflow at the application buffers can reuse QUIC ACKs as application ACKs but will need to ensure that application flow control is in place.\r\n\r\nImplementations ought to expose DATAGRAM QUIC ACKs to the application, so that applications have a choice of using that signal. However, the application is ultimately responsible for using them correctly.",
+          "createdAt": "2020-11-19T05:54:30Z",
+          "updatedAt": "2020-11-19T05:54:30Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "@janaiyengar the way I read your summary of the issue (which is great, btw. Thanks!) it seems that not only do ACKs need to be exposed to the application, but a receiver can't drop acknowledged datagrams without informing the application, right? Otherwise, how would the app be able to reliably implement it's own flow control along with QUIC ACKs? A sender who receives an ACK of a datagram would assume that datagram is taking up buffer on the peer application; but if QUIC dropped it before it received that buffer, then both application sides would get out of sync in their view of the FC window. The sender could eventually stall out because of this, right?",
+          "createdAt": "2020-11-19T06:10:07Z",
+          "updatedAt": "2020-11-19T06:10:07Z"
+        },
+        {
+          "author": "vasilvv",
+          "authorAssociation": "NONE",
+          "body": "\"Instant processing\" model is really nice, and makes sense if you're in the same process as the QUIC stack, but across a privilege separation boundary (web app/browser, userspace/kernel, etc), this is not feasible*, so I don't think this should be allowed at least by default.\r\n\r\n*&nbsp;this is technically possible, and it is in fact how WebSocket API works; if your web app is too slow at processing incoming WebSocket messages, your server will just crash a browser tab remotely by overflowing the task queue, so most people agree this was a big mistake.",
+          "createdAt": "2021-01-22T05:44:16Z",
+          "updatedAt": "2021-01-22T05:44:16Z"
+        },
+        {
+          "author": "quartzjer",
+          "authorAssociation": "NONE",
+          "body": "After reading through this thread I may have missed it, but has anyone considered simply having the spec say something along the lines of:\r\n\r\n\"If an ACK frame has been sent and then due to implementation specific buffering or resource constraints it is unable to process the corresponding DATAGRAM frame, the application MUST be notified of the locally dropped frames so that it has the option to support additional signaling if necessary.\"\r\n\r\nThis will ensure that only for any implementation where this case is possible, the application developer/operator will be made aware of such a possibility and can decide how best to handle it either through configuration or custom application logic.\r\n",
+          "createdAt": "2021-02-26T20:27:02Z",
+          "updatedAt": "2021-02-26T20:27:02Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "What could a reasonable application do with that notification, aside from assert that it doesn't happen?",
+          "createdAt": "2021-03-01T06:38:37Z",
+          "updatedAt": "2021-03-01T06:38:37Z"
+        },
+        {
+          "author": "quartzjer",
+          "authorAssociation": "NONE",
+          "body": "> What could a reasonable application do with that notification, aside from assert that it doesn't happen?\r\n\r\nMany things are possible with the notification, the ability to recognize when the dropped packets are not due to network congestion could be used to do custom throughput signaling back to the sender that incorporates other local signals such as queue depth or processing rate.  \r\n\r\nThe underlying implementation might also expose dynamic controls on the cache or queue size that the application can adjust.  It could also back off other memory or processor heavy operations in order to prioritize capacity to not drop future packets.\r\n\r\nBy ensuring that the ACK signaling only indicates congestion it isolates the responsibility of additional flow control signaling to just implementations that support it, only having to support notifying applications in such an event where frames are dropped locally.",
+          "createdAt": "2021-03-01T07:23:53Z",
+          "updatedAt": "2021-03-01T07:23:53Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "Dropping datagrams ought to be similar to resetting a stream. It is pretty much the same semantic.\r\n",
+          "createdAt": "2021-03-10T12:59:12Z",
+          "updatedAt": "2021-03-10T12:59:12Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@huitema can you elaborate? Resetting a stream is a non-recoverable situation for a stream, whereas dropping datagrams is recoverable.",
+          "createdAt": "2021-03-10T13:37:19Z",
+          "updatedAt": "2021-03-10T13:37:19Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "Resetting streams is defined as an application triggered message: application says it cannot proceed with the stream and provides an application defined code and reason. I think the application saying \"I am dropping some of the datagrams that I received\" has similar semantics.",
+          "createdAt": "2021-03-10T13:47:46Z",
+          "updatedAt": "2021-03-10T13:47:46Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I see. It would make me sad to turn a recoverable error into an unrecoverable one though, because some applications may not want that.",
+          "createdAt": "2021-03-10T13:51:00Z",
+          "updatedAt": "2021-03-10T13:51:00Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "Yes, that's where the analogy with reset breaks. The datagram dropped message should be informative, not change the state of the connection or the datagram streams.",
+          "createdAt": "2021-03-10T13:52:27Z",
+          "updatedAt": "2021-03-10T13:52:27Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "The difficulty I have with this concept is that I don't know what I'd expose to the application. My datagram implementation basically keeps a fixed-size queue of frames. So if I dropped some all I can tell an application is that something got dropped. Adding more information about what was dropped increases complexity.\r\n\r\nThe library already doesn't expose information about packets to the application, and so far things have worked out OK.",
+          "createdAt": "2021-03-10T14:33:00Z",
+          "updatedAt": "2021-03-10T19:32:50Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "I tend to agree that there isn't much a QUIC stack that queues datagrams can do here. The best it could do it indicate how many it dropped, but that's likely not enough. If that data needs to be retransmitted then (at the app layer) they would likely need more detailed info (such as an app identifier for each dropped packet).\r\n\r\nI think the best the draft can do here is mention that if the QUIC stack drops datagrams frames and also acknowledges them, then those acks cannot be leveraged by the application layer. It might be nice to have an additional TP that allows behavior this to be negotiated, but it's not strictly necessary.",
+          "createdAt": "2021-03-10T14:50:23Z",
+          "updatedAt": "2021-03-10T14:50:23Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "\" If that data needs to be retransmitted then (at the app layer) \" ... then the app needs to run a transport on top of datagrams. Or use regular streams.",
+          "createdAt": "2021-03-10T16:15:16Z",
+          "updatedAt": "2021-03-10T16:15:16Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "+1, if you need reliability then datagrams are not the droids you're looking for",
+          "createdAt": "2021-03-10T19:30:50Z",
+          "updatedAt": "2021-03-10T19:30:50Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "The more I think on this, the more it just seems similar to the existing notion that we have with QUIC streams; transport delivery != application end-to-end delivery & processing. It's like email read-reciepts: just because I opened the email doesn't mean I read it, digested it and have a response.\r\n\r\nThe doc might benefit from doing a better job of explaining this notion and the interop concerns that might arise. For instance, stating that it is possible for receiving implementations to acknowledge DATAGRAM-bearing packets while providing no guarantee that the DATAGRAMS are presented to the application. Valid reasons are flow control or any other arbitrary reason the receiver decides. Application's that desire end-to-end loss-detection need to be aware of this possibility and build measures that accomodate it. As Jana points out, there are some signals an implementation MAY chose to provide to make that easier. If they don't, applications can vote with their feet.",
+          "createdAt": "2021-03-10T20:16:06Z",
+          "updatedAt": "2021-03-10T20:16:06Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Adding text to clarify that receipt of an ACK for a packet containing a DATAGRAM frame does not mean that the application got the frame sounds like the right solution here.",
+          "createdAt": "2021-03-10T20:24:54Z",
+          "updatedAt": "2021-03-10T20:24:54Z"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "MDU6SXNzdWU3OTE3MDgzMjU=",
+      "title": "Document interaction of datagrams with pacing",
+      "url": "https://github.com/quicwg/datagram/issues/16",
+      "state": "CLOSED",
+      "author": "vasilvv",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Early in our VPN implementation, we sent QUIC datagrams without any queueing, assuming that if a datagram gets dropped, then we exceeded the cwnd (and thus the estimated channel capacity), so it would likely not reach the peer anyways.  In practice, this turned out to be a terrible idea that lead to underutilization of the channel; our implementation always does pacing, so if you don't queue the datagram, it *will* get dropped unless it just happens to fit into the current pacing quantum.\r\n\r\nBecause pacing is RECOMMENDED for QUIC, I believe some form of queueing should be RECOMMENDED for datagrams, otherwise the users risk running into the same hard-to-debug problem that we had.",
+      "createdAt": "2021-01-22T05:23:33Z",
+      "updatedAt": "2021-03-04T18:12:11Z",
+      "closedAt": "2021-03-04T18:12:11Z",
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think adding a note about pacing to the \"Congestion Control\" subsection makes sense to me.",
+          "createdAt": "2021-01-22T22:37:40Z",
+          "updatedAt": "2021-01-22T22:37:40Z"
+        },
+        {
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "body": "+1, if you're in the bucket of implementations that have insight into their pacing algorithm, it should be reasonable to expect that you'd avoid dropping your own datagrams unless you make a queue and then build up too much in that queue. ",
+          "createdAt": "2021-01-22T22:48:43Z",
+          "updatedAt": "2021-01-22T22:48:43Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 10,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDE0ODY5NjY5",
+      "title": "Change TP to max_datagram_payload_size",
+      "url": "https://github.com/quicwg/datagram/pull/10",
+      "state": "OPEN",
+      "author": "nibanks",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR changes the TP from `max_datagram_frame_size` to `max_datagram_payload_size`.\r\n\r\nFixes #3.",
+      "createdAt": "2020-05-07T19:12:54Z",
+      "updatedAt": "2021-06-15T23:15:43Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "5fe5d4edd3efe42b74e0bba1489c0feb9fcef9c6",
+      "headRepository": "nibanks/datagram",
+      "headRefName": "pr/max-datagram-payload-size",
+      "headRefOid": "ad8ed8f392384b54bf04fb92931f919d51108c28",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "body": "@DavidSchinazi sure. I'll make this PR just about changing to payload size then.",
+          "createdAt": "2020-05-08T01:26:23Z",
+          "updatedAt": "2020-05-08T01:26:23Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA3OTM3Mjkw",
+          "commit": {
+            "abbreviatedOid": "a7cd6b2"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "This PR is conflating two different topics. \r\n1) is the transport parameter unidirectional or bidirectional?\r\n2) does the transport parameter cover the frame size or payload size?\r\n\r\nCould you please split this into two PRs?",
+          "createdAt": "2020-05-08T01:18:13Z",
+          "updatedAt": "2020-05-08T01:18:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "MDExOlB1bGxSZXF1ZXN0NDE1Mjc5Njgx",
+      "title": "Make the TP Unidirectional",
+      "url": "https://github.com/quicwg/datagram/pull/11",
+      "state": "MERGED",
+      "author": "nibanks",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Defines the transport parameter as a unidirectional configuration.\r\n\r\nFixes #7.",
+      "createdAt": "2020-05-08T15:02:50Z",
+      "updatedAt": "2020-05-08T22:32:19Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "master",
+      "baseRefOid": "40181bac148834470b79e7e9e371f8cee1e0dc2c",
+      "headRepository": "nibanks/datagram",
+      "headRefName": "pr/unidirectional",
+      "headRefOid": "f03a1e359cc83352c1e9f98148fb960a83e16778",
+      "closedAt": "2020-05-08T22:32:05Z",
+      "mergedAt": "2020-05-08T22:32:04Z",
+      "mergedBy": "DavidSchinazi",
+      "mergeCommit": {
+        "oid": "5fe5d4edd3efe42b74e0bba1489c0feb9fcef9c6"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4NDA3NjA1",
+          "commit": {
+            "abbreviatedOid": "28715b5"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-05-08T17:44:49Z",
+          "updatedAt": "2020-05-08T17:44:49Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4NTU4MDcx",
+          "commit": {
+            "abbreviatedOid": "28715b5"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-05-08T22:17:24Z",
+          "updatedAt": "2020-05-08T22:17:29Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "nit: `s/for a protocol/for an application protocol/`",
+              "createdAt": "2020-05-08T22:17:24Z",
+              "updatedAt": "2020-05-08T22:27:11Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4NTU4NjMx",
+          "commit": {
+            "abbreviatedOid": "28715b5"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-08T22:19:03Z",
+          "updatedAt": "2020-05-08T22:19:04Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Actually we can make this normative:\r\n\r\n`Application protocols that use DATAGRAM frames MAY choose to only negotiate and use them in a single direction.`",
+              "createdAt": "2020-05-08T22:19:03Z",
+              "updatedAt": "2020-05-08T22:27:11Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4NTYxMTYz",
+          "commit": {
+            "abbreviatedOid": "28715b5"
+          },
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-08T22:26:32Z",
+          "updatedAt": "2020-05-08T22:26:32Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Sure. Let me update that now.",
+              "createdAt": "2020-05-08T22:26:32Z",
+              "updatedAt": "2020-05-08T22:27:11Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NDA4NTYyNzgx",
+          "commit": {
+            "abbreviatedOid": "f03a1e3"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2020-05-08T22:31:36Z",
+          "updatedAt": "2020-05-08T22:31:37Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Thanks!",
+              "createdAt": "2020-05-08T22:31:36Z",
+              "updatedAt": "2020-05-08T22:31:37Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTIwMjAyMTI4",
+      "title": "Change recommendation for max size to 65535",
+      "url": "https://github.com/quicwg/datagram/pull/14",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #13",
+      "createdAt": "2020-11-12T22:43:40Z",
+      "updatedAt": "2020-11-13T03:32:21Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "master",
+      "baseRefOid": "5fe5d4edd3efe42b74e0bba1489c0feb9fcef9c6",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "ac6d215a51288b390292e1be25c0c1c329d0baeb",
+      "closedAt": "2020-11-13T03:32:20Z",
+      "mergedAt": "2020-11-13T03:32:20Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "42f25fcf1f7f80cdeadba1ed3340d06262078dbc"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTI5NTY1OTY1",
+          "commit": {
+            "abbreviatedOid": "ac6d215"
+          },
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-11-12T22:51:39Z",
+          "updatedAt": "2020-11-12T22:51:39Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTI5NTc4NTk0",
+          "commit": {
+            "abbreviatedOid": "ac6d215"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-11-12T23:17:42Z",
+          "updatedAt": "2020-11-12T23:17:42Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NTI5NTc5MzM2",
+          "commit": {
+            "abbreviatedOid": "ac6d215"
+          },
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-11-12T23:19:22Z",
+          "updatedAt": "2020-11-12T23:19:22Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTg0MzU0NzA4",
+      "title": "Reword lowercase \"may\"s",
+      "url": "https://github.com/quicwg/datagram/pull/17",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Closes #4",
+      "createdAt": "2021-03-03T23:33:24Z",
+      "updatedAt": "2021-03-04T14:34:33Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "master",
+      "baseRefOid": "42f25fcf1f7f80cdeadba1ed3340d06262078dbc",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "005029da2ad99428fb9c5684edf5c2a7e5e5b16f",
+      "closedAt": "2021-03-04T14:34:33Z",
+      "mergedAt": "2021-03-04T14:34:33Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "bc4f55649cdb53c0d590a4b63dbf36d68adcd913"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjAzNDcxNDMx",
+          "commit": {
+            "abbreviatedOid": "005029d"
+          },
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-03T23:42:51Z",
+          "updatedAt": "2021-03-03T23:42:51Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjAzNTkyNzM2",
+          "commit": {
+            "abbreviatedOid": "005029d"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks!",
+          "createdAt": "2021-03-04T01:03:30Z",
+          "updatedAt": "2021-03-04T01:03:30Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTg0ODY0NDQ2",
+      "title": "Note about pacing",
+      "url": "https://github.com/quicwg/datagram/pull/18",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Warn against the pathological case of dropping packets due to pacing. Closes #16",
+      "createdAt": "2021-03-04T14:46:41Z",
+      "updatedAt": "2021-03-04T18:12:12Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "master",
+      "baseRefOid": "bc4f55649cdb53c0d590a4b63dbf36d68adcd913",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "c83cd94d6d8281a2d2efaabaa080bf4a96ca8c10",
+      "closedAt": "2021-03-04T18:12:11Z",
+      "mergedAt": "2021-03-04T18:12:11Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "6dec1591e44a54fc1ed6f1c6f43c7196b30d6acc"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjA0MzA5NzIw",
+          "commit": {
+            "abbreviatedOid": "c83cd94"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks!",
+          "createdAt": "2021-03-04T16:39:07Z",
+          "updatedAt": "2021-03-04T16:39:07Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjA2MTQ0MjU4",
+      "title": "Clarify meaning of 0 in the datagram transport parameter",
+      "url": "https://github.com/quicwg/datagram/pull/19",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Clarify meaning of 0 in the datagram transport parameter, based on the discussion at IETF 110. This follows one of the suggestions to have 0 mean no datagrams, and > 0 mean support for datagrams. This should be a non-breaking change with existing implementations.\r\n\r\nCloses #3 ",
+      "createdAt": "2021-03-31T18:31:58Z",
+      "updatedAt": "2021-06-15T23:15:43Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "6dec1591e44a54fc1ed6f1c6f43c7196b30d6acc",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "33f1a6669e5c1c0b0a00a611dd7bfa038678f7b8",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "This change is very surprising. Why not take the approach that was discussed in the issue, wherein the limit describes the *payload* size, and presence of the transport parameter indicates extension support? It's not useful to have a bunch of ill-formed possibilities where the limit describes the frame size but is smaller than needed to encode the frame.\r\n\r\nSee also https://github.com/tfpauly/draft-pauly-quic-datagram/pull/31.",
+          "createdAt": "2021-03-31T18:55:06Z",
+          "updatedAt": "2021-03-31T18:57:13Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@Ralith this is based on the WG discussion, minuted here: https://github.com/quicwg/wg-materials/blob/main/ietf110/minutes.md",
+          "createdAt": "2021-03-31T20:28:50Z",
+          "updatedAt": "2021-03-31T20:28:50Z"
+        },
+        {
+          "author": "Ralith",
+          "authorAssociation": "NONE",
+          "body": "So it comes down to preserving the weird semantics nobody wants because renumbering the TP is aesthetically unappealing? That seems like a shame. Unless saying \"I support it, but you can't send it\" is actually useful somehow?",
+          "createdAt": "2021-03-31T20:58:29Z",
+          "updatedAt": "2021-03-31T20:58:29Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjEwNTQz",
+          "commit": {
+            "abbreviatedOid": "a6d4034"
+          },
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-31T18:44:58Z",
+          "updatedAt": "2021-03-31T18:44:58Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjM2Njc1",
+          "commit": {
+            "abbreviatedOid": "a6d4034"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-31T19:17:45Z",
+          "updatedAt": "2021-03-31T19:18:20Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "```suggestion\r\nreceive such frames on this connection.\r\n```",
+              "createdAt": "2021-03-31T19:17:45Z",
+              "updatedAt": "2021-03-31T20:28:57Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjA2MTc2Mzkx",
+      "title": "Explain the lack of flow IDs, and suggest a pattern",
+      "url": "https://github.com/quicwg/datagram/pull/20",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #6",
+      "createdAt": "2021-03-31T18:55:19Z",
+      "updatedAt": "2021-06-15T23:15:43Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "6dec1591e44a54fc1ed6f1c6f43c7196b30d6acc",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-2",
+      "headRefOid": "76d135a973ae8cd1364f2cedeed8ec9d232a3c3a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjIxMzk4",
+          "commit": {
+            "abbreviatedOid": "76d135a"
+          },
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-31T18:58:16Z",
+          "updatedAt": "2021-03-31T18:58:16Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "I assume H3 datagram spec also references back to this one? Does it make sense to have a circular reference? I know some in the IETF discussion wanted this text, but I'm personally fine with out this last paragraph.",
+              "createdAt": "2021-03-31T18:58:16Z",
+              "updatedAt": "2021-03-31T18:58:16Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjIxNTEx",
+          "commit": {
+            "abbreviatedOid": "76d135a"
+          },
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-31T18:58:24Z",
+          "updatedAt": "2021-03-31T18:58:24Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjI4OTY3",
+          "commit": {
+            "abbreviatedOid": "76d135a"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-31T19:07:56Z",
+          "updatedAt": "2021-03-31T19:07:56Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "Circular references are common and fine",
+              "createdAt": "2021-03-31T19:07:56Z",
+              "updatedAt": "2021-03-31T19:07:56Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjMwODI2",
+          "commit": {
+            "abbreviatedOid": "76d135a"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-03-31T19:10:18Z",
+          "updatedAt": "2021-03-31T19:10:18Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjkxNTY4",
+          "commit": {
+            "abbreviatedOid": "76d135a"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-31T20:29:46Z",
+          "updatedAt": "2021-03-31T20:29:46Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "Yup, this is a non-normative reference; H3 datagram will have a normative reference.",
+              "createdAt": "2021-03-31T20:29:46Z",
+              "updatedAt": "2021-03-31T20:29:46Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjkyNzQx",
+          "commit": {
+            "abbreviatedOid": "76d135a"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-31T20:31:18Z",
+          "updatedAt": "2021-03-31T20:31:18Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "Agreed, though FWIW circular normative references are OK - they just require simultaneous publication.",
+              "createdAt": "2021-03-31T20:31:18Z",
+              "updatedAt": "2021-03-31T20:31:19Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NzI0MTI5",
+          "commit": {
+            "abbreviatedOid": "76d135a"
+          },
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-03-31T21:13:54Z",
+          "updatedAt": "2021-03-31T21:13:55Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "I'm not too bothered by a circular reference but I don't think it adds much. The wire format is simple. The main complexity of the H3 draft comes from how the flow IDs meld with HTTP semantics. So if you're going to reference it then be more specific about why, or just don't bother IMO.\r\n\r\nAnd if you are going to reference it, let's use the MASQUE edited draft ",
+              "createdAt": "2021-03-31T21:13:54Z",
+              "updatedAt": "2021-03-31T21:13:55Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjU3MzA5NjQ2",
+          "commit": {
+            "abbreviatedOid": "76d135a"
+          },
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-05-11T23:30:58Z",
+          "updatedAt": "2021-05-11T23:30:58Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "Given some of the churn in H3 DGRAM, how about we extract this third paragraph into another issue/PR that we can sit on while we land the other changes?",
+              "createdAt": "2021-05-11T23:30:58Z",
+              "updatedAt": "2021-05-11T23:30:58Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
