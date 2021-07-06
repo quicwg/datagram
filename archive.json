@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-06-15T23:16:18.675136+00:00",
+  "timestamp": "2021-07-06T23:48:56.154815+00:00",
   "repo": "quicwg/datagram",
   "labels": [
     {
@@ -124,15 +124,15 @@
       "id": "MDU6SXNzdWU1NzIyMzk1MDg=",
       "title": "Specify Max Payload Size instead of Max Frame Size",
       "url": "https://github.com/quicwg/datagram/issues/3",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "DavidSchinazi",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Right now, the TP specifies a maximum frame size, including frame type, length and payload. This makes certain values invalid (0, 1?). Also, since this values practically is a kind of flow control, indicating how much data I'm willing to receive at a time, it's the payload length that's important here, not the framing.\r\n\r\nFor these reasons, I'm arguing to change this to specifying a maximum payload length. Then, the question of what a value of zero means. Should a value of 0 be the same thing as not present or should it mean that only 0 length datagrams are allowed? I think it is simpler to say that a value of zero is the same as not present (i.e. disabled).\r\n\r\n(Issue copied from [individual draft repo](https://github.com/tfpauly/draft-pauly-quic-datagram/issues/30), by @nibanks on 2019-11-18)",
       "createdAt": "2020-02-27T17:30:16Z",
-      "updatedAt": "2021-03-10T13:49:59Z",
-      "closedAt": null,
+      "updatedAt": "2021-07-06T04:35:59Z",
+      "closedAt": "2021-07-06T04:35:59Z",
       "comments": [
         {
           "author": "DavidSchinazi",
@@ -1599,24 +1599,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NjA2MTQ0MjU4",
       "title": "Clarify meaning of 0 in the datagram transport parameter",
       "url": "https://github.com/quicwg/datagram/pull/19",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tfpauly",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Clarify meaning of 0 in the datagram transport parameter, based on the discussion at IETF 110. This follows one of the suggestions to have 0 mean no datagrams, and > 0 mean support for datagrams. This should be a non-breaking change with existing implementations.\r\n\r\nCloses #3 ",
       "createdAt": "2021-03-31T18:31:58Z",
-      "updatedAt": "2021-06-15T23:15:43Z",
+      "updatedAt": "2021-07-06T04:36:01Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "6dec1591e44a54fc1ed6f1c6f43c7196b30d6acc",
       "headRepository": "quicwg/datagram",
       "headRefName": "tfpauly-patch-1",
       "headRefOid": "33f1a6669e5c1c0b0a00a611dd7bfa038678f7b8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-07-06T04:36:00Z",
+      "mergedAt": "2021-07-06T04:35:59Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "0d91c89e3fb64a53d54ff934822cee08e2ee4ded"
+      },
       "comments": [
         {
           "author": "Ralith",
@@ -1688,18 +1690,54 @@
       "labels": [],
       "body": "Closes #6",
       "createdAt": "2021-03-31T18:55:19Z",
-      "updatedAt": "2021-06-15T23:15:43Z",
+      "updatedAt": "2021-07-06T23:48:53Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "6dec1591e44a54fc1ed6f1c6f43c7196b30d6acc",
       "headRepository": "quicwg/datagram",
       "headRefName": "tfpauly-patch-2",
-      "headRefOid": "76d135a973ae8cd1364f2cedeed8ec9d232a3c3a",
+      "headRefOid": "0bd9bb8205f12bb467c0970bccf22ae27dd0a9b5",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "I would like this section to say something about priorities, as emerged in the issue. Something to the effect of:\r\n\r\n\"QUIC Implementations SHOULD present an API to applications to assign relative priorities to DATAGRAM frames with respect to each other and to QUIC streams. This can be done by the API conceptually assigning DATAGRAM frames to an existing QUIC stream and inheriting its priority, or assigning a priority in the DATAGRAM send API itself.\"",
+          "createdAt": "2021-06-23T16:48:27Z",
+          "updatedAt": "2021-06-23T16:48:27Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "the first sentence of @martinduke's suggestion sounds ok. I don't like the second one much (sorry).\r\n\r\nedit: clarification - the first sentence is very much like RFC 9000's \"A QUIC implementation SHOULD provide ways in which an application can indicate the relative priority of streams\"",
+          "createdAt": "2021-06-23T17:54:14Z",
+          "updatedAt": "2021-06-23T17:55:45Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "> \r\n> \r\n> the first sentence of @martinduke's suggestion sounds ok. I don't like the second one much (sorry).\r\n> \r\n> edit: clarification - the first sentence is very much like RFC 9000's \"A QUIC implementation SHOULD provide ways in which an application can indicate the relative priority of streams\"\r\n\r\nI'm not married to the second sentence.",
+          "createdAt": "2021-06-23T17:56:19Z",
+          "updatedAt": "2021-06-23T17:56:19Z"
+        },
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Piling on to agree here: I'm OK with adding the first sentence, though I think the second one is too specific so I'd prefer the second sentence wasn't added",
+          "createdAt": "2021-06-23T22:02:32Z",
+          "updatedAt": "2021-06-23T22:02:32Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Added the first sentence about priorities. Please check!",
+          "createdAt": "2021-07-06T23:48:53Z",
+          "updatedAt": "2021-07-06T23:48:53Z"
+        }
+      ],
       "reviews": [
         {
           "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjI1NjIxMzk4",
