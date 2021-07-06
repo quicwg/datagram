@@ -228,9 +228,10 @@ and how it is parsed.
 
 If the application needs to support the coexistence of multiple flows of
 datagrams, one recommended pattern is to use a variable-length integer at the
-beginning of the Datagram Data field. For example, using datagrams with
-HTTP/3 involves prepending such a flow identifier to all datagrams
-(see {{?I-D.schinazi-quic-h3-datagram}}).
+beginning of the Datagram Data field.
+
+QUIC implementations SHOULD present an API to applications to assign relative
+priorities to DATAGRAM frames with respect to each other and to QUIC streams.
 
 ## Acknowledgement Handling
 
