@@ -5,9 +5,9 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                E. Kinnear
 Intended status: Standards Track                              Apple Inc.
-Expires: 2 October 2021                                      D. Schinazi
+Expires: 7 January 2022                                      D. Schinazi
                                                               Google LLC
-                                                           31 March 2021
+                                                             6 July 2021
 
 
                 An Unreliable Datagram Extension to QUIC
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 October 2021.
+   This Internet-Draft will expire on 7 January 2022.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Pauly, et al.            Expires 2 October 2021                 [Page 1]
+Pauly, et al.            Expires 7 January 2022                 [Page 1]
 
-Internet-Draft               QUIC Datagrams                   March 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
    and restrictions with respect to this document.  Code Components
@@ -76,7 +76,7 @@ Table of Contents
      5.3.  Flow Control  . . . . . . . . . . . . . . . . . . . . . .   7
      5.4.  Congestion Control  . . . . . . . . . . . . . . . . . . .   7
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   8
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Pauly, et al.            Expires 2 October 2021                 [Page 2]
+Pauly, et al.            Expires 7 January 2022                 [Page 2]
 
-Internet-Draft               QUIC Datagrams                   March 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
 1.1.  Specification of Requirements
@@ -165,9 +165,9 @@ Internet-Draft               QUIC Datagrams                   March 2021
 
 
 
-Pauly, et al.            Expires 2 October 2021                 [Page 3]
+Pauly, et al.            Expires 7 January 2022                 [Page 3]
 
-Internet-Draft               QUIC Datagrams                   March 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
 3.  Transport Parameter
@@ -221,9 +221,9 @@ Internet-Draft               QUIC Datagrams                   March 2021
 
 
 
-Pauly, et al.            Expires 2 October 2021                 [Page 4]
+Pauly, et al.            Expires 7 January 2022                 [Page 4]
 
-Internet-Draft               QUIC Datagrams                   March 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
    Application protocols that use datagrams MUST define how they react
@@ -277,9 +277,9 @@ Internet-Draft               QUIC Datagrams                   March 2021
 
 
 
-Pauly, et al.            Expires 2 October 2021                 [Page 5]
+Pauly, et al.            Expires 7 January 2022                 [Page 5]
 
-Internet-Draft               QUIC Datagrams                   March 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
    DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
@@ -308,9 +308,11 @@ Internet-Draft               QUIC Datagrams                   March 2021
 
    If the application needs to support the coexistence of multiple flows
    of datagrams, one recommended pattern is to use a variable-length
-   integer at the beginning of the Datagram Data field.  For example,
-   using datagrams with HTTP/3 involves prepending such a flow
-   identifier to all datagrams (see [I-D.schinazi-quic-h3-datagram]).
+   integer at the beginning of the Datagram Data field.
+
+   QUIC implementations SHOULD present an API to applications to assign
+   relative priorities to DATAGRAM frames with respect to each other and
+   to QUIC streams.
 
 5.2.  Acknowledgement Handling
 
@@ -321,6 +323,21 @@ Internet-Draft               QUIC Datagrams                   March 2021
    DATAGRAM frames, since the timing of these acknowledgements is not
    used for loss recovery.
 
+
+
+
+
+
+
+
+
+
+
+Pauly, et al.            Expires 7 January 2022                 [Page 6]
+
+Internet-Draft               QUIC Datagrams                    July 2021
+
+
    If a sender detects that a packet containing a specific DATAGRAM
    frame might have been lost, the implementation MAY notify the
    application that it believes the datagram was lost.  Similarly, if a
@@ -329,14 +346,6 @@ Internet-Draft               QUIC Datagrams                   March 2021
    successfully transmitted and received.  Note that, due to reordering,
    a DATAGRAM frame that was thought to be lost could at a later point
    be received and acknowledged.
-
-
-
-
-Pauly, et al.            Expires 2 October 2021                 [Page 6]
-
-Internet-Draft               QUIC Datagrams                   March 2021
-
 
 5.3.  Flow Control
 
@@ -374,6 +383,17 @@ Internet-Draft               QUIC Datagrams                   March 2021
    transmitted with the DATAGRAM frame, like the STREAM frame, MUST be
    protected either by 0-RTT or 1-RTT keys.
 
+
+
+
+
+
+
+Pauly, et al.            Expires 7 January 2022                 [Page 7]
+
+Internet-Draft               QUIC Datagrams                    July 2021
+
+
 7.  IANA Considerations
 
    This document registers a new value in the QUIC Transport Parameter
@@ -384,16 +404,6 @@ Internet-Draft               QUIC Datagrams                   March 2021
    Parameter Name:  max_datagram_frame_size
 
    Specification:  Indicates that the connection should enable support
-
-
-
-
-
-Pauly, et al.            Expires 2 October 2021                 [Page 7]
-
-Internet-Draft               QUIC Datagrams                   March 2021
-
-
       for unreliable DATAGRAM frames.  An endpoint that advertises this
       transport parameter can receive datagrams frames from the other
       endpoint, up to and including the length in bytes provided in the
@@ -432,23 +442,17 @@ Internet-Draft               QUIC Datagrams                   March 2021
 
 9.2.  Informative References
 
-   [I-D.schinazi-quic-h3-datagram]
-              Schinazi, D., "Using QUIC Datagrams with HTTP/3", Work in
-              Progress, Internet-Draft, draft-schinazi-quic-h3-datagram-
-              05, 12 October 2020, <https://www.ietf.org/archive/id/
-              draft-schinazi-quic-h3-datagram-05.txt>.
+
+
+
+Pauly, et al.            Expires 7 January 2022                 [Page 8]
+
+Internet-Draft               QUIC Datagrams                    July 2021
+
 
    [RFC0768]  Postel, J., "User Datagram Protocol", STD 6, RFC 768,
               DOI 10.17487/RFC0768, August 1980,
               <https://www.rfc-editor.org/info/rfc768>.
-
-
-
-
-Pauly, et al.            Expires 2 October 2021                 [Page 8]
-
-Internet-Draft               QUIC Datagrams                   March 2021
-
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -497,8 +501,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-Pauly, et al.            Expires 2 October 2021                 [Page 9]
+Pauly, et al.            Expires 7 January 2022                 [Page 9]
