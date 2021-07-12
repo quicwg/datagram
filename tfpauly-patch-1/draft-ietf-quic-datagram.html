@@ -925,8 +925,8 @@ a QUIC connection.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <nav class="toc"><ul class="compact ulBare ulEmpty toc">
 <li class="compact ulBare ulEmpty toc" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
-<ul class="compact ulBare toc ulEmpty">
-<li class="compact ulBare toc ulEmpty" id="section-toc.1-1.1.2.1">
+<ul class="compact ulBare ulEmpty toc">
+<li class="compact ulBare ulEmpty toc" id="section-toc.1-1.1.2.1">
                 <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-specification-of-requiremen" class="xref">Specification of Requirements</a></p>
 </li>
             </ul>
@@ -942,17 +942,17 @@ a QUIC connection.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </li>
           <li class="compact ulBare ulEmpty toc" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-behavior-and-usage" class="xref">Behavior and Usage</a></p>
-<ul class="compact ulBare toc ulEmpty">
-<li class="compact ulBare toc ulEmpty" id="section-toc.1-1.5.2.1">
+<ul class="compact ulBare ulEmpty toc">
+<li class="compact ulBare ulEmpty toc" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-multiplexing-datagrams" class="xref">Multiplexing Datagrams</a></p>
 </li>
-              <li class="compact ulBare toc ulEmpty" id="section-toc.1-1.5.2.2">
+              <li class="compact ulBare ulEmpty toc" id="section-toc.1-1.5.2.2">
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-acknowledgement-handling" class="xref">Acknowledgement Handling</a></p>
 </li>
-              <li class="compact ulBare toc ulEmpty" id="section-toc.1-1.5.2.3">
+              <li class="compact ulBare ulEmpty toc" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-flow-control" class="xref">Flow Control</a></p>
 </li>
-              <li class="compact ulBare toc ulEmpty" id="section-toc.1-1.5.2.4">
+              <li class="compact ulBare ulEmpty toc" id="section-toc.1-1.5.2.4">
                 <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-congestion-control" class="xref">Congestion Control</a></p>
 </li>
             </ul>
@@ -968,11 +968,11 @@ a QUIC connection.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </li>
           <li class="compact ulBare ulEmpty toc" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-references" class="xref">References</a></p>
-<ul class="compact ulBare toc ulEmpty">
-<li class="compact ulBare toc ulEmpty" id="section-toc.1-1.9.2.1">
+<ul class="compact ulBare ulEmpty toc">
+<li class="compact ulBare ulEmpty toc" id="section-toc.1-1.9.2.1">
                 <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
 </li>
-              <li class="compact ulBare toc ulEmpty" id="section-toc.1-1.9.2.2">
+              <li class="compact ulBare ulEmpty toc" id="section-toc.1-1.9.2.2">
                 <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
 </li>
             </ul>
@@ -1204,13 +1204,16 @@ ack-eliciting (<span>[<a href="#RFC9002" class="xref">RFC9002</a>]</span>). Rece
 ACK frames (within the limits specified by max_ack_delay) in reponse to receiving
 packets that only contain DATAGRAM frames, since the timing of these
 acknowledgements is not used for loss recovery.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">If a sender detects that a packet containing a specific DATAGRAM frame might
+<p id="section-5.2-2">When a sender suspects that a packet containing only DATAGRAM frames has been
+lost, it MAY send probe packets to elicit a faster acknowledgement as described
+in Section 6.2.4 of <span>[<a href="#RFC9002" class="xref">RFC9002</a>]</span>.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">If a sender detects that a packet containing a specific DATAGRAM frame might
 have been lost, the implementation MAY notify the application that it believes
 the datagram was lost. Similarly, if a packet containing a DATAGRAM frame is
 acknowledged, the implementation MAY notify the application that the datagram
 was successfully transmitted and received. Note that, due to reordering, a
 DATAGRAM frame that was thought to be lost could at a later point be received
-and acknowledged.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+and acknowledged.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="flow-control">
