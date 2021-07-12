@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-07-12T02:52:35.962172+00:00",
+  "timestamp": "2021-07-12T17:44:38.665717+00:00",
   "repo": "quicwg/datagram",
   "labels": [
     {
@@ -415,15 +415,15 @@
       "id": "MDU6SXNzdWU2MDQ4NTYyMjM=",
       "title": "No streams in datagrams?",
       "url": "https://github.com/quicwg/datagram/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinduke",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I finally sat down and read this draft (nice work, BTW) and was somewhat sad to learn that QUIC won't natively support stream multiplexing for datagrams.\r\n\r\nIt is true that applications can implement this if they choose. But one nice thing about QUIC is that it takes care of this machinery on behalf of the application. This is a somewhat aesthetic concern, but it feels awkward to have one layer of stream multiplexing in QUIC and then another layer in the application. It would be ugly in our implementation, at least.\r\n\r\nMoving on to non-aesthetic issues: I don't have a full grasp of all the use cases for DATAGRAM, but if stream multiplexing is a common requirement, it would be good to move this into the transport. Applications that don't need this are free to do it all over one stream at a tiny loss in wire efficiency, or we could have a stream-less version if people are deeply concerned about one byte per frame.",
       "createdAt": "2020-04-22T15:37:41Z",
-      "updatedAt": "2021-03-11T03:24:39Z",
-      "closedAt": null,
+      "updatedAt": "2021-07-12T02:53:02Z",
+      "closedAt": "2021-07-12T02:53:02Z",
       "comments": [
         {
           "author": "LPardue",
@@ -1260,21 +1260,21 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NDE0ODY5NjY5",
       "title": "Change TP to max_datagram_payload_size",
       "url": "https://github.com/quicwg/datagram/pull/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nibanks",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "This PR changes the TP from `max_datagram_frame_size` to `max_datagram_payload_size`.\r\n\r\nFixes #3.",
       "createdAt": "2020-05-07T19:12:54Z",
-      "updatedAt": "2021-06-15T23:15:43Z",
+      "updatedAt": "2021-07-12T03:09:52Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "5fe5d4edd3efe42b74e0bba1489c0feb9fcef9c6",
       "headRepository": "nibanks/datagram",
       "headRefName": "pr/max-datagram-payload-size",
       "headRefOid": "ad8ed8f392384b54bf04fb92931f919d51108c28",
-      "closedAt": null,
+      "closedAt": "2021-07-12T03:09:52Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -1285,6 +1285,13 @@
           "body": "@DavidSchinazi sure. I'll make this PR just about changing to payload size then.",
           "createdAt": "2020-05-08T01:26:23Z",
           "updatedAt": "2020-05-08T01:26:23Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I believe this is now outdated, and superseded by more recent PRs",
+          "createdAt": "2021-07-12T03:09:52Z",
+          "updatedAt": "2021-07-12T03:09:52Z"
         }
       ],
       "reviews": [
@@ -1683,24 +1690,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NjA2MTc2Mzkx",
       "title": "Explain the lack of flow IDs, and suggest a pattern",
       "url": "https://github.com/quicwg/datagram/pull/20",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tfpauly",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #6",
       "createdAt": "2021-03-31T18:55:19Z",
-      "updatedAt": "2021-07-12T02:52:16Z",
+      "updatedAt": "2021-07-12T02:53:03Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "6dec1591e44a54fc1ed6f1c6f43c7196b30d6acc",
       "headRepository": "quicwg/datagram",
       "headRefName": "tfpauly-patch-2",
       "headRefOid": "4cdafa1f8230def6db6b5446ee81e69dffd295ab",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-07-12T02:53:02Z",
+      "mergedAt": "2021-07-12T02:53:02Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "a74ac46449ab0226067e19c6bb7b8de9d9ba2d6b"
+      },
       "comments": [
         {
           "author": "martinduke",
@@ -1988,6 +1997,204 @@
               "body": "```suggestion\r\nthat applications will want to differentiate between specific DATAGRAM frames\r\n```",
               "createdAt": "2021-07-12T02:52:11Z",
               "updatedAt": "2021-07-12T02:52:11Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "MDExOlB1bGxSZXF1ZXN0Njg3NDY0ODc0",
+      "title": "Update references to RFCs",
+      "url": "https://github.com/quicwg/datagram/pull/21",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-07-12T02:57:03Z",
+      "updatedAt": "2021-07-12T02:57:42Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "a74ac46449ab0226067e19c6bb7b8de9d9ba2d6b",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "f99689c2e414ab76a0fa5b351ae3b288ddeea9ea",
+      "closedAt": "2021-07-12T02:57:42Z",
+      "mergedAt": "2021-07-12T02:57:42Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "74d5f8d6ca78ab6981be06cb0313a37e1ab34e0e"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 22,
+      "id": "MDExOlB1bGxSZXF1ZXN0Njg3NDY2OTk5",
+      "title": "Add a reference for sending probe packets",
+      "url": "https://github.com/quicwg/datagram/pull/22",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Closes #8",
+      "createdAt": "2021-07-12T03:03:11Z",
+      "updatedAt": "2021-07-12T16:56:19Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "74d5f8d6ca78ab6981be06cb0313a37e1ab34e0e",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "42a1f35656e59e46802c3d5af91d642c6dc97464",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA0MTM0ODAy",
+          "commit": {
+            "abbreviatedOid": "42a1f35"
+          },
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "This text is fine with me. I am wondering if we should say something additional, like that packets with datagram frames shouldn't be treated special, with respect to loss recovery. ",
+          "createdAt": "2021-07-12T13:49:33Z",
+          "updatedAt": "2021-07-12T13:49:33Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA0MzM4Nzk3",
+          "commit": {
+            "abbreviatedOid": "42a1f35"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "This text sounds good, though I'd love a little bit more text mentioning the benefit of this probe",
+          "createdAt": "2021-07-12T16:55:01Z",
+          "updatedAt": "2021-07-12T16:55:01Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA0MzQwMDYz",
+          "commit": {
+            "abbreviatedOid": "42a1f35"
+          },
+          "author": "ekinnear",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-07-12T16:56:19Z",
+          "updatedAt": "2021-07-12T16:56:19Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "MDExOlB1bGxSZXF1ZXN0Njg3NDY5ODM2",
+      "title": "Transport acks != application processing",
+      "url": "https://github.com/quicwg/datagram/pull/23",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Closes #15",
+      "createdAt": "2021-07-12T03:09:21Z",
+      "updatedAt": "2021-07-12T17:44:10Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "74d5f8d6ca78ab6981be06cb0313a37e1ab34e0e",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-2",
+      "headRefOid": "df50e1a6b0bfcc52353e8e029723138f50f95f01",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA0MTM3MTA1",
+          "commit": {
+            "abbreviatedOid": "4a1ec7f"
+          },
+          "author": "nibanks",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Text is good, but I am still a bit sad that we don't have some way to leverage the QUIC ACKs in a general sense (not implementation specific).",
+          "createdAt": "2021-07-12T13:51:32Z",
+          "updatedAt": "2021-07-12T13:51:32Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA0MTQ1NDky",
+          "commit": {
+            "abbreviatedOid": "4a1ec7f"
+          },
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-12T13:58:29Z",
+          "updatedAt": "2021-07-12T13:58:29Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "which application? The sender, receiver, or both?",
+              "createdAt": "2021-07-12T13:58:29Z",
+              "updatedAt": "2021-07-12T13:58:29Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA0MTQ5MDU2",
+          "commit": {
+            "abbreviatedOid": "4a1ec7f"
+          },
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-12T14:01:22Z",
+          "updatedAt": "2021-07-12T14:01:22Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "I appreciate this text was already like this before the PR. However, IMO it wouldn't hurt to be specific here, the following sentences are. \r\n\r\nThis isn't a blocking issue, so go ahead and merge if you disagree.",
+              "createdAt": "2021-07-12T14:01:22Z",
+              "updatedAt": "2021-07-12T14:01:22Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA0MzQxNDQx",
+          "commit": {
+            "abbreviatedOid": "4a1ec7f"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-07-12T16:57:48Z",
+          "updatedAt": "2021-07-12T16:58:38Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "I agree with Lucas, how about:\r\n```suggestion\r\nimplementation MAY notify the sender application that the datagram was successfully\r\n```\r\nsame for line 251 above.",
+              "createdAt": "2021-07-12T16:57:49Z",
+              "updatedAt": "2021-07-12T16:58:38Z"
             }
           ]
         }
