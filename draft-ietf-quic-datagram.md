@@ -247,6 +247,10 @@ ACK frames (within the limits specified by max_ack_delay) in reponse to receivin
 packets that only contain DATAGRAM frames, since the timing of these
 acknowledgements is not used for loss recovery.
 
+As with any ack-eliciting frame, when a sender suspects that a packet containing
+only DATAGRAM frames has been lost, it MAY send probe packets to elicit a faster
+acknowledgement as described in Section 6.2.4 of {{!RFC9002}}.
+
 If a sender detects that a packet containing a specific DATAGRAM frame might
 have been lost, the implementation MAY notify the application that it believes
 the datagram was lost.
