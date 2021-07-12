@@ -217,7 +217,7 @@ size is limited by other factors.
 
 DATAGRAM frames belong to a QUIC connection as a whole, and are not strongly
 associated with any stream ID at the QUIC layer. However, it is expected
-that applications will want to differentiate between different DATAGRAM frames
+that applications will want to differentiate between specific DATAGRAM frames
 by using identifiers, such as for logical flows of datagrams or to distinguish
 between different kinds of datagrams.
 
