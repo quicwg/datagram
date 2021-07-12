@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-07-06T23:48:56.154815+00:00",
+  "timestamp": "2021-07-12T02:52:35.962172+00:00",
   "repo": "quicwg/datagram",
   "labels": [
     {
@@ -1690,13 +1690,13 @@
       "labels": [],
       "body": "Closes #6",
       "createdAt": "2021-03-31T18:55:19Z",
-      "updatedAt": "2021-07-06T23:48:53Z",
+      "updatedAt": "2021-07-12T02:52:16Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "6dec1591e44a54fc1ed6f1c6f43c7196b30d6acc",
       "headRepository": "quicwg/datagram",
       "headRefName": "tfpauly-patch-2",
-      "headRefOid": "0bd9bb8205f12bb467c0970bccf22ae27dd0a9b5",
+      "headRefOid": "4cdafa1f8230def6db6b5446ee81e69dffd295ab",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -1882,6 +1882,112 @@
               "body": "Given some of the churn in H3 DGRAM, how about we extract this third paragraph into another issue/PR that we can sit on while we land the other changes?",
               "createdAt": "2021-05-11T23:30:58Z",
               "updatedAt": "2021-05-11T23:30:58Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzAwNDYzOTQw",
+          "commit": {
+            "abbreviatedOid": "0bd9bb8"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-06T23:49:14Z",
+          "updatedAt": "2021-07-06T23:49:15Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "@LPardue removed the specific H3 datagram reference; that OK?",
+              "createdAt": "2021-07-06T23:49:14Z",
+              "updatedAt": "2021-07-06T23:49:15Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzAwNDY5MDQ2",
+          "commit": {
+            "abbreviatedOid": "0bd9bb8"
+          },
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-07T00:02:44Z",
+          "updatedAt": "2021-07-07T00:02:45Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "\"differentiate between different\" seems kind of redundant. I tried penning a suggestion for this sentence but it didn't seem to read any better",
+              "createdAt": "2021-07-07T00:02:45Z",
+              "updatedAt": "2021-07-07T00:02:45Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzAwNDY5MjY0",
+          "commit": {
+            "abbreviatedOid": "0bd9bb8"
+          },
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "I made a grammatical nit, but in the absence being able to make a firm suggestion, this LGTM.",
+          "createdAt": "2021-07-07T00:03:23Z",
+          "updatedAt": "2021-07-07T00:03:23Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzAwNDY5Mzg3",
+          "commit": {
+            "abbreviatedOid": "0bd9bb8"
+          },
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-07T00:03:39Z",
+          "updatedAt": "2021-07-07T00:03:39Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "yep!",
+              "createdAt": "2021-07-07T00:03:39Z",
+              "updatedAt": "2021-07-07T00:03:39Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzAxMTA4NjAy",
+          "commit": {
+            "abbreviatedOid": "0bd9bb8"
+          },
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2021-07-07T14:50:51Z",
+          "updatedAt": "2021-07-07T14:50:51Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzAzNjc3Njc0",
+          "commit": {
+            "abbreviatedOid": "0bd9bb8"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-12T02:52:11Z",
+          "updatedAt": "2021-07-12T02:52:11Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\r\nthat applications will want to differentiate between specific DATAGRAM frames\r\n```",
+              "createdAt": "2021-07-12T02:52:11Z",
+              "updatedAt": "2021-07-12T02:52:11Z"
             }
           ]
         }
