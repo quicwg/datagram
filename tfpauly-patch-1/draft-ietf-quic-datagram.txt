@@ -322,14 +322,14 @@ Internet-Draft               QUIC Datagrams                    July 2021
    reponse to receiving packets that only contain DATAGRAM frames, since
    the timing of these acknowledgements is not used for loss recovery.
 
-   When a sender suspects that a packet containing only DATAGRAM frames
-   has been lost, it MAY send probe packets to elicit a faster
-   acknowledgement as described in Section 6.2.4 of [RFC9002].
+   As with any ack-eliciting frame, when a sender suspects that a packet
+   containing only DATAGRAM frames has been lost, it MAY send probe
+   packets to elicit a faster acknowledgement as described in
+   Section 6.2.4 of [RFC9002].
 
    If a sender detects that a packet containing a specific DATAGRAM
    frame might have been lost, the implementation MAY notify the
    application that it believes the datagram was lost.  Similarly, if a
-   packet containing a DATAGRAM frame is acknowledged, the
 
 
 
@@ -338,6 +338,7 @@ Pauly, et al.            Expires 13 January 2022                [Page 6]
 Internet-Draft               QUIC Datagrams                    July 2021
 
 
+   packet containing a DATAGRAM frame is acknowledged, the
    implementation MAY notify the application that the datagram was
    successfully transmitted and received.  Note that, due to reordering,
    a DATAGRAM frame that was thought to be lost could at a later point
@@ -385,7 +386,6 @@ Internet-Draft               QUIC Datagrams                    July 2021
    Registry:
 
    Value:  0x0020 (if this document is approved)
-
 
 
 
