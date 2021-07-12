@@ -324,12 +324,12 @@ Internet-Draft               QUIC Datagrams                    July 2021
 
    If a sender detects that a packet containing a specific DATAGRAM
    frame might have been lost, the implementation MAY notify the
-   application that it believes the datagram was lost.  Similarly, if a
-   packet containing a DATAGRAM frame is acknowledged, the
-   implementation MAY notify the application that the datagram was
-   successfully transmitted and received.  Note that, due to reordering,
-   a DATAGRAM frame that was thought to be lost could at a later point
-   be received and acknowledged.
+   application that it believes the datagram was lost.
+
+   Similarly, if a packet containing a DATAGRAM frame is acknowledged,
+   the implementation MAY notify the sender application that the
+   datagram was successfully transmitted and received.  Due to
+   reordering, this can include a DATAGRAM frame that was thought to be
 
 
 
@@ -337,6 +337,14 @@ Pauly, et al.            Expires 13 January 2022                [Page 6]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
+
+   lost, but which at a later point was received and acknowledged.  It
+   is important to note that acknowledgement of a DATAGRAM frame only
+   indicates that the transport-layer handling on the receiver processed
+   the frame, and does not guarantee that the application on the
+   receiver successfully processed the data.  Thus, this signal SHOULD
+   NOT replace application-layer signals that indicate successful
+   processing.
 
 5.3.  Flow Control
 
@@ -379,14 +387,6 @@ Internet-Draft               QUIC Datagrams                    July 2021
    This document registers a new value in the QUIC Transport Parameter
    Registry:
 
-   Value:  0x0020 (if this document is approved)
-
-   Parameter Name:  max_datagram_frame_size
-
-   Specification:  A non-zero value indicates that the endpoint supports
-
-
-
 
 
 Pauly, et al.            Expires 13 January 2022                [Page 7]
@@ -394,6 +394,11 @@ Pauly, et al.            Expires 13 January 2022                [Page 7]
 Internet-Draft               QUIC Datagrams                    July 2021
 
 
+   Value:  0x0020 (if this document is approved)
+
+   Parameter Name:  max_datagram_frame_size
+
+   Specification:  A non-zero value indicates that the endpoint supports
       receiving unreliable DATAGRAM frames.  An endpoint that advertises
       this transport parameter can receive DATAGRAM frames from the
       other endpoint, up to and including the length in bytes provided
@@ -436,11 +441,6 @@ Internet-Draft               QUIC Datagrams                    July 2021
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-   [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
-              Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
-              January 2012, <https://www.rfc-editor.org/info/rfc6347>.
-
-
 
 
 
@@ -449,6 +449,10 @@ Pauly, et al.            Expires 13 January 2022                [Page 8]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
+
+   [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
+              Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
+              January 2012, <https://www.rfc-editor.org/info/rfc6347>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -481,10 +485,6 @@ Authors' Addresses
    United States of America
 
    Email: dschinazi.ietf@gmail.com
-
-
-
-
 
 
 
