@@ -249,11 +249,17 @@ acknowledgements is not used for loss recovery.
 
 If a sender detects that a packet containing a specific DATAGRAM frame might
 have been lost, the implementation MAY notify the application that it believes
-the datagram was lost. Similarly, if a packet containing a DATAGRAM frame is
-acknowledged, the implementation MAY notify the application that the datagram
-was successfully transmitted and received. Note that, due to reordering, a
-DATAGRAM frame that was thought to be lost could at a later point be received
-and acknowledged.
+the datagram was lost.
+
+Similarly, if a packet containing a DATAGRAM frame is acknowledged, the
+implementation MAY notify the sender application that the datagram was successfully
+transmitted and received. Due to reordering, this can include a DATAGRAM frame
+that was thought to be lost, but which at a later point was received and
+acknowledged. It is important to note that acknowledgement of a DATAGRAM frame
+only indicates that the transport-layer handling on the receiver processed
+the frame, and does not guarantee that the application on the receiver
+successfully processed the data. Thus, this signal SHOULD NOT replace
+application-layer signals that indicate successful processing.
 
 ## Flow Control
 
