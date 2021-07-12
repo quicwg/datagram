@@ -5,9 +5,9 @@
 Network Working Group                                           T. Pauly
 Internet-Draft                                                E. Kinnear
 Intended status: Standards Track                              Apple Inc.
-Expires: 7 January 2022                                      D. Schinazi
+Expires: 13 January 2022                                     D. Schinazi
                                                               Google LLC
-                                                             6 July 2021
+                                                            12 July 2021
 
 
                 An Unreliable Datagram Extension to QUIC
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 January 2022.
+   This Internet-Draft will expire on 13 January 2022.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Pauly, et al.            Expires 7 January 2022                 [Page 1]
+Pauly, et al.            Expires 13 January 2022                [Page 1]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Pauly, et al.            Expires 7 January 2022                 [Page 2]
+Pauly, et al.            Expires 13 January 2022                [Page 2]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
@@ -165,7 +165,7 @@ Internet-Draft               QUIC Datagrams                    July 2021
 
 
 
-Pauly, et al.            Expires 7 January 2022                 [Page 3]
+Pauly, et al.            Expires 13 January 2022                [Page 3]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
@@ -221,7 +221,7 @@ Internet-Draft               QUIC Datagrams                    July 2021
 
 
 
-Pauly, et al.            Expires 7 January 2022                 [Page 4]
+Pauly, et al.            Expires 13 January 2022                [Page 4]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
@@ -277,7 +277,7 @@ Internet-Draft               QUIC Datagrams                    July 2021
 
 
 
-Pauly, et al.            Expires 7 January 2022                 [Page 5]
+Pauly, et al.            Expires 13 January 2022                [Page 5]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
@@ -297,7 +297,7 @@ Internet-Draft               QUIC Datagrams                    July 2021
    DATAGRAM frames belong to a QUIC connection as a whole, and are not
    strongly associated with any stream ID at the QUIC layer.  However,
    it is expected that applications will want to differentiate between
-   different DATAGRAM frames by using identifiers, such as for logical
+   specific DATAGRAM frames by using identifiers, such as for logical
    flows of datagrams or to distinguish between different kinds of
    datagrams.
 
@@ -333,7 +333,7 @@ Internet-Draft               QUIC Datagrams                    July 2021
 
 
 
-Pauly, et al.            Expires 7 January 2022                 [Page 6]
+Pauly, et al.            Expires 13 January 2022                [Page 6]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
@@ -389,7 +389,7 @@ Internet-Draft               QUIC Datagrams                    July 2021
 
 
 
-Pauly, et al.            Expires 7 January 2022                 [Page 7]
+Pauly, et al.            Expires 13 January 2022                [Page 7]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
@@ -445,7 +445,7 @@ Internet-Draft               QUIC Datagrams                    July 2021
 
 
 
-Pauly, et al.            Expires 7 January 2022                 [Page 8]
+Pauly, et al.            Expires 13 January 2022                [Page 8]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
@@ -501,4 +501,4 @@ Authors' Addresses
 
 
 
-Pauly, et al.            Expires 7 January 2022                 [Page 9]
+Pauly, et al.            Expires 13 January 2022                [Page 9]
