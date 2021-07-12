@@ -5,9 +5,9 @@
 QUIC                                                            T. Pauly
 Internet-Draft                                                E. Kinnear
 Intended status: Standards Track                              Apple Inc.
-Expires: 17 December 2021                                    D. Schinazi
+Expires: 13 January 2022                                     D. Schinazi
                                                               Google LLC
-                                                            15 June 2021
+                                                            12 July 2021
 
 
                 An Unreliable Datagram Extension to QUIC
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 December 2021.
+   This Internet-Draft will expire on 13 January 2022.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Pauly, et al.           Expires 17 December 2021                [Page 1]
+Pauly, et al.            Expires 13 January 2022                [Page 1]
 
-Internet-Draft               QUIC Datagrams                    June 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
    and restrictions with respect to this document.  Code Components
@@ -71,11 +71,12 @@ Table of Contents
    3.  Transport Parameter . . . . . . . . . . . . . . . . . . . . .   4
    4.  Datagram Frame Type . . . . . . . . . . . . . . . . . . . . .   5
    5.  Behavior and Usage  . . . . . . . . . . . . . . . . . . . . .   5
-     5.1.  Acknowledgement Handling  . . . . . . . . . . . . . . . .   6
-     5.2.  Flow Control  . . . . . . . . . . . . . . . . . . . . . .   6
-     5.3.  Congestion Control  . . . . . . . . . . . . . . . . . . .   7
+     5.1.  Multiplexing Datagrams  . . . . . . . . . . . . . . . . .   6
+     5.2.  Acknowledgement Handling  . . . . . . . . . . . . . . . .   6
+     5.3.  Flow Control  . . . . . . . . . . . . . . . . . . . . . .   7
+     5.4.  Congestion Control  . . . . . . . . . . . . . . . . . . .   7
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   8
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
@@ -108,10 +109,9 @@ Table of Contents
 
 
 
-
-Pauly, et al.           Expires 17 December 2021                [Page 2]
+Pauly, et al.            Expires 13 January 2022                [Page 2]
 
-Internet-Draft               QUIC Datagrams                    June 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
 1.1.  Specification of Requirements
@@ -165,9 +165,9 @@ Internet-Draft               QUIC Datagrams                    June 2021
 
 
 
-Pauly, et al.           Expires 17 December 2021                [Page 3]
+Pauly, et al.            Expires 13 January 2022                [Page 3]
 
-Internet-Draft               QUIC Datagrams                    June 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
 3.  Transport Parameter
@@ -178,23 +178,28 @@ Internet-Draft               QUIC Datagrams                    June 2021
    integer value (represented as a variable-length integer) that
    represents the maximum size of a DATAGRAM frame (including the frame
    type, length, and payload) the endpoint is willing to receive, in
-   bytes.  An endpoint that includes this parameter supports the
-   DATAGRAM frame types and is willing to receive such frames on this
-   connection.  Endpoints MUST NOT send DATAGRAM frames until they have
-   received the max_datagram_frame_size transport parameter.  Endpoints
-   MUST NOT send DATAGRAM frames of size strictly larger than the value
-   of max_datagram_frame_size the endpoint has received from its peer.
-   An endpoint that receives a DATAGRAM frame when it has not sent the
-   max_datagram_frame_size transport parameter MUST terminate the
-   connection with error PROTOCOL_VIOLATION.  An endpoint that receives
-   a DATAGRAM frame that is strictly larger than the value it sent in
-   its max_datagram_frame_size transport parameter MUST terminate the
-   connection with error PROTOCOL_VIOLATION.  Endpoints that wish to use
-   DATAGRAM frames need to ensure they send a max_datagram_frame_size
-   value sufficient to allow their peer to use them.  It is RECOMMENDED
-   to send the value 65535 in the max_datagram_frame_size transport
-   parameter as that indicates to the peer that this endpoint will
-   accept any DATAGRAM frame that fits inside a QUIC packet.
+   bytes.
+
+   The default for this parameter is 0, which indicates that the
+   endpoint does not support DATAGRAM frames.  A value greater than 0
+   indicates that the endpoint supports the DATAGRAM frame types and is
+   willing to receive such frames on this connection.
+
+   An endpoint MUST NOT send DATAGRAM frames until it has received the
+   max_datagram_frame_size transport parameter with a non-zero value.
+   An endpoint MUST NOT send DATAGRAM frames that are larger than the
+   max_datagram_frame_size value it has received from its peer.  An
+   endpoint that receives a DATAGRAM frame when it has not indicated
+   support via the transport parameter MUST terminate the connection
+   with an error of type PROTOCOL_VIOLATION.  Similarly, an endpoint
+   that receives a DATAGRAM frame that is larger than the value it sent
+   in its max_datagram_frame_size transport parameter MUST terminate the
+   connection with an error of type PROTOCOL_VIOLATION.
+
+   For most uses of DATAGRAM frames, it is RECOMMENDED to send a value
+   of 65535 in the max_datagram_frame_size transport parameter to
+   indicate that this endpoint will accept any DATAGRAM frame that fits
+   inside a QUIC packet.
 
    The max_datagram_frame_size transport parameter is a unidirectional
    limit and indication of support of DATAGRAM frames.  Application
@@ -216,14 +221,9 @@ Internet-Draft               QUIC Datagrams                    June 2021
 
 
 
-
-
-
-
-
-Pauly, et al.           Expires 17 December 2021                [Page 4]
+Pauly, et al.            Expires 13 January 2022                [Page 4]
 
-Internet-Draft               QUIC Datagrams                    June 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
    Application protocols that use datagrams MUST define how they react
@@ -277,20 +277,12 @@ Internet-Draft               QUIC Datagrams                    June 2021
 
 
 
-Pauly, et al.           Expires 17 December 2021                [Page 5]
+Pauly, et al.            Expires 13 January 2022                [Page 5]
 
-Internet-Draft               QUIC Datagrams                    June 2021
+Internet-Draft               QUIC Datagrams                    July 2021
 
 
    DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
-
-   Application protocols using datagrams are responsible for defining
-   the semantics of the Datagram Data field, and how it is parsed.  If
-   the application protocol supports the coexistence of multiple
-   entities using datagrams inside a single QUIC connection, it can use
-   a mechanism to allow demultiplexing between them.  For example, using
-   datagrams with HTTP/3 involves prepending a flow identifier to all
-   datagrams, see [I-D.schinazi-quic-h3-datagram].
 
    Note that while the max_datagram_frame_size transport parameter
    places a limit on the maximum size of DATAGRAM frames, that limit can
@@ -300,7 +292,29 @@ Internet-Draft               QUIC Datagrams                    June 2021
    need to handle cases where the maximum datagram size is limited by
    other factors.
 
-5.1.  Acknowledgement Handling
+5.1.  Multiplexing Datagrams
+
+   DATAGRAM frames belong to a QUIC connection as a whole, and are not
+   strongly associated with any stream ID at the QUIC layer.  However,
+   it is expected that applications will want to differentiate between
+   specific DATAGRAM frames by using identifiers, such as for logical
+   flows of datagrams or to distinguish between different kinds of
+   datagrams.
+
+   Identifiers used to multiplex different kinds of datagrams, or flows
+   of datagrams, are the responsibility of the application protocol
+   running over QUIC to define.  The application defines the semantics
+   of the Datagram Data field and how it is parsed.
+
+   If the application needs to support the coexistence of multiple flows
+   of datagrams, one recommended pattern is to use a variable-length
+   integer at the beginning of the Datagram Data field.
+
+   QUIC implementations SHOULD present an API to applications to assign
+   relative priorities to DATAGRAM frames with respect to each other and
+   to QUIC streams.
+
+5.2.  Acknowledgement Handling
 
    Although DATAGRAM frames are not retransmitted upon loss detection,
    they are ack-eliciting ([I-D.ietf-quic-recovery]).  Receivers SHOULD
@@ -308,6 +322,21 @@ Internet-Draft               QUIC Datagrams                    June 2021
    max_ack_delay) in reponse to receiving packets that only contain
    DATAGRAM frames, since the timing of these acknowledgements is not
    used for loss recovery.
+
+
+
+
+
+
+
+
+
+
+
+Pauly, et al.            Expires 13 January 2022                [Page 6]
+
+Internet-Draft               QUIC Datagrams                    July 2021
+
 
    If a sender detects that a packet containing a specific DATAGRAM
    frame might have been lost, the implementation MAY notify the
@@ -318,7 +347,7 @@ Internet-Draft               QUIC Datagrams                    June 2021
    a DATAGRAM frame that was thought to be lost could at a later point
    be received and acknowledged.
 
-5.2.  Flow Control
+5.3.  Flow Control
 
    DATAGRAM frames do not provide any explicit flow control signaling,
    and do not contribute to any per-flow or connection-wide data limit.
@@ -330,15 +359,7 @@ Internet-Draft               QUIC Datagrams                    June 2021
    frames are inherently unreliable, they MAY be dropped by the receiver
    if the receiver cannot process them.
 
-
-
-
-Pauly, et al.           Expires 17 December 2021                [Page 6]
-
-Internet-Draft               QUIC Datagrams                    June 2021
-
-
-5.3.  Congestion Control
+5.4.  Congestion Control
 
    DATAGRAM frames employ the QUIC connection's congestion controller.
    As a result, a connection might be unable to send a DATAGRAM frame
@@ -362,6 +383,17 @@ Internet-Draft               QUIC Datagrams                    June 2021
    transmitted with the DATAGRAM frame, like the STREAM frame, MUST be
    protected either by 0-RTT or 1-RTT keys.
 
+
+
+
+
+
+
+Pauly, et al.            Expires 13 January 2022                [Page 7]
+
+Internet-Draft               QUIC Datagrams                    July 2021
+
+
 7.  IANA Considerations
 
    This document registers a new value in the QUIC Transport Parameter
@@ -371,11 +403,11 @@ Internet-Draft               QUIC Datagrams                    June 2021
 
    Parameter Name:  max_datagram_frame_size
 
-   Specification:  Indicates that the connection should enable support
-      for unreliable DATAGRAM frames.  An endpoint that advertises this
-      transport parameter can receive datagrams frames from the other
-      endpoint, up to and including the length in bytes provided in the
-      transport parameter.
+   Specification:  A non-zero value indicates that the endpoint supports
+      receiving unreliable DATAGRAM frames.  An endpoint that advertises
+      this transport parameter can receive DATAGRAM frames from the
+      other endpoint, up to and including the length in bytes provided
+      in the transport parameter.  The default value is 0.
 
    This document also registers a new value in the QUIC Frame Type
    registry:
@@ -385,14 +417,6 @@ Internet-Draft               QUIC Datagrams                    June 2021
    Frame Name:  DATAGRAM
 
    Specification:  Unreliable application data
-
-
-
-
-Pauly, et al.           Expires 17 December 2021                [Page 7]
-
-Internet-Draft               QUIC Datagrams                    June 2021
-
 
 8.  Acknowledgments
 
@@ -418,11 +442,13 @@ Internet-Draft               QUIC Datagrams                    June 2021
 
 9.2.  Informative References
 
-   [I-D.schinazi-quic-h3-datagram]
-              Schinazi, D., "Using QUIC Datagrams with HTTP/3", Work in
-              Progress, Internet-Draft, draft-schinazi-quic-h3-datagram-
-              05, 12 October 2020, <https://www.ietf.org/archive/id/
-              draft-schinazi-quic-h3-datagram-05.txt>.
+
+
+
+Pauly, et al.            Expires 13 January 2022                [Page 8]
+
+Internet-Draft               QUIC Datagrams                    July 2021
+
 
    [RFC0768]  Postel, J., "User Datagram Protocol", STD 6, RFC 768,
               DOI 10.17487/RFC0768, August 1980,
@@ -440,15 +466,6 @@ Internet-Draft               QUIC Datagrams                    June 2021
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
-
-
-
-
-
-Pauly, et al.           Expires 17 December 2021                [Page 8]
-
-Internet-Draft               QUIC Datagrams                    June 2021
-
 
 Authors' Addresses
 
@@ -484,21 +501,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Pauly, et al.           Expires 17 December 2021                [Page 9]
+Pauly, et al.            Expires 13 January 2022                [Page 9]

@@ -16,25 +16,25 @@ a QUIC connection.
  quic@ietf.org  or on the GitHub repository which contains the draft:
  https://github.com/quicwg/datagram . 
     " name="description">
-<meta content="xml2rfc 3.8.0" name="generator">
+<meta content="xml2rfc 3.9.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-quic-datagram-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.8.0
-    Python 3.8.10
+  xml2rfc 3.9.1
+    Python 3.9.5
     appdirs 1.4.4
-    ConfigArgParse 1.2.3
-    google-i18n-address 2.4.0
+    ConfigArgParse 1.3
+    google-i18n-address 2.5.0
     html5lib 1.1
     intervaltree 3.1.0
-    Jinja2 2.11.2
+    Jinja2 2.11.3
     kitchen 1.2.6
     lxml 4.6.3
     pycountry 20.7.3
-    pyflakes 2.2.0
-    PyYAML 5.3.1
+    pyflakes 2.3.0
+    PyYAML 5.4.1
     requests 2.25.1
-    setuptools 51.3.3
+    setuptools 52.0.0
     six 1.15.0
 -->
 <link href="draft-ietf-quic-datagram.xml" rel="alternate" type="application/rfc+xml">
@@ -825,11 +825,11 @@ address div.right {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">QUIC Datagrams</td>
-<td class="right">June 2021</td>
+<td class="right">July 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Pauly, et al.</td>
-<td class="center">Expires 17 December 2021</td>
+<td class="center">Expires 13 January 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -842,12 +842,12 @@ address div.right {
 <dd class="internet-draft">draft-ietf-quic-datagram-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-06-15" class="published">15 June 2021</time>
+<time datetime="2021-07-12" class="published">12 July 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2021-12-17">17 December 2021</time></dd>
+<dd class="expires"><time datetime="2022-01-13">13 January 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -894,7 +894,7 @@ a QUIC connection.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 December 2021.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 January 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -922,60 +922,63 @@ a QUIC connection.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
         <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
 <a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
         </h2>
-<nav class="toc"><ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.1">
+<nav class="toc"><ul class="ulEmpty ulBare toc compact">
+<li class="ulEmpty ulBare toc compact" id="section-toc.1-1.1">
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.1.2.1">
+<ul class="ulBare toc compact ulEmpty">
+<li class="ulBare toc compact ulEmpty" id="section-toc.1-1.1.2.1">
                 <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-specification-of-requiremen" class="xref">Specification of Requirements</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.2">
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.2">
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-motivation" class="xref">Motivation</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.3">
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.3">
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-transport-parameter" class="xref">Transport Parameter</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.4">
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-datagram-frame-type" class="xref">Datagram Frame Type</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.5">
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-behavior-and-usage" class="xref">Behavior and Usage</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-acknowledgement-handling" class="xref">Acknowledgement Handling</a></p>
+<ul class="ulBare toc compact ulEmpty">
+<li class="ulBare toc compact ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-multiplexing-datagrams" class="xref">Multiplexing Datagrams</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-flow-control" class="xref">Flow Control</a></p>
+              <li class="ulBare toc compact ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-acknowledgement-handling" class="xref">Acknowledgement Handling</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-congestion-control" class="xref">Congestion Control</a></p>
+              <li class="ulBare toc compact ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-flow-control" class="xref">Flow Control</a></p>
+</li>
+              <li class="ulBare toc compact ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-congestion-control" class="xref">Congestion Control</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.6">
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.7">
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.8">
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.9">
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-references" class="xref">References</a></p>
-<ul class="ulEmpty compact toc">
-<li class="ulEmpty compact toc" id="section-toc.1-1.9.2.1">
+<ul class="ulBare toc compact ulEmpty">
+<li class="ulBare toc compact ulEmpty" id="section-toc.1-1.9.2.1">
                 <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
 </li>
-              <li class="ulEmpty compact toc" id="section-toc.1-1.9.2.2">
+              <li class="ulBare toc compact ulEmpty" id="section-toc.1-1.9.2.2">
                 <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="ulEmpty compact toc" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-appendix.a" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1065,26 +1068,28 @@ of a QUIC Transport Parameter (name=max_datagram_frame_size, value=0x0020).
 The max_datagram_frame_size transport parameter is an integer value
 (represented as a variable-length integer) that represents the maximum
 size of a DATAGRAM frame (including the frame type, length, and
-payload) the endpoint is willing to receive, in bytes. An endpoint that
-includes this parameter supports the DATAGRAM frame types and is willing to
-receive such frames on this connection. Endpoints MUST NOT send DATAGRAM
-frames until they have received the max_datagram_frame_size transport
-parameter. Endpoints MUST NOT send DATAGRAM frames of size strictly larger
-than the value of max_datagram_frame_size the endpoint has received from its
-peer. An endpoint that receives a DATAGRAM frame when it has not sent the
-max_datagram_frame_size transport parameter MUST terminate the connection with
-error PROTOCOL_VIOLATION. An endpoint that receives a DATAGRAM frame that is
-strictly larger than the value it sent in its max_datagram_frame_size
-transport parameter MUST terminate the connection with error
-PROTOCOL_VIOLATION. Endpoints that wish to use DATAGRAM frames need to ensure
-they send a max_datagram_frame_size value sufficient to allow their peer to
-use them. It is RECOMMENDED to send the value 65535 in the
-max_datagram_frame_size transport parameter as that indicates to the peer that
-this endpoint will accept any DATAGRAM frame that fits inside a QUIC packet.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">The max_datagram_frame_size transport parameter is a unidirectional limit and
+payload) the endpoint is willing to receive, in bytes.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">The default for this parameter is 0, which indicates that the endpoint
+does not support DATAGRAM frames. A value greater than 0 indicates
+that the endpoint supports the DATAGRAM frame types and is willing to
+receive such frames on this connection.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">An endpoint MUST NOT send DATAGRAM frames until it has received the
+max_datagram_frame_size transport parameter with a non-zero value. An
+endpoint MUST NOT send DATAGRAM frames that are larger than the
+max_datagram_frame_size value it has received from its peer.
+An endpoint that receives a DATAGRAM frame when it has not indicated support
+via the transport parameter MUST terminate the connection with an error of
+type PROTOCOL_VIOLATION. Similarly, an endpoint that receives a DATAGRAM frame
+that is larger than the value it sent in its max_datagram_frame_size
+transport parameter MUST terminate the connection with an error of type
+PROTOCOL_VIOLATION.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">For most uses of DATAGRAM frames, it is RECOMMENDED to send a value of 65535 in
+the max_datagram_frame_size transport parameter to indicate that this endpoint
+will accept any DATAGRAM frame that fits inside a QUIC packet.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The max_datagram_frame_size transport parameter is a unidirectional limit and
 indication of support of DATAGRAM frames. Application protocols that use
-DATAGRAM frames MAY choose to only negotiate and use them in a single direction.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">When clients use 0-RTT, they MAY store the value of the server's
+DATAGRAM frames MAY choose to only negotiate and use them in a single direction.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">When clients use 0-RTT, they MAY store the value of the server's
 max_datagram_frame_size transport parameter. Doing so allows the client to send
 DATAGRAM frames in 0-RTT packets. When servers decide to accept 0-RTT data,
 they MUST send a max_datagram_frame_size transport parameter greater or equal
@@ -1093,11 +1098,11 @@ the NewSessionTicket message. If a client stores the value of the
 max_datagram_frame_size transport parameter with their 0-RTT state, they MUST
 validate that the new value of the max_datagram_frame_size transport parameter
 sent by the server in the handshake is greater or equal to the stored value;
-if not, the client MUST terminate the connection with error PROTOCOL_VIOLATION.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">Application protocols that use datagrams MUST define how they react to the
+if not, the client MUST terminate the connection with error PROTOCOL_VIOLATION.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">Application protocols that use datagrams MUST define how they react to the
 max_datagram_frame_size transport parameter being missing. If datagram support
 is integral to the application, the application protocol can fail the handshake
-if the max_datagram_frame_size transport parameter is not present.<a href="#section-3-4" class="pilcrow">¶</a></p>
+if the max_datagram_frame_size transport parameter is not present.<a href="#section-3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="datagram-frame-type">
@@ -1162,57 +1167,72 @@ coalesced with other frames.<a href="#section-5-1" class="pilcrow">¶</a></p>
 data to the application immediately, as long as it is able to process the frame
 and can store the contents in memory.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">Application protocols using datagrams are responsible for defining the
-semantics of the Datagram Data field, and how it is parsed. If the application
-protocol supports the coexistence of multiple entities using datagrams inside
-a single QUIC connection, it can use a mechanism to allow demultiplexing
-between them. For example, using datagrams with HTTP/3 involves prepending
-a flow identifier to all datagrams, see <span>[<a href="#I-D.schinazi-quic-h3-datagram" class="xref">I-D.schinazi-quic-h3-datagram</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">Note that while the max_datagram_frame_size transport parameter places a limit
+<p id="section-5-4">Note that while the max_datagram_frame_size transport parameter places a limit
 on the maximum size of DATAGRAM frames, that limit can be further reduced by
 the max_packet_size transport parameter, and by the Maximum Transmission Unit
 (MTU) of the path between endpoints. DATAGRAM frames cannot be fragmented,
 therefore application protocols need to handle cases where the maximum datagram
-size is limited by other factors.<a href="#section-5-5" class="pilcrow">¶</a></p>
-<div id="acknowledgement-handling">
+size is limited by other factors.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<div id="multiplexing-datagrams">
 <section id="section-5.1">
-        <h3 id="name-acknowledgement-handling">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-acknowledgement-handling" class="section-name selfRef">Acknowledgement Handling</a>
+        <h3 id="name-multiplexing-datagrams">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-multiplexing-datagrams" class="section-name selfRef">Multiplexing Datagrams</a>
         </h3>
-<p id="section-5.1-1">Although DATAGRAM frames are not retransmitted upon loss detection, they are
+<p id="section-5.1-1">DATAGRAM frames belong to a QUIC connection as a whole, and are not strongly
+associated with any stream ID at the QUIC layer. However, it is expected
+that applications will want to differentiate between specific DATAGRAM frames
+by using identifiers, such as for logical flows of datagrams or to distinguish
+between different kinds of datagrams.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">Identifiers used to multiplex different kinds of datagrams, or flows of
+datagrams, are the responsibility of the application protocol running over QUIC
+to define. The application defines the semantics of the Datagram Data field
+and how it is parsed.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">If the application needs to support the coexistence of multiple flows of
+datagrams, one recommended pattern is to use a variable-length integer at the
+beginning of the Datagram Data field.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">QUIC implementations SHOULD present an API to applications to assign relative
+priorities to DATAGRAM frames with respect to each other and to QUIC streams.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgement-handling">
+<section id="section-5.2">
+        <h3 id="name-acknowledgement-handling">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-acknowledgement-handling" class="section-name selfRef">Acknowledgement Handling</a>
+        </h3>
+<p id="section-5.2-1">Although DATAGRAM frames are not retransmitted upon loss detection, they are
 ack-eliciting (<span>[<a href="#I-D.ietf-quic-recovery" class="xref">I-D.ietf-quic-recovery</a>]</span>). Receivers SHOULD support delaying
 ACK frames (within the limits specified by max_ack_delay) in reponse to receiving
 packets that only contain DATAGRAM frames, since the timing of these
-acknowledgements is not used for loss recovery.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">If a sender detects that a packet containing a specific DATAGRAM frame might
+acknowledgements is not used for loss recovery.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">If a sender detects that a packet containing a specific DATAGRAM frame might
 have been lost, the implementation MAY notify the application that it believes
 the datagram was lost. Similarly, if a packet containing a DATAGRAM frame is
 acknowledged, the implementation MAY notify the application that the datagram
 was successfully transmitted and received. Note that, due to reordering, a
 DATAGRAM frame that was thought to be lost could at a later point be received
-and acknowledged.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+and acknowledged.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="flow-control">
-<section id="section-5.2">
+<section id="section-5.3">
         <h3 id="name-flow-control">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-flow-control" class="section-name selfRef">Flow Control</a>
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-flow-control" class="section-name selfRef">Flow Control</a>
         </h3>
-<p id="section-5.2-1">DATAGRAM frames do not provide any explicit flow control signaling,
-and do not contribute to any per-flow or connection-wide data limit.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">The risk associated with not providing flow control for DATAGRAM frames
+<p id="section-5.3-1">DATAGRAM frames do not provide any explicit flow control signaling,
+and do not contribute to any per-flow or connection-wide data limit.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">The risk associated with not providing flow control for DATAGRAM frames
 is that a receiver might not be able to commit the necessary resources to process
 the frames. For example, it might not be able to store the frame contents in memory.
 However, since DATAGRAM frames are inherently unreliable, they MAY be
-dropped by the receiver if the receiver cannot process them.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+dropped by the receiver if the receiver cannot process them.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="congestion-control">
-<section id="section-5.3">
+<section id="section-5.4">
         <h3 id="name-congestion-control">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
         </h3>
-<p id="section-5.3-1">DATAGRAM frames employ the QUIC connection's congestion controller. As a
+<p id="section-5.4-1">DATAGRAM frames employ the QUIC connection's congestion controller. As a
 result, a connection might be unable to send a DATAGRAM frame generated by the
 application until the congestion controller allows it
 <span>[<a href="#I-D.ietf-quic-recovery" class="xref">I-D.ietf-quic-recovery</a>]</span>. The sender implementation MUST either delay
@@ -1220,10 +1240,10 @@ sending the frame until the controller allows it or drop the frame without
 sending it (at which point it MAY notify the application). Implementations
 that use packet pacing SHOULD support delaying the transmission of DATAGRAM
 frames for at least the time it takes to send the paced packets allowed by the
-congestion controller to avoid dropping frames excessively.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
-<p id="section-5.3-2">Implementations can optionally support allowing the application to specify
+congestion controller to avoid dropping frames excessively.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">Implementations can optionally support allowing the application to specify
 a sending expiration time, beyond which a congestion-controlled DATAGRAM
-frame ought to be dropped without transmission.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+frame ought to be dropped without transmission.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1261,10 +1281,10 @@ Parameter Name:  </dt>
 <dt id="section-7-2.5">
 Specification:  </dt>
         <dd style="margin-left: 1.5em" id="section-7-2.6">
-          <p id="section-7-2.6.1">Indicates that the connection should enable support for unreliable DATAGRAM
-frames. An endpoint that advertises this transport parameter can receive
-datagrams frames from the other endpoint, up to and including the length in
-bytes provided in the transport parameter.<a href="#section-7-2.6.1" class="pilcrow">¶</a></p>
+          <p id="section-7-2.6.1">A non-zero value indicates that the endpoint supports receiving unreliable
+DATAGRAM frames. An endpoint that advertises this transport parameter can receive
+DATAGRAM frames from the other endpoint, up to and including the length in
+bytes provided in the transport parameter. The default value is 0.<a href="#section-7-2.6.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
@@ -1323,10 +1343,6 @@ Specification:  </dt>
 <a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="I-D.schinazi-quic-h3-datagram">[I-D.schinazi-quic-h3-datagram]</dt>
-        <dd>
-<span class="refAuthor">Schinazi, D.</span>, <span class="refTitle">"Using QUIC Datagrams with HTTP/3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-schinazi-quic-h3-datagram-05</span>, <time datetime="2020-10-12" class="refDate">12 October 2020</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-schinazi-quic-h3-datagram-05.txt">https://www.ietf.org/archive/id/draft-schinazi-quic-h3-datagram-05.txt</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC0768">[RFC0768]</dt>
         <dd>
 <span class="refAuthor">Postel, J.</span>, <span class="refTitle">"User Datagram Protocol"</span>, <span class="seriesInfo">STD 6</span>, <span class="seriesInfo">RFC 768</span>, <span class="seriesInfo">DOI 10.17487/RFC0768</span>, <time datetime="1980-08" class="refDate">August 1980</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc768">https://www.rfc-editor.org/info/rfc768</a>&gt;</span>. </dd>
@@ -1347,7 +1363,7 @@ Specification:  </dt>
 </section>
 </section>
 <div id="authors-addresses">
-<section id="section-appendix.a">
+<section id="appendix-A">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
