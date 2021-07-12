@@ -252,7 +252,7 @@ have been lost, the implementation MAY notify the application that it believes
 the datagram was lost.
 
 Similarly, if a packet containing a DATAGRAM frame is acknowledged, the
-implementation MAY notify the application that the datagram was successfully
+implementation MAY notify the sender application that the datagram was successfully
 transmitted and received. Due to reordering, this can include a DATAGRAM frame
 that was thought to be lost, but which at a later point was received and
 acknowledged. It is important to note that acknowledgement of a DATAGRAM frame
