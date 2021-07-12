@@ -2,7 +2,7 @@
 
 
 
-Network Working Group                                           T. Pauly
+QUIC                                                            T. Pauly
 Internet-Draft                                                E. Kinnear
 Intended status: Standards Track                              Apple Inc.
 Expires: 13 January 2022                                     D. Schinazi
@@ -76,7 +76,7 @@ Table of Contents
      5.3.  Flow Control  . . . . . . . . . . . . . . . . . . . . . .   7
      5.4.  Congestion Control  . . . . . . . . . . . . . . . . . . .   7
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
    8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   8
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
@@ -85,11 +85,10 @@ Table of Contents
 
 1.  Introduction
 
-   The QUIC Transport Protocol [I-D.ietf-quic-transport] provides a
-   secure, multiplexed connection for transmitting reliable streams of
-   application data.  Reliability within QUIC is performed on a per-
-   stream basis, so some frame types are not eligible for
-   retransmission.
+   The QUIC Transport Protocol [RFC9000] provides a secure, multiplexed
+   connection for transmitting reliable streams of application data.
+   Reliability within QUIC is performed on a per-stream basis, so some
+   frame types are not eligible for retransmission.
 
    Some applications, particularly those that need to transmit real-time
    data, prefer to transmit data unreliably.  These applications can
@@ -106,6 +105,7 @@ Table of Contents
    mailing list quic@ietf.org (mailto:quic@ietf.org) or on the GitHub
    repository which contains the draft: https://github.com/quicwg/
    datagram (https://github.com/quicwg/datagram).
+
 
 
 
@@ -178,23 +178,28 @@ Internet-Draft               QUIC Datagrams                    July 2021
    integer value (represented as a variable-length integer) that
    represents the maximum size of a DATAGRAM frame (including the frame
    type, length, and payload) the endpoint is willing to receive, in
-   bytes.  An endpoint that includes this parameter supports the
-   DATAGRAM frame types and is willing to receive such frames on this
-   connection.  Endpoints MUST NOT send DATAGRAM frames until they have
-   received the max_datagram_frame_size transport parameter.  Endpoints
-   MUST NOT send DATAGRAM frames of size strictly larger than the value
-   of max_datagram_frame_size the endpoint has received from its peer.
-   An endpoint that receives a DATAGRAM frame when it has not sent the
-   max_datagram_frame_size transport parameter MUST terminate the
-   connection with error PROTOCOL_VIOLATION.  An endpoint that receives
-   a DATAGRAM frame that is strictly larger than the value it sent in
-   its max_datagram_frame_size transport parameter MUST terminate the
-   connection with error PROTOCOL_VIOLATION.  Endpoints that wish to use
-   DATAGRAM frames need to ensure they send a max_datagram_frame_size
-   value sufficient to allow their peer to use them.  It is RECOMMENDED
-   to send the value 65535 in the max_datagram_frame_size transport
-   parameter as that indicates to the peer that this endpoint will
-   accept any DATAGRAM frame that fits inside a QUIC packet.
+   bytes.
+
+   The default for this parameter is 0, which indicates that the
+   endpoint does not support DATAGRAM frames.  A value greater than 0
+   indicates that the endpoint supports the DATAGRAM frame types and is
+   willing to receive such frames on this connection.
+
+   An endpoint MUST NOT send DATAGRAM frames until it has received the
+   max_datagram_frame_size transport parameter with a non-zero value.
+   An endpoint MUST NOT send DATAGRAM frames that are larger than the
+   max_datagram_frame_size value it has received from its peer.  An
+   endpoint that receives a DATAGRAM frame when it has not indicated
+   support via the transport parameter MUST terminate the connection
+   with an error of type PROTOCOL_VIOLATION.  Similarly, an endpoint
+   that receives a DATAGRAM frame that is larger than the value it sent
+   in its max_datagram_frame_size transport parameter MUST terminate the
+   connection with an error of type PROTOCOL_VIOLATION.
+
+   For most uses of DATAGRAM frames, it is RECOMMENDED to send a value
+   of 65535 in the max_datagram_frame_size transport parameter to
+   indicate that this endpoint will accept any DATAGRAM frame that fits
+   inside a QUIC packet.
 
    The max_datagram_frame_size transport parameter is a unidirectional
    limit and indication of support of DATAGRAM frames.  Application
@@ -213,11 +218,6 @@ Internet-Draft               QUIC Datagrams                    July 2021
    by the server in the handshake is greater or equal to the stored
    value; if not, the client MUST terminate the connection with error
    PROTOCOL_VIOLATION.
-
-
-
-
-
 
 
 
@@ -317,19 +317,19 @@ Internet-Draft               QUIC Datagrams                    July 2021
 5.2.  Acknowledgement Handling
 
    Although DATAGRAM frames are not retransmitted upon loss detection,
-   they are ack-eliciting ([I-D.ietf-quic-recovery]).  Receivers SHOULD
-   support delaying ACK frames (within the limits specified by
-   max_ack_delay) in reponse to receiving packets that only contain
-   DATAGRAM frames, since the timing of these acknowledgements is not
-   used for loss recovery.
+   they are ack-eliciting ([RFC9002]).  Receivers SHOULD support
+   delaying ACK frames (within the limits specified by max_ack_delay) in
+   reponse to receiving packets that only contain DATAGRAM frames, since
+   the timing of these acknowledgements is not used for loss recovery.
 
+   If a sender detects that a packet containing a specific DATAGRAM
+   frame might have been lost, the implementation MAY notify the
+   application that it believes the datagram was lost.
 
-
-
-
-
-
-
+   Similarly, if a packet containing a DATAGRAM frame is acknowledged,
+   the implementation MAY notify the application that the datagram was
+   successfully transmitted and received.  Due to reordering, this can
+   include a DATAGRAM frame that was thought to be lost, but which at a
 
 
 
@@ -338,14 +338,12 @@ Pauly, et al.            Expires 13 January 2022                [Page 6]
 Internet-Draft               QUIC Datagrams                    July 2021
 
 
-   If a sender detects that a packet containing a specific DATAGRAM
-   frame might have been lost, the implementation MAY notify the
-   application that it believes the datagram was lost.  Similarly, if a
-   packet containing a DATAGRAM frame is acknowledged, the
-   implementation MAY notify the application that the datagram was
-   successfully transmitted and received.  Note that, due to reordering,
-   a DATAGRAM frame that was thought to be lost could at a later point
-   be received and acknowledged.
+   later point was received and acknowledged.  It is important to note
+   that acknowledgement of a DATAGRAM frame only indicates that the
+   transport-layer handling on the receiver processed the frame, and
+   does not guarantee that the application on the receiver successfully
+   processed the data.  Thus, this signal SHOULD NOT replace
+   application-layer signals that indicate successful processing.
 
 5.3.  Flow Control
 
@@ -364,13 +362,13 @@ Internet-Draft               QUIC Datagrams                    July 2021
    DATAGRAM frames employ the QUIC connection's congestion controller.
    As a result, a connection might be unable to send a DATAGRAM frame
    generated by the application until the congestion controller allows
-   it [I-D.ietf-quic-recovery].  The sender implementation MUST
-   either delay sending the frame until the controller allows it or drop
-   the frame without sending it (at which point it MAY notify the
-   application).  Implementations that use packet pacing SHOULD support
-   delaying the transmission of DATAGRAM frames for at least the time it
-   takes to send the paced packets allowed by the congestion controller
-   to avoid dropping frames excessively.
+   it [RFC9002].  The sender implementation MUST either delay sending
+   the frame until the controller allows it or drop the frame without
+   sending it (at which point it MAY notify the application).
+   Implementations that use packet pacing SHOULD support delaying the
+   transmission of DATAGRAM frames for at least the time it takes to
+   send the paced packets allowed by the congestion controller to avoid
+   dropping frames excessively.
 
    Implementations can optionally support allowing the application to
    specify a sending expiration time, beyond which a congestion-
@@ -383,8 +381,10 @@ Internet-Draft               QUIC Datagrams                    July 2021
    transmitted with the DATAGRAM frame, like the STREAM frame, MUST be
    protected either by 0-RTT or 1-RTT keys.
 
+7.  IANA Considerations
 
-
+   This document registers a new value in the QUIC Transport Parameter
+   Registry:
 
 
 
@@ -394,20 +394,15 @@ Pauly, et al.            Expires 13 January 2022                [Page 7]
 Internet-Draft               QUIC Datagrams                    July 2021
 
 
-7.  IANA Considerations
-
-   This document registers a new value in the QUIC Transport Parameter
-   Registry:
-
    Value:  0x0020 (if this document is approved)
 
    Parameter Name:  max_datagram_frame_size
 
-   Specification:  Indicates that the connection should enable support
-      for unreliable DATAGRAM frames.  An endpoint that advertises this
-      transport parameter can receive datagrams frames from the other
-      endpoint, up to and including the length in bytes provided in the
-      transport parameter.
+   Specification:  A non-zero value indicates that the endpoint supports
+      receiving unreliable DATAGRAM frames.  An endpoint that advertises
+      this transport parameter can receive DATAGRAM frames from the
+      other endpoint, up to and including the length in bytes provided
+      in the transport parameter.  The default value is 0.
 
    This document also registers a new value in the QUIC Frame Type
    registry:
@@ -426,29 +421,16 @@ Internet-Draft               QUIC Datagrams                    July 2021
 
 9.1.  Normative References
 
-   [I-D.ietf-quic-recovery]
-              Iyengar, J. and I. Swett, "QUIC Loss Detection and
-              Congestion Control", Work in Progress, Internet-Draft,
-              draft-ietf-quic-recovery-34, 14 January 2021,
-              <https://www.ietf.org/archive/id/draft-ietf-quic-recovery-
-              34.txt>.
+   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/info/rfc9000>.
 
-   [I-D.ietf-quic-transport]
-              Iyengar, J. and M. Thomson, "QUIC: A UDP-Based Multiplexed
-              and Secure Transport", Work in Progress, Internet-Draft,
-              draft-ietf-quic-transport-34, 14 January 2021,
-              <https://www.ietf.org/archive/id/draft-ietf-quic-
-              transport-34.txt>.
+   [RFC9002]  Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
+              and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
+              May 2021, <https://www.rfc-editor.org/info/rfc9002>.
 
 9.2.  Informative References
-
-
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 8]
-
-Internet-Draft               QUIC Datagrams                    July 2021
-
 
    [RFC0768]  Postel, J., "User Datagram Protocol", STD 6, RFC 768,
               DOI 10.17487/RFC0768, August 1980,
@@ -458,6 +440,15 @@ Internet-Draft               QUIC Datagrams                    July 2021
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+
+
+
+
+Pauly, et al.            Expires 13 January 2022                [Page 8]
+
+Internet-Draft               QUIC Datagrams                    July 2021
+
 
    [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
               Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
@@ -494,6 +485,15 @@ Authors' Addresses
    United States of America
 
    Email: dschinazi.ietf@gmail.com
+
+
+
+
+
+
+
+
+
 
 
 
