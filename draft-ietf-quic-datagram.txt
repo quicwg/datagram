@@ -76,7 +76,7 @@ Table of Contents
      5.3.  Flow Control  . . . . . . . . . . . . . . . . . . . . . .   7
      5.4.  Congestion Control  . . . . . . . . . . . . . . . . . . .   7
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   8
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
@@ -322,14 +322,14 @@ Internet-Draft               QUIC Datagrams                    July 2021
    reponse to receiving packets that only contain DATAGRAM frames, since
    the timing of these acknowledgements is not used for loss recovery.
 
+   As with any ack-eliciting frame, when a sender suspects that a packet
+   containing only DATAGRAM frames has been lost, it MAY send probe
+   packets to elicit a faster acknowledgement as described in
+   Section 6.2.4 of [RFC9002].
+
    If a sender detects that a packet containing a specific DATAGRAM
    frame might have been lost, the implementation MAY notify the
    application that it believes the datagram was lost.
-
-   Similarly, if a packet containing a DATAGRAM frame is acknowledged,
-   the implementation MAY notify the sender application that the
-   datagram was successfully transmitted and received.  Due to
-   reordering, this can include a DATAGRAM frame that was thought to be
 
 
 
@@ -338,6 +338,10 @@ Pauly, et al.            Expires 13 January 2022                [Page 6]
 Internet-Draft               QUIC Datagrams                    July 2021
 
 
+   Similarly, if a packet containing a DATAGRAM frame is acknowledged,
+   the implementation MAY notify the sender application that the
+   datagram was successfully transmitted and received.  Due to
+   reordering, this can include a DATAGRAM frame that was thought to be
    lost, but which at a later point was received and acknowledged.  It
    is important to note that acknowledgement of a DATAGRAM frame only
    indicates that the transport-layer handling on the receiver processed
@@ -382,10 +386,6 @@ Internet-Draft               QUIC Datagrams                    July 2021
    transmitted with the DATAGRAM frame, like the STREAM frame, MUST be
    protected either by 0-RTT or 1-RTT keys.
 
-7.  IANA Considerations
-
-   This document registers a new value in the QUIC Transport Parameter
-   Registry:
 
 
 
@@ -393,6 +393,11 @@ Pauly, et al.            Expires 13 January 2022                [Page 7]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
+
+7.  IANA Considerations
+
+   This document registers a new value in the QUIC Transport Parameter
+   Registry:
 
    Value:  0x0020 (if this document is approved)
 
@@ -436,11 +441,6 @@ Internet-Draft               QUIC Datagrams                    July 2021
               DOI 10.17487/RFC0768, August 1980,
               <https://www.rfc-editor.org/info/rfc768>.
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
-
 
 
 
@@ -449,6 +449,11 @@ Pauly, et al.            Expires 13 January 2022                [Page 8]
 
 Internet-Draft               QUIC Datagrams                    July 2021
 
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
               Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
@@ -485,11 +490,6 @@ Authors' Addresses
    United States of America
 
    Email: dschinazi.ietf@gmail.com
-
-
-
-
-
 
 
 
