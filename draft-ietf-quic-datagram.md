@@ -94,17 +94,12 @@ for handshakes.
 handshake, which has a basic packet loss retransmission timer. This
 can allow loss recovery to occur more quickly for QUIC data.
 
-- QUIC datagrams, while unreliable, can support acknowledgements,
-allowing applications to be aware of whether a datagram was successfully
-received.
+- QUIC datagrams are subject to QUIC congestion control. Providing a single
+congestion control for both reliable and unreliable data can be more effective
+and efficient.
 
-- QUIC datagrams are subject to QUIC congestion control, allowing
-applications to avoid implementing their own.
-
-These reductions in connection latency, and application insight into
-the delivery of datagrams, can be useful for optimizing audio/video
-streaming applications, gaming applications, and other real-time
-network applications.
+These features can be useful for optimizing audio/video streaming applications,
+gaming applications, and other real-time network applications.
 
 Unreliable QUIC datagrams can also be used to implement an IP
 packet tunnel over QUIC, such as for a Virtual Private Network (VPN).
