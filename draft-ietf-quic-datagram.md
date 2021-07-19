@@ -38,6 +38,9 @@ author:
     country: United States of America
     email: dschinazi.ietf@gmail.com
 
+normative:
+  RFC9001:
+
 --- abstract
 
 This document defines an extension to the QUIC transport protocol to
@@ -298,6 +301,9 @@ The DATAGRAM frame shares the same security properties as the rest of
 the data transmitted within a QUIC connection. All application data transmitted
 with the DATAGRAM frame, like the STREAM frame, MUST be protected
 either by 0-RTT or 1-RTT keys.
+
+Application protocols that allow DATAGRAM frames to be sent in 0-RTT require a
+profile that defines acceptable use of 0-RTT; see {{Section 5.6 of RFC9001}}.
 
 # IANA Considerations
 
