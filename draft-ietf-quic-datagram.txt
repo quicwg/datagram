@@ -346,8 +346,8 @@ Internet-Draft               QUIC Datagrams                    July 2021
    is important to note that acknowledgement of a DATAGRAM frame only
    indicates that the transport-layer handling on the receiver processed
    the frame, and does not guarantee that the application on the
-   receiver successfully processed the data.  Thus, this signal SHOULD
-   NOT replace application-layer signals that indicate successful
+   receiver successfully processed the data.  Thus, this signal cannot
+   replace application-layer signals that indicate successful
    processing.
 
 5.3.  Flow Control
