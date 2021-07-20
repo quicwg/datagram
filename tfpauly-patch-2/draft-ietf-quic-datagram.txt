@@ -5,9 +5,9 @@
 QUIC                                                            T. Pauly
 Internet-Draft                                                E. Kinnear
 Intended status: Standards Track                              Apple Inc.
-Expires: 13 January 2022                                     D. Schinazi
+Expires: 21 January 2022                                     D. Schinazi
                                                               Google LLC
-                                                            12 July 2021
+                                                            20 July 2021
 
 
                 An Unreliable Datagram Extension to QUIC
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 January 2022.
+   This Internet-Draft will expire on 21 January 2022.
 
 Copyright Notice
 
@@ -50,14 +50,6 @@ Copyright Notice
    Provisions Relating to IETF Documents (https://trustee.ietf.org/
    license-info) in effect on the date of publication of this document.
    Please review these documents carefully, as they describe your rights
-
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 1]
-
-Internet-Draft               QUIC Datagrams                    July 2021
-
-
    and restrictions with respect to this document.  Code Components
    extracted from this document must include Simplified BSD License text
    as described in Section 4.e of the Trust Legal Provisions and are
@@ -65,23 +57,23 @@ Internet-Draft               QUIC Datagrams                    July 2021
 
 Table of Contents
 
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-     1.1.  Specification of Requirements . . . . . . . . . . . . . .   3
-   2.  Motivation  . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   3.  Transport Parameter . . . . . . . . . . . . . . . . . . . . .   4
-   4.  Datagram Frame Type . . . . . . . . . . . . . . . . . . . . .   5
-   5.  Behavior and Usage  . . . . . . . . . . . . . . . . . . . . .   5
-     5.1.  Multiplexing Datagrams  . . . . . . . . . . . . . . . . .   6
-     5.2.  Acknowledgement Handling  . . . . . . . . . . . . . . . .   6
-     5.3.  Flow Control  . . . . . . . . . . . . . . . . . . . . . .   7
-     5.4.  Congestion Control  . . . . . . . . . . . . . . . . . . .   7
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
-   8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .   8
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .   8
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
+   1.  Introduction
+     1.1.  Specification of Requirements
+   2.  Motivation
+   3.  Transport Parameter
+   4.  Datagram Frame Type
+   5.  Behavior and Usage
+     5.1.  Multiplexing Datagrams
+     5.2.  Acknowledgement Handling
+     5.3.  Flow Control
+     5.4.  Congestion Control
+   6.  Security Considerations
+   7.  IANA Considerations
+   8.  Acknowledgments
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
+   Authors' Addresses
 
 1.  Introduction
 
@@ -91,28 +83,24 @@ Table of Contents
    frame types are not eligible for retransmission.
 
    Some applications, particularly those that need to transmit real-time
-   data, prefer to transmit data unreliably.  These applications can
-   build directly upon UDP [RFC0768] as a transport, and can add
-   security with DTLS [RFC6347].  Extending QUIC to support transmitting
-   unreliable application data would provide another option for secure
-   datagrams, with the added benefit of sharing a cryptographic and
-   authentication context used for reliable streams.
+   data, prefer to transmit data unreliably.  In the past, these
+   applications have built directly upon UDP [RFC0768] as a transport,
+   and have often added security with DTLS [RFC6347].  Extending QUIC to
+   support transmitting unreliable application data provides another
+   option for secure datagrams, with the added benefit of sharing the
+   cryptographic and authentication context used for reliable streams.
 
    This document defines two new DATAGRAM QUIC frame types, which carry
    application data without requiring retransmissions.
+
+   Note that DATAGRAM frames are scoped to unreliable tranmission only.
+   Reliable transmission of short datagrams is already supported via
+   STREAM frames.
 
    Discussion of this work is encouraged to happen on the QUIC IETF
    mailing list quic@ietf.org (mailto:quic@ietf.org) or on the GitHub
    repository which contains the draft: https://github.com/quicwg/
    datagram (https://github.com/quicwg/datagram).
-
-
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 2]
-
-Internet-Draft               QUIC Datagrams                    July 2021
-
 
 1.1.  Specification of Requirements
 
@@ -137,17 +125,13 @@ Internet-Draft               QUIC Datagrams                    July 2021
       handshake, which has a basic packet loss retransmission timer.
       This can allow loss recovery to occur more quickly for QUIC data.
 
-   *  QUIC datagrams, while unreliable, can support acknowledgements,
-      allowing applications to be aware of whether a datagram was
-      successfully received.
+   *  QUIC datagrams are subject to QUIC congestion control.  Providing
+      a single congestion control for both reliable and unreliable data
+      can be more effective and efficient.
 
-   *  QUIC datagrams are subject to QUIC congestion control, allowing
-      applications to avoid implementing their own.
-
-   These reductions in connection latency, and application insight into
-   the delivery of datagrams, can be useful for optimizing audio/video
-   streaming applications, gaming applications, and other real-time
-   network applications.
+   These features can be useful for optimizing audio/video streaming
+   applications, gaming applications, and other real-time network
+   applications.
 
    Unreliable QUIC datagrams can also be used to implement an IP packet
    tunnel over QUIC, such as for a Virtual Private Network (VPN).
@@ -157,18 +141,6 @@ Internet-Draft               QUIC Datagrams                    July 2021
    the control data, and DTLS for tunneling IP packets.  A single QUIC
    connection could support both parts with the use of unreliable
    datagrams.
-
-
-
-
-
-
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 3]
-
-Internet-Draft               QUIC Datagrams                    July 2021
-
 
 3.  Transport Parameter
 
@@ -219,13 +191,6 @@ Internet-Draft               QUIC Datagrams                    July 2021
    value; if not, the client MUST terminate the connection with error
    PROTOCOL_VIOLATION.
 
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 4]
-
-Internet-Draft               QUIC Datagrams                    July 2021
-
-
    Application protocols that use datagrams MUST define how they react
    to the max_datagram_frame_size transport parameter being missing.  If
    datagram support is integral to the application, the application
@@ -275,19 +240,12 @@ Internet-Draft               QUIC Datagrams                    July 2021
    deliver the data to the application immediately, as long as it is
    able to process the frame and can store the contents in memory.
 
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 5]
-
-Internet-Draft               QUIC Datagrams                    July 2021
-
-
    DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 
    Note that while the max_datagram_frame_size transport parameter
    places a limit on the maximum size of DATAGRAM frames, that limit can
-   be further reduced by the max_packet_size transport parameter, and by
-   the Maximum Transmission Unit (MTU) of the path between endpoints.
+   be further reduced by the max_packet_size transport parameter and the
+   Maximum Transmission Unit (MTU) of the path between endpoints.
    DATAGRAM frames cannot be fragmented, therefore application protocols
    need to handle cases where the maximum datagram size is limited by
    other factors.
@@ -322,6 +280,11 @@ Internet-Draft               QUIC Datagrams                    July 2021
    reponse to receiving packets that only contain DATAGRAM frames, since
    the timing of these acknowledgements is not used for loss recovery.
 
+   As with any ack-eliciting frame, when a sender suspects that a packet
+   containing only DATAGRAM frames has been lost, it sends probe packets
+   to elicit a faster acknowledgement as described in Section 6.2.4 of
+   [RFC9002].
+
    If a sender detects that a packet containing a specific DATAGRAM
    frame might have been lost, the implementation MAY notify the
    application that it believes the datagram was lost.
@@ -330,20 +293,12 @@ Internet-Draft               QUIC Datagrams                    July 2021
    the implementation MAY notify the sender application that the
    datagram was successfully transmitted and received.  Due to
    reordering, this can include a DATAGRAM frame that was thought to be
-
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 6]
-
-Internet-Draft               QUIC Datagrams                    July 2021
-
-
    lost, but which at a later point was received and acknowledged.  It
    is important to note that acknowledgement of a DATAGRAM frame only
    indicates that the transport-layer handling on the receiver processed
    the frame, and does not guarantee that the application on the
-   receiver successfully processed the data.  Thus, this signal SHOULD
-   NOT replace application-layer signals that indicate successful
+   receiver successfully processed the data.  Thus, this signal cannot
+   replace application-layer signals that indicate successful
    processing.
 
 5.3.  Flow Control
@@ -382,17 +337,14 @@ Internet-Draft               QUIC Datagrams                    July 2021
    transmitted with the DATAGRAM frame, like the STREAM frame, MUST be
    protected either by 0-RTT or 1-RTT keys.
 
+   Application protocols that allow DATAGRAM frames to be sent in 0-RTT
+   require a profile that defines acceptable use of 0-RTT; see
+   Section 5.6 of [RFC9001].
+
 7.  IANA Considerations
 
    This document registers a new value in the QUIC Transport Parameter
    Registry:
-
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 7]
-
-Internet-Draft               QUIC Datagrams                    July 2021
-
 
    Value:  0x0020 (if this document is approved)
 
@@ -424,39 +376,35 @@ Internet-Draft               QUIC Datagrams                    July 2021
    [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
               Multiplexed and Secure Transport", RFC 9000,
               DOI 10.17487/RFC9000, May 2021,
-              <https://www.rfc-editor.org/info/rfc9000>.
+              <https://datatracker.ietf.org/doc/html/rfc9000>.
+
+   [RFC9001]  Thomson, M., Ed. and S. Turner, Ed., "Using TLS to Secure
+              QUIC", RFC 9001, DOI 10.17487/RFC9001, May 2021,
+              <https://datatracker.ietf.org/doc/html/rfc9001>.
 
    [RFC9002]  Iyengar, J., Ed. and I. Swett, Ed., "QUIC Loss Detection
               and Congestion Control", RFC 9002, DOI 10.17487/RFC9002,
-              May 2021, <https://www.rfc-editor.org/info/rfc9002>.
+              May 2021, <https://datatracker.ietf.org/doc/html/rfc9002>.
 
 9.2.  Informative References
 
    [RFC0768]  Postel, J., "User Datagram Protocol", STD 6, RFC 768,
               DOI 10.17487/RFC0768, August 1980,
-              <https://www.rfc-editor.org/info/rfc768>.
+              <https://datatracker.ietf.org/doc/html/rfc768>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
-
-
-
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 8]
-
-Internet-Draft               QUIC Datagrams                    July 2021
-
+              <https://datatracker.ietf.org/doc/html/rfc2119>.
 
    [RFC6347]  Rescorla, E. and N. Modadugu, "Datagram Transport Layer
               Security Version 1.2", RFC 6347, DOI 10.17487/RFC6347,
-              January 2012, <https://www.rfc-editor.org/info/rfc6347>.
+              January 2012,
+              <https://datatracker.ietf.org/doc/html/rfc6347>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+              May 2017, <https://datatracker.ietf.org/doc/html/rfc8174>.
 
 Authors' Addresses
 
@@ -485,20 +433,3 @@ Authors' Addresses
    United States of America
 
    Email: dschinazi.ietf@gmail.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Pauly, et al.            Expires 13 January 2022                [Page 9]
