@@ -61,11 +61,11 @@ Reliability within QUIC is performed on a per-stream basis, so some frame
 types are not eligible for retransmission.
 
 Some applications, particularly those that need to transmit real-time data,
-prefer to transmit data unreliably. These applications can build directly upon
-UDP {{?RFC0768}} as a transport, and can add security with DTLS {{?RFC6347}}.
-Extending QUIC to support transmitting unreliable application data would
-provide another option for secure datagrams, with the added benefit of sharing
-a cryptographic and authentication context used for reliable streams.
+prefer to transmit data unreliably. In the past, these applications have built
+directly upon UDP {{?RFC0768}} as a transport, and have often added security with
+DTLS {{?RFC6347}}. Extending QUIC to support transmitting unreliable application
+data provides another option for secure datagrams, with the added benefit of
+sharing the cryptographic and authentication context used for reliable streams.
 
 This document defines two new DATAGRAM QUIC frame types, which
 carry application data without requiring retransmissions.
