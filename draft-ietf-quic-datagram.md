@@ -335,4 +335,8 @@ Specification:
 
 # Acknowledgments
 
-Thanks to Ian Swett, who inspired this proposal.
+The original proposal for this work came from Ian Swett.
+
+This document had reviews and input from many contributors in the
+IETF QUIC Working Group, with substantive input from Nick Banks,
+Lucas Pardue, Chris Wood, Rui Paulo, and Martin Thomson.
