@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-07-19T20:22:49.759169+00:00",
+  "timestamp": "2021-07-20T15:58:07.930112+00:00",
   "repo": "quicwg/datagram",
   "labels": [
     {
@@ -1272,15 +1272,15 @@
       "id": "MDU6SXNzdWU5NDcxODM1NTQ=",
       "title": "Can be acknowledged?",
       "url": "https://github.com/quicwg/datagram/issues/24",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "> QUIC datagrams, while unreliable, can support acknowledgements, allowing applications to be aware of whether a datagram was successfully received.\r\n-- https://www.ietf.org/archive/id/draft-ietf-quic-datagram-03.html#section-2-2.3\r\n\r\nIsn't it the case that they *are* acknowledged?\r\n\r\n(This one is just a nit, the next issue will be more serious.)",
       "createdAt": "2021-07-19T01:54:19Z",
-      "updatedAt": "2021-07-19T01:54:19Z",
-      "closedAt": null,
+      "updatedAt": "2021-07-19T20:23:29Z",
+      "closedAt": "2021-07-19T20:23:29Z",
       "comments": []
     },
     {
@@ -1288,15 +1288,15 @@
       "id": "MDU6SXNzdWU5NDcxODc4MDA=",
       "title": "Overstating value of acknowledgments",
       "url": "https://github.com/quicwg/datagram/issues/26",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "> QUIC datagrams, while unreliable, can support acknowledgements, allowing applications to be aware of whether a datagram was successfully received.\r\n-- https://www.ietf.org/archive/id/draft-ietf-quic-datagram-03.html#section-2-2.3\r\n\r\nThis is not an application-layer signal.  While the peer might have received the packet and processed it at the QUIC layer, this does not guarantee that the DATAGRAM frame contents were processed by the application.\r\n\r\nThe draft already acknowledges this in [Section 5.2](https://www.ietf.org/archive/id/draft-ietf-quic-datagram-03.html#name-acknowledgement-handling).  However, the treatment in the motivation could be misleading.\r\n\r\nConsider dropping this item.",
       "createdAt": "2021-07-19T02:01:43Z",
-      "updatedAt": "2021-07-19T02:01:43Z",
-      "closedAt": null,
+      "updatedAt": "2021-07-19T20:23:29Z",
+      "closedAt": "2021-07-19T20:23:29Z",
       "comments": []
     },
     {
@@ -1304,15 +1304,15 @@
       "id": "MDU6SXNzdWU5NDcyMDIzMDM=",
       "title": "Reiterate need for 0-RTT profile",
       "url": "https://github.com/quicwg/datagram/issues/29",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Application protocols that use QUIC are required to define how 0-RTT is used.  This draft doesn't really change that, but it does add to what 0-RTT can carry.  In an abundance of caution, it should link to [Section 5.6 of RFC 9001](https://quicwg.org/base-drafts/rfc9001.html#section-5.6-3).",
       "createdAt": "2021-07-19T02:30:27Z",
-      "updatedAt": "2021-07-19T02:30:27Z",
-      "closedAt": null,
+      "updatedAt": "2021-07-19T20:28:46Z",
+      "closedAt": "2021-07-19T20:28:46Z",
       "comments": []
     },
     {
@@ -1327,7 +1327,33 @@
       "labels": [],
       "body": "> Implementations that use packet pacing SHOULD support delaying the transmission of DATAGRAM frames for at least the time it takes to send the paced packets allowed by the congestion controller to avoid dropping frames excessively.\r\n\r\nI am having trouble parsing this.  I think that this is saying that if you have a pacer, then an endpoint might delay DATAGRAM frames to avoid overriding the sending rate of the pacer.\r\n\r\nHowever, this seems to imply that the maximum delay imposed here is the inter-packet interval of the pacer.  I think that is a bad assumption, even if it might be a simplifying assumption that some implementations might choose to adopt.  In some cases, the pacer interval will be too slow for the application (for low BDP, high RTT connections especially) or in some cases the pacer interval might be short enough to allow multiple intervals before dropping the packet (for high BDP, short RTT connections).\r\n\r\nThe goal should just be to avoid deferring DATAGRAM sending indefinitely, with controls over any delays being available to applications.\r\n\r\nMaybe:\r\n\r\n> Implementations that use packet pacing ({{Section 7.7 of RFC9002}}) can delay transmission of DATAGRAM frames to avoid having packets sent faster than pacing would otherwise allow.  Any transmission delays will need to allow for application-level constraints on frame delivery times.",
       "createdAt": "2021-07-19T02:51:01Z",
-      "updatedAt": "2021-07-19T02:51:01Z",
+      "updatedAt": "2021-07-19T23:29:52Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think the goal here was to prevent implementations naively dropping DATAGRAM frames anytime they couldn't be sent immediately, which would be a pathologically bad case when a packet pacer is being used. But good point that this should be clarified.",
+          "createdAt": "2021-07-19T23:29:52Z",
+          "updatedAt": "2021-07-19T23:29:52Z"
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "MDU6SXNzdWU5NDgwMTE1NzU=",
+      "title": "Update acknowledgements section to include WG contibutors",
+      "url": "https://github.com/quicwg/datagram/issues/33",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "We should update the acknowledgements",
+      "createdAt": "2021-07-19T20:43:36Z",
+      "updatedAt": "2021-07-19T20:43:50Z",
       "closedAt": null,
       "comments": []
     }
@@ -2402,24 +2428,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NjkyMjA2ODkz",
       "title": "Cannot rely on transport ACK",
       "url": "https://github.com/quicwg/datagram/pull/27",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "The use of \"SHOULD NOT\" implies that a) this is discretionary, and b)\r\nthat applications might be able to rely on it in some cases.\r\n\r\nI don't believe that either is true unless the protocol were specified\r\nentirely differently.  (And that alternative specification wouldn't be\r\npractical anyway.)",
       "createdAt": "2021-07-19T02:05:20Z",
-      "updatedAt": "2021-07-19T20:22:46Z",
+      "updatedAt": "2021-07-19T20:22:51Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "0a57c01097a29f5f88d2f3743f33b3a15d4b329c",
       "headRepository": "martinthomson/datagram",
       "headRefName": "just-cannot",
       "headRefOid": "6cc681a368687e82d2c286862b0ad9fbfcc35d76",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-07-19T20:22:51Z",
+      "mergedAt": "2021-07-19T20:22:51Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "3323ff31ef00e0b61e8ee60734f67c7c5154cc66"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2455,24 +2483,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NjkyMjA5NTIx",
       "title": "Tweak motivation",
       "url": "https://github.com/quicwg/datagram/pull/28",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Drop the text on acknowledgments.\r\n\r\nCloses #26.\r\nCloses #24.\r\n\r\nThen modify the congestion control thing to make the benefit clearer.  A\r\nunified congestion controller can be more efficient.",
       "createdAt": "2021-07-19T02:11:11Z",
-      "updatedAt": "2021-07-19T19:57:39Z",
+      "updatedAt": "2021-07-19T20:23:30Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "0a57c01097a29f5f88d2f3743f33b3a15d4b329c",
       "headRepository": "martinthomson/datagram",
       "headRefName": "acks-not-a-motivation",
       "headRefOid": "20a607ce6145032adaa99f2d1c79cc3da2194dfd",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-07-19T20:23:29Z",
+      "mergedAt": "2021-07-19T20:23:29Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "1f5362f605ac973b65406bbf289a121cca14f392"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2487,6 +2517,19 @@
           "createdAt": "2021-07-19T19:57:39Z",
           "updatedAt": "2021-07-19T19:57:39Z",
           "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA5OTQ2MDk3",
+          "commit": {
+            "abbreviatedOid": "20a607c"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-07-19T20:23:22Z",
+          "updatedAt": "2021-07-19T20:23:22Z",
+          "comments": []
         }
       ]
     },
@@ -2495,24 +2538,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NjkyMjE4NjAz",
       "title": "0-RTT needs a profile",
       "url": "https://github.com/quicwg/datagram/pull/30",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Closes #29.",
       "createdAt": "2021-07-19T02:33:35Z",
-      "updatedAt": "2021-07-19T20:16:44Z",
+      "updatedAt": "2021-07-19T20:28:46Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "0a57c01097a29f5f88d2f3743f33b3a15d4b329c",
       "headRepository": "martinthomson/datagram",
       "headRefName": "cite-9001",
       "headRefOid": "bb1fc2988b51c767710f497dc6d71fe92bf52edd",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-07-19T20:28:46Z",
+      "mergedAt": "2021-07-19T20:28:45Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "e090b597a3d2d27401505b892938d03040bdf116"
+      },
       "comments": [
         {
           "author": "martinthomson",
@@ -2520,6 +2565,13 @@
           "body": "I put this in Security Considerations, but I can see that [Section 5](https://www.ietf.org/archive/id/draft-ietf-quic-datagram-03.html#name-behavior-and-usage) is another good choice (perhaps a better one).",
           "createdAt": "2021-07-19T02:37:07Z",
           "updatedAt": "2021-07-19T02:37:07Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree this could also be its own subsection of section 5, but given that this really is just reiterating an existing requirement, it's also OK where it is.",
+          "createdAt": "2021-07-19T20:28:42Z",
+          "updatedAt": "2021-07-19T20:28:42Z"
         }
       ],
       "reviews": [
@@ -2535,6 +2587,19 @@
           "createdAt": "2021-07-19T20:16:44Z",
           "updatedAt": "2021-07-19T20:16:44Z",
           "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA5OTQ5ODI4",
+          "commit": {
+            "abbreviatedOid": "bb1fc29"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-07-19T20:28:02Z",
+          "updatedAt": "2021-07-19T20:28:02Z",
+          "comments": []
         }
       ]
     },
@@ -2543,24 +2608,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NjkyMjE5MDI3",
       "title": "Two items, and no comma",
       "url": "https://github.com/quicwg/datagram/pull/31",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2021-07-19T02:35:13Z",
-      "updatedAt": "2021-07-19T20:15:39Z",
+      "updatedAt": "2021-07-19T20:24:07Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "0a57c01097a29f5f88d2f3743f33b3a15d4b329c",
       "headRepository": "martinthomson/datagram",
       "headRefName": "and-mtu",
       "headRefOid": "3bb5597e40585509374bd8ec0ed19fe616f4e5ac",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-07-19T20:24:06Z",
+      "mergedAt": "2021-07-19T20:24:06Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "c1157b4d5638657803f40f4b5f13213bdeb8bae0"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2575,8 +2642,49 @@
           "createdAt": "2021-07-19T20:15:39Z",
           "updatedAt": "2021-07-19T20:15:39Z",
           "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzA5OTQ2NTk4",
+          "commit": {
+            "abbreviatedOid": "3bb5597"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-07-19T20:24:01Z",
+          "updatedAt": "2021-07-19T20:24:01Z",
+          "comments": []
         }
       ]
+    },
+    {
+      "number": 34,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjkzNTk1OTA4",
+      "title": "Editorial changes to the introduction",
+      "url": "https://github.com/quicwg/datagram/pull/34",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-07-20T15:57:57Z",
+      "updatedAt": "2021-07-20T15:57:57Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "e090b597a3d2d27401505b892938d03040bdf116",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "5a9552075e5a321a07e999980df57019a885df55",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
