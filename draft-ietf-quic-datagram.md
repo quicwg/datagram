@@ -70,8 +70,8 @@ sharing the cryptographic and authentication context used for reliable streams.
 This document defines two new DATAGRAM QUIC frame types, which
 carry application data without requiring retransmissions.
 
-Note that DATAGRAM frames are scoped to unreliable tranmission only. Reliable
-transmission of short datagrams is already supported via STREAM frames.
+Note that DATAGRAM frames are only meant for unreliable transmissions. Reliable
+transmission is already supported by QUIC via STREAM frames.
 
 Discussion of this work is encouraged to happen on the QUIC IETF mailing list
 <quic@ietf.org> or on the GitHub repository which contains the draft:
