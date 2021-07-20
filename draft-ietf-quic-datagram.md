@@ -62,7 +62,7 @@ types are not eligible for retransmission.
 
 Some applications, particularly those that need to transmit real-time data,
 prefer to transmit data unreliably. In the past, these applications have built
-directly upon UDP {{?RFC0768}} as a transport, and often add security with
+directly upon UDP {{?RFC0768}} as a transport, and have often added security with
 DTLS {{?RFC6347}}. Extending QUIC to support transmitting unreliable application
 data provides another option for secure datagrams, with the added benefit of
 sharing the cryptographic and authentication context used for reliable streams.
