@@ -5,9 +5,9 @@
 QUIC                                                            T. Pauly
 Internet-Draft                                                E. Kinnear
 Intended status: Standards Track                              Apple Inc.
-Expires: 20 January 2022                                     D. Schinazi
+Expires: 21 January 2022                                     D. Schinazi
                                                               Google LLC
-                                                            19 July 2021
+                                                            20 July 2021
 
 
                 An Unreliable Datagram Extension to QUIC
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 January 2022.
+   This Internet-Draft will expire on 21 January 2022.
 
 Copyright Notice
 
@@ -83,12 +83,12 @@ Table of Contents
    frame types are not eligible for retransmission.
 
    Some applications, particularly those that need to transmit real-time
-   data, prefer to transmit data unreliably.  These applications can
-   build directly upon UDP [RFC0768] as a transport, and can add
-   security with DTLS [RFC6347].  Extending QUIC to support transmitting
-   unreliable application data would provide another option for secure
-   datagrams, with the added benefit of sharing a cryptographic and
-   authentication context used for reliable streams.
+   data, prefer to transmit data unreliably.  In the past, these
+   applications have built directly upon UDP [RFC0768] as a transport,
+   and have often added security with DTLS [RFC6347].  Extending QUIC to
+   support transmitting unreliable application data provides another
+   option for secure datagrams, with the added benefit of sharing the
+   cryptographic and authentication context used for reliable streams.
 
    This document defines two new DATAGRAM QUIC frame types, which carry
    application data without requiring retransmissions.
