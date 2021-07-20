@@ -367,7 +367,7 @@ Table of Contents
 
    This document had reviews and input from many contributors in the
    IETF QUIC Working Group, with substantive input from Nick Banks,
-   Lucas Pardue, Chris Wood, Rui Paulo, and Martin Thomson.
+   Lucas Pardue, Rui Paulo, and Martin Thomson, and Chris Wood.
 
 9.  References
 
