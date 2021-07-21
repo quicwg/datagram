@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-07-20T15:58:07.930112+00:00",
+  "timestamp": "2021-07-21T15:43:22.129401+00:00",
   "repo": "quicwg/datagram",
   "labels": [
     {
@@ -55,15 +55,15 @@
       "id": "MDU6SXNzdWU1NzIyMzgwODE=",
       "title": "remind implementors of the \"fun\" parts of no flow control",
       "url": "https://github.com/quicwg/datagram/issues/1",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "DavidSchinazi",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Flow control is painful because getting it wrong is painful.\r\n\r\nNot having flow control doesn't mean having it done right!\r\n\r\nWould be great to have a brief reminder around this in the draft!\r\n\r\n(Issue copied from [individual draft repo](https://github.com/tfpauly/draft-pauly-quic-datagram/issues/33), by @grmocg on 2019-11-19)",
       "createdAt": "2020-02-27T17:27:58Z",
-      "updatedAt": "2021-03-04T15:08:32Z",
-      "closedAt": null,
+      "updatedAt": "2021-07-20T21:42:57Z",
+      "closedAt": "2021-07-20T21:42:57Z",
       "comments": [
         {
           "author": "tfpauly",
@@ -71,6 +71,13 @@
           "body": "I expect this may be covered when we add text for #15",
           "createdAt": "2021-03-04T15:06:02Z",
           "updatedAt": "2021-03-04T15:08:32Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I believe this should be covered sufficiently now with the current text. Please open a this or a new issue if you disagree!",
+          "createdAt": "2021-07-20T21:42:57Z",
+          "updatedAt": "2021-07-20T21:42:57Z"
         }
       ]
     },
@@ -882,15 +889,15 @@
       "id": "MDU6SXNzdWU2NDI1MjgxNjk=",
       "title": "Question about scope: why only unreliable datagrams? Why not reliable datagrams too?",
       "url": "https://github.com/quicwg/datagram/issues/12",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "skissane",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Some applications might want to send messages, and not care about the order of delivery, but still get reliability.\r\n\r\nQUIC streams give them reliability, but within a stream it enforces order of delivery.\r\n\r\nThis datagram proposal gives unordered delivery of messages, but without reliability.\r\n\r\nWhy not provide datagrams with optional (opt-in) reliability?\r\n\r\nIt shouldn't be a lot of extra work for QUIC implementors to provide reliable datagrams as well as unreliable, given that retransmission is already there for QUIC streams.\r\n\r\n(I guess an application could create a separate QUIC stream for each unordered reliable message. That might work, but seems ugly and may have some overhead.)",
       "createdAt": "2020-06-21T09:25:00Z",
-      "updatedAt": "2020-06-22T00:52:47Z",
-      "closedAt": null,
+      "updatedAt": "2021-07-21T15:42:56Z",
+      "closedAt": "2021-07-21T15:42:56Z",
       "comments": [
         {
           "author": "DavidSchinazi",
@@ -1344,7 +1351,7 @@
       "id": "MDU6SXNzdWU5NDgwMTE1NzU=",
       "title": "Update acknowledgements section to include WG contibutors",
       "url": "https://github.com/quicwg/datagram/issues/33",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tfpauly",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -1353,9 +1360,54 @@
       "labels": [],
       "body": "We should update the acknowledgements",
       "createdAt": "2021-07-19T20:43:36Z",
-      "updatedAt": "2021-07-19T20:43:50Z",
-      "closedAt": null,
+      "updatedAt": "2021-07-21T15:43:06Z",
+      "closedAt": "2021-07-21T15:43:06Z",
       "comments": []
+    },
+    {
+      "number": 35,
+      "id": "MDU6SXNzdWU5NDg5MzgzNTk=",
+      "title": "Lack of application-defined format",
+      "url": "https://github.com/quicwg/datagram/issues/35",
+      "state": "OPEN",
+      "author": "MikeBishop",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Neither this draft nor H3-Datagrams says what the behavior should be when the transport supports DATAGRAM frames but no supported application format has been negotiated for them.  While I think the correct behavior would be to drop them, since there's no ability to interpret their payload, no document actually says that.  There's also a legitimate argument for closing the connection, since something was sent that the application layer can't deal with.\r\n\r\nH3-Datagrams probably can't say that, since the possibility exists that a different datagram-payload format will be deployed for HTTP/3 in the future.  Should this document have a sentence about what happens when the application-layer doesn't define what to do with incoming datagrams / doesn't consume them?\r\n\r\n(There's also the question of simultaneously supporting two different formats, but I think that's an application-layer issue this document can ignore.)",
+      "createdAt": "2021-07-20T18:40:20Z",
+      "updatedAt": "2021-07-20T21:13:24Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Due to reordering, it's possible that a DATAGRAM frame arrives before the QUIC packet which negotiates the application format. Therefore we can't close the connection here. Depending on the application, it might be best to drop the datagram, or buffer it in hopes of later negotiating the format. I'm not sure draft-ietf-quic-datagram needs to say anything, what's wrong with leaving that up to applications?",
+          "createdAt": "2021-07-20T18:45:18Z",
+          "updatedAt": "2021-07-20T18:45:18Z"
+        },
+        {
+          "author": "LPardue",
+          "authorAssociation": "MEMBER",
+          "body": "The corollary to Mike's question also applies, what happens if an application protocol doesn't use QUIC streams?\r\n\r\nGetting something written somewhere seems sensible, I suggest the applicability draft.",
+          "createdAt": "2021-07-20T18:46:57Z",
+          "updatedAt": "2021-07-20T18:46:57Z"
+        },
+        {
+          "author": "MikeBishop",
+          "authorAssociation": "NONE",
+          "body": "True, there's also an indeterminate state before you know what the application supports, for H3 at least.  But once you know what the application supports and behavior is different than expected, something needs to happen. Preferably there should be a spec that says what should happen; implementation guidance in applicability is an option as well.",
+          "createdAt": "2021-07-20T20:17:13Z",
+          "updatedAt": "2021-07-20T20:17:13Z"
+        },
+        {
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I don't think there's anything concrete the transport can say here, but we could point to the fact that the application needs to define it's behavior for datagrams.",
+          "createdAt": "2021-07-20T21:13:24Z",
+          "updatedAt": "2021-07-20T21:13:24Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -2663,7 +2715,7 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NjkzNTk1OTA4",
       "title": "Editorial changes to the introduction",
       "url": "https://github.com/quicwg/datagram/pull/34",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tfpauly",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -2672,19 +2724,356 @@
       "labels": [],
       "body": "",
       "createdAt": "2021-07-20T15:57:57Z",
-      "updatedAt": "2021-07-20T15:57:57Z",
+      "updatedAt": "2021-07-20T21:11:27Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "e090b597a3d2d27401505b892938d03040bdf116",
       "headRepository": "quicwg/datagram",
       "headRefName": "tfpauly-patch-1",
-      "headRefOid": "5a9552075e5a321a07e999980df57019a885df55",
+      "headRefOid": "7df4cf7787fee1dc4f11b01a25ba9fc2e1699897",
+      "closedAt": "2021-07-20T21:11:26Z",
+      "mergedAt": "2021-07-20T21:11:26Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "61ac20d5a2b6d312941c828810b1c11b31afaff9"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzEwNzcxMzA2",
+          "commit": {
+            "abbreviatedOid": "5a95520"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Approved pending one nit",
+          "createdAt": "2021-07-20T16:10:37Z",
+          "updatedAt": "2021-07-20T16:11:10Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "nit: pick past or present (\"have built\" vs \"add\")\r\n```suggestion\r\ndirectly upon UDP {{?RFC0768}} as a transport, and have often added security with\r\n```",
+              "createdAt": "2021-07-20T16:10:37Z",
+              "updatedAt": "2021-07-20T16:11:10Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjkzODU5MzE2",
+      "title": "Rework pacing phrasing",
+      "url": "https://github.com/quicwg/datagram/pull/36",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Closes #32",
+      "createdAt": "2021-07-20T21:21:12Z",
+      "updatedAt": "2021-07-21T05:22:55Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "61ac20d5a2b6d312941c828810b1c11b31afaff9",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-1",
+      "headRefOid": "a5861739fbd88af875382a10d21c4264c998143a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMDgxNTAz",
+          "commit": {
+            "abbreviatedOid": "a586173"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-20T21:27:39Z",
+          "updatedAt": "2021-07-20T21:27:39Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Incorrect pacing would cause datagram frame loss, not packet loss. Here's a slightly tweaked phrasing:\r\n\r\n```suggestion\r\napplication). Implementations that use packet pacing ({{Section 7.7 of RFC9002}})\r\nSHOULD take care to avoid excessively dropping DATAGRAM frames due to the\r\ntransmission delays used for pacing.\r\n```\r\n\r\nThat said, as an implementer I'm not sure what this sentence tells me: \"take care\" is very vague. What's a concrete solution? Keeping pacing credits available in case datagrams come in?",
+              "createdAt": "2021-07-20T21:27:39Z",
+              "updatedAt": "2021-07-20T21:27:40Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMTIzMzkw",
+          "commit": {
+            "abbreviatedOid": "a586173"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-20T22:44:19Z",
+          "updatedAt": "2021-07-20T22:44:20Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Realistically, it's \"don't drop a frame just because you're pacing\". This came from https://github.com/quicwg/datagram/issues/16 originally.\r\n\r\n@DavidSchinazi happy to take any suggested text here.",
+              "createdAt": "2021-07-20T22:44:19Z",
+              "updatedAt": "2021-07-20T22:44:20Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMTUyMDY5",
+          "commit": {
+            "abbreviatedOid": "a586173"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-20T23:54:02Z",
+          "updatedAt": "2021-07-20T23:54:02Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "If the application passes a datagram to the transport and the transport can't send it right away due to pacing, what's the transport supposed to do? If I shouldn't drop it what am I supposed to do instead?",
+              "createdAt": "2021-07-20T23:54:02Z",
+              "updatedAt": "2021-07-20T23:54:03Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMjQ4NzU1",
+          "commit": {
+            "abbreviatedOid": "a586173"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-21T04:33:07Z",
+          "updatedAt": "2021-07-21T05:22:55Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "I think that the phrasing you want is:\r\n> Implementations that use pacing (#REF) can delay the sending of DATAGRAM frames to maintain consistent packet pacing. DATAGRAM frames that are delayed too much might not meet delay constraints imposed by an application, in which case they can be dropped.\r\n\r\nNo normative language, nothing about trying to avoid excessive drops, delay comment applies to both sources of delay (CC and pacing).  You might then add an implementation note:\r\n\r\n> Implementations might need to balance the sending constraints imposed by congestion control and pacing against the delay constraints imposed by applications.\r\n\r\nI don't really think that's necessary though.",
+              "createdAt": "2021-07-21T04:33:07Z",
+              "updatedAt": "2021-07-21T05:22:55Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjkzODg1OTAz",
+      "title": "Clarify scope to unreliable data only",
+      "url": "https://github.com/quicwg/datagram/pull/37",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Closes #12",
+      "createdAt": "2021-07-20T21:55:22Z",
+      "updatedAt": "2021-07-21T15:42:56Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "61ac20d5a2b6d312941c828810b1c11b31afaff9",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-2",
+      "headRefOid": "5ff385951aa37c39e25eb52c50299a56e408c5dd",
+      "closedAt": "2021-07-21T15:42:56Z",
+      "mergedAt": "2021-07-21T15:42:55Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "bd2292fa743639e8790a5688b47e9dc67b533a20"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMTEyOTc4",
+          "commit": {
+            "abbreviatedOid": "ec86dba"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-20T22:22:28Z",
+          "updatedAt": "2021-07-20T22:22:29Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nNote that DATAGRAM frames are only meant for unreliable transmissions. Reliable\r\ntransmission is already supported by QUIC via STREAM frames.\r\n```",
+              "createdAt": "2021-07-20T22:22:29Z",
+              "updatedAt": "2021-07-20T22:22:29Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjkzODkzMjAw",
+      "title": "Note retransmission logic difference in security considerations",
+      "url": "https://github.com/quicwg/datagram/pull/38",
+      "state": "OPEN",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Closes #2",
+      "createdAt": "2021-07-20T22:06:15Z",
+      "updatedAt": "2021-07-21T04:26:09Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "61ac20d5a2b6d312941c828810b1c11b31afaff9",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-3",
+      "headRefOid": "d021fc97c1cd15a27125897c29d4fd05253bc694",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "NONE",
+          "body": "Thank you!",
+          "createdAt": "2021-07-20T22:52:23Z",
+          "updatedAt": "2021-07-20T22:52:23Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMTE0NzI3",
+          "commit": {
+            "abbreviatedOid": "d021fc9"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-07-20T22:25:52Z",
+          "updatedAt": "2021-07-20T22:25:52Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMTI2ODk1",
+          "commit": {
+            "abbreviatedOid": "d021fc9"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-07-20T22:52:15Z",
+          "updatedAt": "2021-07-20T22:52:15Z",
+          "comments": []
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMjQ2MzYx",
+          "commit": {
+            "abbreviatedOid": "d021fc9"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-07-21T04:26:07Z",
+          "updatedAt": "2021-07-21T04:26:09Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\nretransmission, connections that use DATAGRAM frames might be distinguished from\r\nother frames using the different response to loss.\r\n```",
+              "createdAt": "2021-07-21T04:26:07Z",
+              "updatedAt": "2021-07-21T04:26:10Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "MDExOlB1bGxSZXF1ZXN0NjkzODk4MjY2",
+      "title": "Update acknowledgements",
+      "url": "https://github.com/quicwg/datagram/pull/39",
+      "state": "MERGED",
+      "author": "tfpauly",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "tfpauly"
+      ],
+      "labels": [],
+      "body": "Closes #33\r\n\r\nLet me know if anyone else should be added!",
+      "createdAt": "2021-07-20T22:13:05Z",
+      "updatedAt": "2021-07-21T15:43:07Z",
+      "baseRepository": "quicwg/datagram",
+      "baseRefName": "main",
+      "baseRefOid": "61ac20d5a2b6d312941c828810b1c11b31afaff9",
+      "headRepository": "quicwg/datagram",
+      "headRefName": "tfpauly-patch-4",
+      "headRefOid": "83dbc4dbae8db3d3a7691120acb33eaac89a78db",
+      "closedAt": "2021-07-21T15:43:06Z",
+      "mergedAt": "2021-07-21T15:43:06Z",
+      "mergedBy": "tfpauly",
+      "mergeCommit": {
+        "oid": "a1c47ed8185a3f08fbd28266a62fe74efb2600be"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMTE1MTc4",
+          "commit": {
+            "abbreviatedOid": "0428991"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-07-20T22:26:43Z",
+          "updatedAt": "2021-07-20T22:26:48Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "nit: order names alphabetically by last name?",
+              "createdAt": "2021-07-20T22:26:44Z",
+              "updatedAt": "2021-07-20T22:26:48Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzExMTI0Mzk0",
+          "commit": {
+            "abbreviatedOid": "83dbc4d"
+          },
+          "author": "tfpauly",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-07-20T22:46:28Z",
+          "updatedAt": "2021-07-20T22:46:28Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Done!",
+              "createdAt": "2021-07-20T22:46:28Z",
+              "updatedAt": "2021-07-20T22:46:28Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
