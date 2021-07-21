@@ -302,8 +302,8 @@ profile that defines acceptable use of 0-RTT; see {{Section 5.6 of RFC9001}}.
 
 The use of DATAGRAM frames might be detectable by an adversary on path that is
 capable of dropping packets. Since DATAGRAM frames do not use transport-level
-retransmission, connections that use DATAGRAM frames will generally have different
-loss recovery patterns.
+retransmission, connections that use DATAGRAM frames might be distinguished from
+other frames using the different response to loss.
 
 # IANA Considerations
 
