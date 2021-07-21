@@ -341,6 +341,12 @@ Table of Contents
    require a profile that defines acceptable use of 0-RTT; see
    Section 5.6 of [RFC9001].
 
+   The use of DATAGRAM frames might be detectable by an adversary on
+   path that is capable of dropping packets.  Since DATAGRAM frames do
+   not use transport-level retransmission, connections that use DATAGRAM
+   frames might be distinguished from other frames using the different
+   response to loss.
+
 7.  IANA Considerations
 
    This document registers a new value in the QUIC Transport Parameter
@@ -367,7 +373,11 @@ Table of Contents
 
 8.  Acknowledgments
 
-   Thanks to Ian Swett, who inspired this proposal.
+   The original proposal for this work came from Ian Swett.
+
+   This document had reviews and input from many contributors in the
+   IETF QUIC Working Group, with substantive input from Nick Banks,
+   Lucas Pardue, Rui Paulo, and Martin Thomson, and Chris Wood.
 
 9.  References
 
