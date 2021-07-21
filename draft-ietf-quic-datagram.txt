@@ -5,9 +5,9 @@
 QUIC                                                            T. Pauly
 Internet-Draft                                                E. Kinnear
 Intended status: Standards Track                              Apple Inc.
-Expires: 21 January 2022                                     D. Schinazi
+Expires: 22 January 2022                                     D. Schinazi
                                                               Google LLC
-                                                            20 July 2021
+                                                            21 July 2021
 
 
                 An Unreliable Datagram Extension to QUIC
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 January 2022.
+   This Internet-Draft will expire on 22 January 2022.
 
 Copyright Notice
 
@@ -92,6 +92,10 @@ Table of Contents
 
    This document defines two new DATAGRAM QUIC frame types, which carry
    application data without requiring retransmissions.
+
+   Note that DATAGRAM frames are only meant for unreliable
+   transmissions.  Reliable transmission is already supported by QUIC
+   via STREAM frames.
 
    Discussion of this work is encouraged to happen on the QUIC IETF
    mailing list quic@ietf.org (mailto:quic@ietf.org) or on the GitHub
