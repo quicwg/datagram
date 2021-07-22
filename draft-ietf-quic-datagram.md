@@ -347,4 +347,4 @@ The original proposal for this work came from Ian Swett.
 
 This document had reviews and input from many contributors in the
 IETF QUIC Working Group, with substantive input from Nick Banks,
-Lucas Pardue, Rui Paulo, and Martin Thomson, and Chris Wood.
+Lucas Pardue, Rui Paulo, Martin Thomson, Victor Vasiliev, and Chris Wood.
