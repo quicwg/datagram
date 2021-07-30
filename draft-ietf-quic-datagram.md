@@ -165,6 +165,13 @@ max_datagram_frame_size transport parameter being missing. If datagram support
 is integral to the application, the application protocol can fail the handshake
 if the max_datagram_frame_size transport parameter is not present.
 
+## Disabling Eliciting ACKs
+
+An endpoint can optionally send a separate QUIC Transport Parameter
+(name=max_datagram_no_ack, value=0x0021). This parameter is a zero-length
+value. When present, the parameter indicates to the receiver that DATAGRAM
+frames do not elicit an acknowledgement.
+
 # Datagram Frame Type
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
@@ -243,10 +250,11 @@ priorities to DATAGRAM frames with respect to each other and to QUIC streams.
 ## Acknowledgement Handling
 
 Although DATAGRAM frames are not retransmitted upon loss detection, they are
-ack-eliciting ({{!RFC9002}}). Receivers SHOULD support delaying
-ACK frames (within the limits specified by max_ack_delay) in reponse to receiving
-packets that only contain DATAGRAM frames, since the timing of these
-acknowledgements is not used for loss recovery.
+ack-eliciting ({{!RFC9002}}) unless the peer sent the max_datagram_no_ack transport
+parameter. Receivers SHOULD support delaying ACK frames (within the limits
+specified by max_ack_delay) in reponse to receiving packets that only contain
+ack-eliciting DATAGRAM frames, since the timing of these acknowledgements is not
+used for loss recovery.
 
 As with any ack-eliciting frame, when a sender suspects that a packet containing
 only DATAGRAM frames has been lost, it sends probe packets to elicit a faster
@@ -292,6 +300,9 @@ congestion controller to avoid dropping frames excessively.
 Implementations can optionally support allowing the application to specify
 a sending expiration time, beyond which a congestion-controlled DATAGRAM
 frame ought to be dropped without transmission.
+
+Implementations that set max_datagram_no_ack should be wary of sending purely
+DATAGRAM frames as this can lead an exhaustion of the congestion control windows.
 
 # Security Considerations
 
