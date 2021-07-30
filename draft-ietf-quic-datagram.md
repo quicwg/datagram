@@ -168,11 +168,13 @@ if the max_datagram_frame_size transport parameter is not present.
 # Datagram Frame Type
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
-The DATAGRAM frame type takes the form 0b0011000X (or the values 0x30
-and 0x31). The least significant bit of the DATAGRAM frame type is the
+The DATAGRAM frame type takes the form 0b001100XX (or the values 0x30, 0x31, 0x32
+and 0x33). The least significant bit of the DATAGRAM frame type is the
 LEN bit (0x01). It indicates that there is a Length field present. If this
 bit is set to 0, the Length field is absent and the Datagram Data field extends
 to the end of the packet. If this bit is set to 1, the Length field is present.
+The second least significant bit of the DATAGRAM frame type is the NO_ACK bit (0x02).
+It indicates that the DATAGRAM frame should not elicit an acknowledgement.
 
 The DATAGRAM frame is structured as follows:
 
@@ -243,10 +245,10 @@ priorities to DATAGRAM frames with respect to each other and to QUIC streams.
 ## Acknowledgement Handling
 
 Although DATAGRAM frames are not retransmitted upon loss detection, they are
-ack-eliciting ({{!RFC9002}}). Receivers SHOULD support delaying
-ACK frames (within the limits specified by max_ack_delay) in reponse to receiving
-packets that only contain DATAGRAM frames, since the timing of these
-acknowledgements is not used for loss recovery.
+ack-eliciting ({{!RFC9002}}) if they do not have the NO-ACK bit set. Receivers
+SHOULD support delaying ACK frames (within the limits specified by max_ack_delay)
+in response to receiving packets that only contain ack-eliciting DATAGRAM frames,
+since the timing of these acknowledgements is not used for loss recovery.
 
 As with any ack-eliciting frame, when a sender suspects that a packet containing
 only DATAGRAM frames has been lost, it sends probe packets to elicit a faster
@@ -307,6 +309,10 @@ The use of DATAGRAM frames might be detectable by an adversary on path that is
 capable of dropping packets. Since DATAGRAM frames do not use transport-level
 retransmission, connections that use DATAGRAM frames might be distinguished from
 other frames using the different response to loss.
+
+Implementations that send non-ack-eliciting DATAGRAMS should be wary of sending
+purely these frames as this can lead to an exhaustion of the congestion control
+windows.
 
 # IANA Considerations
 
