@@ -173,7 +173,7 @@ and 0x33). The least significant bit of the DATAGRAM frame type is the
 LEN bit (0x01). It indicates that there is a Length field present. If this
 bit is set to 0, the Length field is absent and the Datagram Data field extends
 to the end of the packet. If this bit is set to 1, the Length field is present.
-The second least significant bit of the DATAGRAM frame type is the NO_ACK bit (0x02).
+The second least significant bit of the DATAGRAM frame type is the NO-ACK bit (0x02).
 It indicates that the DATAGRAM frame should not elicit an acknowledgement.
 
 The DATAGRAM frame is structured as follows:
