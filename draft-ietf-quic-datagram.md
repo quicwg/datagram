@@ -302,7 +302,8 @@ a sending expiration time, beyond which a congestion-controlled DATAGRAM
 frame ought to be dropped without transmission.
 
 Implementations that set max_datagram_no_ack should be wary of sending purely
-DATAGRAM frames as this can lead an exhaustion of the congestion control windows.
+DATAGRAM frames as this can lead to an exhaustion of the congestion control
+windows.
 
 # Security Considerations
 
