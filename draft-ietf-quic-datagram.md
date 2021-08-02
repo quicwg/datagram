@@ -177,13 +177,11 @@ to the end of the packet. If this bit is set to 1, the Length field is present.
 The DATAGRAM frame is structured as follows:
 
 ~~~
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                        [Length (i)]                         ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                      Datagram Data (*)                      ...
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+DATAGRAM Frame {
+  Type (i) = 0x30..0x31,
+  [Length (i)],
+  Datagram Data (..),
+}
 ~~~
 {: #datagram-format title="DATAGRAM Frame Format"}
 
@@ -191,10 +189,10 @@ DATAGRAM frames contain the following fields:
 
 Length:
 
-: A variable-length integer specifying the length of the datagram in bytes. This field
-is present only when the LEN bit is set. If the LEN bit is not set, the datagram data
-extends to the end of the QUIC packet. Note that empty (i.e., zero-length)
-datagrams are allowed.
+: A variable-length integer specifying the length of the Datagram Data field in
+bytes. This field is present only when the LEN bit is set to 1. When the LEN bit
+is set to 0, the Datagram Data field extends to the end of the QUIC packet. Note
+that empty (i.e., zero-length) datagrams are allowed.
 
 Datagram Data:
 
