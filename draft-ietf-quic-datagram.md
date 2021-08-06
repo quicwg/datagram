@@ -282,8 +282,8 @@ application until the congestion controller allows it {{!RFC9002}}. The sender
 implementation MUST either delay sending the frame until the controller allows
 it or drop the frame without sending it (at which point it MAY notify the
 application). Implementations that use packet pacing ({{Section 7.7 of RFC9002}})
-SHOULD take care to not drop DATAGRAM frames due to the transmission delays
-used for pacing, to avoid excessive packet drops.
+can also delay the sending of DATAGRAM frames to maintain consistent packet
+pacing.
 
 Implementations can optionally support allowing the application to specify
 a sending expiration time, beyond which a congestion-controlled DATAGRAM
