@@ -242,9 +242,12 @@ priorities to DATAGRAM frames with respect to each other and to QUIC streams.
 
 Although DATAGRAM frames are not retransmitted upon loss detection, they are
 ack-eliciting ({{!RFC9002}}). Receivers SHOULD support delaying
-ACK frames (within the limits specified by max_ack_delay) in reponse to receiving
-packets that only contain DATAGRAM frames, since the timing of these
-acknowledgements is not used for loss recovery.
+ACK frames (within the limits specified by max_ack_delay) in response to
+receiving packets that only contain DATAGRAM frames, since the sender takes no
+action if these packets are temporarily unacknowledged. Receivers will
+continue to send ACK frames when conditions indicate a packet might be lost,
+since the packet's payload is unknown to the receiver, and when dictated by
+max_ack_delay or other protocol components.
 
 As with any ack-eliciting frame, when a sender suspects that a packet containing
 only DATAGRAM frames has been lost, it sends probe packets to elicit a faster
