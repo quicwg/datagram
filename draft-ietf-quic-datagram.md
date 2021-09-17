@@ -220,7 +220,7 @@ size is limited by other factors.
 
 ## Multiplexing Datagrams
 
-DATAGRAM frames belong to a QUIC connection as a whole, and are not strongly
+DATAGRAM frames belong to a QUIC connection as a whole, and are not
 associated with any stream ID at the QUIC layer. However, it is expected
 that applications will want to differentiate between specific DATAGRAM frames
 by using identifiers, such as for logical flows of datagrams or to distinguish
