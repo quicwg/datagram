@@ -165,7 +165,7 @@ max_datagram_frame_size transport parameter being missing. If datagram support
 is integral to the application, the application protocol can fail the handshake
 if the max_datagram_frame_size transport parameter is not present.
 
-# Datagram Frame Type
+# Datagram Frame Types
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
 The DATAGRAM frame type takes the form 0b0011000X (or the values 0x30
@@ -174,7 +174,7 @@ LEN bit (0x01). It indicates that there is a Length field present. If this
 bit is set to 0, the Length field is absent and the Datagram Data field extends
 to the end of the packet. If this bit is set to 1, the Length field is present.
 
-The DATAGRAM frame is structured as follows:
+DATAGRAM frames are structured as follows:
 
 ~~~
 DATAGRAM Frame {
@@ -200,7 +200,7 @@ Datagram Data:
 
 # Behavior and Usage
 
-When an application sends an unreliable datagram over a QUIC connection,
+When an application sends an datagram over a QUIC connection,
 QUIC will generate a new DATAGRAM frame and send it in the first available
 packet. This frame SHOULD be sent as soon as possible, and MAY be
 coalesced with other frames.
