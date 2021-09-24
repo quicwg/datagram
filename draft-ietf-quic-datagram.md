@@ -200,7 +200,7 @@ Datagram Data:
 
 # Behavior and Usage
 
-When an application sends an datagram over a QUIC connection,
+When an application sends a datagram over a QUIC connection,
 QUIC will generate a new DATAGRAM frame and send it in the first available
 packet. This frame SHOULD be sent as soon as possible, and MAY be
 coalesced with other frames.
