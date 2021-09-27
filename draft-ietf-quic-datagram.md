@@ -214,8 +214,8 @@ DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.
 Note that while the max_datagram_frame_size transport parameter places a limit
 on the maximum size of DATAGRAM frames, that limit can be further reduced by
 the max_packet_size transport parameter and the Maximum Transmission Unit
-(MTU) of the path between endpoints. DATAGRAM frames cannot be fragmented,
-therefore application protocols need to handle cases where the maximum datagram
+(MTU) of the path between endpoints. DATAGRAM frames cannot be fragmented;
+therefore, application protocols need to handle cases where the maximum datagram
 size is limited by other factors.
 
 ## Multiplexing Datagrams
