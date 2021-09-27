@@ -57,8 +57,9 @@ Discussion of this work is encouraged to happen on the QUIC IETF mailing list
 
 The QUIC Transport Protocol {{!RFC9000}} provides a secure,
 multiplexed connection for transmitting reliable streams of application data.
-Reliability within QUIC is performed on a per-stream basis, so some frame
-types are not eligible for retransmission.
+QUIC uses various frame types to transmit data within packets, and each frame
+type defines whether or not the data it contains will be retransmitted.
+Streams of reliable application data are sent using STREAM frames.
 
 Some applications, particularly those that need to transmit real-time data,
 prefer to transmit data unreliably. In the past, these applications have built
