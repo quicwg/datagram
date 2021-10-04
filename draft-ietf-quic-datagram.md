@@ -332,7 +332,7 @@ Specification:
 
 ## QUIC Frame Types
 
-This document register two new values in the QUIC Frame Type registry
+This document registers two new values in the QUIC Frame Type registry
 maintained at
 [](https://www.iana.org/assignments/quic/quic.xhtml#quic-frame-types).
 
