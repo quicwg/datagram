@@ -308,24 +308,36 @@ other frames using the different response to loss.
 
 # IANA Considerations
 
-This document registers a new value in the QUIC Transport Parameter Registry:
+This document registers a new value in the QUIC Transport Parameter Registry
+maintained at
+[](https://www.iana.org/assignments/quic/quic.xhtml#quic-transport).
 
 Value:
 
-: 0x0020 (if this document is approved)
+: 0x20 (if this document is approved)
 
 Parameter Name:
 
 : max_datagram_frame_size
 
+Status:
+
+: permanent
+
 Specification:
+
+: This document
+
+Notes:
 
 : A non-zero value indicates that the endpoint supports receiving unreliable
 DATAGRAM frames. An endpoint that advertises this transport parameter can receive
 DATAGRAM frames from the other endpoint, up to and including the length in
 bytes provided in the transport parameter. The default value is 0.
 
-This document also registers a new value in the QUIC Frame Type registry:
+This document also registers a new value in the QUIC Frame Type registry
+maintained at
+[](https://www.iana.org/assignments/quic/quic.xhtml#quic-frame-types).
 
 Value:
 
@@ -335,9 +347,13 @@ Frame Name:
 
 : DATAGRAM
 
+Status:
+
+: permanent
+
 Specification:
 
-: Unreliable application data
+: This document
 
 # Acknowledgments
 
