@@ -1,0 +1,197 @@
+As required by RFC 4858, this is the current template for the Document
+Shepherd Write-Up. Changes are expected over time.
+
+This version is dated 1 November 2019.
+
+(1) What type of RFC is being requested (BCP, Proposed Standard, Internet
+Standard, Informational, Experimental, or Historic)? Why is this the proper type
+of RFC? Is this type of RFC indicated in the title page header?
+
+Proposed Standard. This is the proper type for a simple extension to QUIC.
+
+(2) The IESG approval announcement includes a Document Announcement Write-Up.
+Please provide such a Document Announcement Write-Up. Recent examples can be
+found in the "Action" announcements for approved documents. The approval
+announcement contains the following sections:
+
+Technical Summary:
+
+The draft defines a simple extension to the QUIC transport (RFC 9000), using the
+well-defined extension mechanisms. It registers a new DATAGRAM frame type for
+unreliable application data and clearly describes how the frame transmission and
+reception operates within the loss recovery and detection framework of QUIC.
+
+Working Group Summary:
+
+There are two notable points but clear WG consensus was established through the
+development and last call.
+
+The first point is about datagram demultiplexing identifiers. Prior to WG
+adoption of this document, earlier drafts included a demultiplexing field in the
+DATAGRAM frame. Discussion of the document before adoption led to the field
+being removed and the definition of such a field delegated to applications using
+datagrams. The topic came up again during the WG activity and we were able to
+reach clear consensus to continue delegating the field to applications. In
+future, with deployment experience, we may discover patterns of identifiers that
+could be incorporated into the transport layer. There was consensus to not block
+progress on this draft in order to wait for such experience.
+
+The second point is about DATAGRAM ack-elicitation. Near the time the document
+was ready for WGLC, a use case was identified for delaying acknowledgement of
+DATAGRAMs. There was some rigourous discussion on this topic, with several
+proposals for design change to the datagram specification. In opposition of such
+design changes were concerns over unintended consequences to congestion control.
+Furthermore, other extension mechanisms (such as draft-ietf-quic-ack-frequency)
+provided alternative means for satisfying the use case requirements. A consensus
+call was issued that established clear consensus to not attempt to solve the
+problem in this document.
+
+Document Quality:
+
+There are several implementations of the datagram extension and several
+interoperable deployments of the datagram extension deployed on the Internet.
+This extension provides an unreliable data transport feature that application
+protocols can build upon. Within the IETF, the MASQUE and WebTrans WGs have
+adopted documents to define such application uses. Other members of the
+community are also interested in using this extension.
+
+No special review has been required.
+
+Personnel:
+
+Lucas Pardue is the document shepherd. Zahed Sarker is the AD.
+
+(3) Briefly describe the review of this document that was performed by the
+Document Shepherd. If this version of the document is not ready for publication,
+please explain why the document is being forwarded to the IESG.
+
+I have reviewed this document thoroughly and implemented the extension. The
+scope of the extension is focused and is straightforward to implement for any
+person familiar with QUIC.
+
+(4) Does the document Shepherd have any concerns about the depth or breadth of
+the reviews that have been performed?
+
+None. The datagram document has been developed alongside the QUIC core protocol
+and has benefitted from relevant and up-to-date review expertise within the WG
+and community.
+
+(5) Do portions of the document need review from a particular or from broader
+perspective, e.g., security, operational complexity, AAA, DNS, DHCP, XML, or
+internationalization? If so, describe the review that took place.
+
+No special review is required.
+
+(6) Describe any specific concerns or issues that the Document Shepherd has with
+this document that the Responsible Area Director and/or the IESG should be aware
+of? For example, perhaps he or she is uncomfortable with certain parts of the
+document, or has concerns whether there really is a need for it. In any event,
+if the WG has discussed those issues and has indicated that it still wishes to
+advance the document, detail those concerns here.
+
+No specific concerns.
+
+(7) Has each author confirmed that any and all appropriate IPR disclosures
+required for full conformance with the provisions of BCP 78 and BCP 79 have
+already been filed. If not, explain why?
+
+Yes. There are no IPR disclosures for this document.
+
+(8) Has an IPR disclosure been filed that references this document? If so, summarize any WG discussion and conclusion regarding the IPR disclosures.
+
+There are no IPR disclosures for this document.
+
+(9) How solid is the WG consensus behind this document? Does it represent the
+strong concurrence of a few individuals, with others being silent, or does the
+WG as a whole understand and agree with it?
+
+This extension defined in this document has been implemented and deployed by a
+wide range of vendors. The notable points described in answer (2) were resolved
+within the working group with clear consensus before WGLC. During WGLC only
+a handful of editorial issues were raised.
+
+(10) Has anyone threatened an appeal or otherwise indicated extreme discontent?
+If so, please summarise the areas of conflict in separate email messages to the
+Responsible Area Director. (It should be in a separate email because this
+questionnaire is publicly available.)
+
+No.
+
+(11) Identify any ID nits the Document Shepherd has found in this document. (See
+http://www.ietf.org/tools/idnits/ and the Internet-Drafts Checklist).
+Boilerplate checks are not enough; this check needs to be thorough.
+
+No nits.
+
+(12) Describe how the document meets any required formal review criteria, such
+as the MIB Doctor, YANG Doctor, media type, and URI type reviews.
+
+N/A
+
+(13) Have all references within this document been identified as either
+normative or informative?
+
+Yes.
+
+(14) Are there normative references to documents that are not ready for
+advancement or are otherwise in an unclear state? If such normative references
+exist, what is the plan for their completion?
+
+No.
+
+(15) Are there downward normative references references (see RFC 3967)? If so,
+list these downward references to support the Area Director in the Last Call
+procedure.
+
+No.
+
+(16) Will publication of this document change the status of any existing RFCs?
+Are those RFCs listed on the title page header, listed in the abstract, and
+discussed in the introduction? If the RFCs are not listed in the Abstract and
+Introduction, explain why, and point to the part of the document where the
+relationship of this document to the other RFCs is discussed. If this
+information is not in the document, explain why the WG considers it unnecessary.
+
+No.
+
+(17) Describe the Document Shepherd's review of the IANA considerations section,
+especially with regard to its consistency with the body of the document. Confirm
+that all protocol extensions that the document makes are associated with the
+appropriate reservations in IANA registries. Confirm that any referenced IANA
+registries have been clearly identified. Confirm that newly created IANA
+registries include a detailed specification of the initial contents for the
+registry, that allocations procedures for future registrations are defined, and
+a reasonable name for the new registry has been suggested (see RFC 8126).
+
+This document registers a new Transport Parameter. This is a permanent
+registration in the range 0x00-0x3f, which requires Standards Action or IESG
+approval.
+
+This document registers two new QUIC frame types. This is a permanent
+registration in the range 0x00-0x3f, which requires Standards Action or IESG
+approval.
+
+The registrations conform to the registration requirements of IANA.
+
+(18) List any new IANA registries that require Expert Review for future
+allocations. Provide any public guidance that the IESG would find useful in
+selecting the IANA Experts for these new registries.
+
+N/A
+
+(19) Describe reviews and automated checks performed by the Document Shepherd to
+validate sections of the document written in a formal language, such as XML
+code, BNF rules, MIB definitions, YANG modules, etc.
+
+N/A
+
+(20) If the document contains a YANG module, has the module been checked with
+any of the recommended validation tools
+(https://trac.ietf.org/trac/ops/wiki/yang-review-tools) for syntax and
+formatting validation? If there are any resulting errors or warnings, what is
+the justification for not fixing them at this time? Does the YANG module comply
+with the Network Management Datastore Architecture (NMDA) as specified in
+RFC8342?
+
+N/A
+
