@@ -41,10 +41,12 @@ was ready for WGLC, a use case was identified for delaying acknowledgement of
 DATAGRAMs. There was some rigourous discussion on this topic, with several
 proposals for design change to the datagram specification. In opposition of such
 design changes were concerns over unintended consequences to congestion control.
-Furthermore, other extension mechanisms (such as draft-ietf-quic-ack-frequency)
-provided alternative means for satisfying the use case requirements. A consensus
-call was issued that established clear consensus to not attempt to solve the
-problem in this document.
+WG discussion identified other ways in which the use case might be addressed,
+which harnessed the extensibility mechanisms of the QUIC protocol. Given the
+broad range of possible technical solutions, the chairs sought clarity about
+whether the group believed the use case needed to be solved in the scope of this
+document. A consensus call was issued and the responses established clear
+consensus to not work it.
 
 Document Quality:
 
