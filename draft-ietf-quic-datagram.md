@@ -207,8 +207,8 @@ When a QUIC endpoint receives a valid DATAGRAM frame, it SHOULD deliver the
 data to the application immediately, as long as it is able to process the frame
 and can store the contents in memory.
 
-Like STREAM frames, DATAGRAM frames MUST be protected with either 0-RTT or
-1-RTT keys.
+Like STREAM frames, DATAGRAM frames contain application data and MUST be protected
+with either 0-RTT or 1-RTT keys.
 
 Note that while the max_datagram_frame_size transport parameter places a limit
 on the maximum size of DATAGRAM frames, that limit can be further reduced by
