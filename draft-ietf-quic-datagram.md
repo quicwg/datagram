@@ -231,7 +231,8 @@ and how it is parsed.
 
 If the application needs to support the coexistence of multiple flows of
 datagrams, one recommended pattern is to use a variable-length integer at the
-beginning of the Datagram Data field.
+beginning of the Datagram Data field. This is a simple approach that allows
+a large number of flows to be encoded using minimal space.
 
 QUIC implementations SHOULD present an API to applications to assign relative
 priorities to DATAGRAM frames with respect to each other and to QUIC streams.
