@@ -128,7 +128,8 @@ that the endpoint supports the DATAGRAM frame types and is willing to
 receive such frames on this connection.
 
 An endpoint MUST NOT send DATAGRAM frames until it has received the
-max_datagram_frame_size transport parameter with a non-zero value. An
+max_datagram_frame_size transport parameter with a non-zero value during the
+handshake (or during a previous handshake if 0-RTT is used). An
 endpoint MUST NOT send DATAGRAM frames that are larger than the
 max_datagram_frame_size value it has received from its peer.
 An endpoint that receives a DATAGRAM frame when it has not indicated support
