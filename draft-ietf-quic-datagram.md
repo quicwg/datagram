@@ -90,9 +90,8 @@ Transmitting unreliable data over QUIC provides benefits over existing solutions
   context between a reliable QUIC stream and flow of unreliable QUIC datagrams.
   This can reduce the latency required for handshakes.
 
-- QUIC uses a more nuanced loss recovery mechanism than the DTLS handshake,
-  which has a basic packet loss retransmission timer. This can allow loss
-  recovery to occur more quickly for QUIC data.
+- QUIC uses a more nuanced loss recovery mechanism than the DTLS handshake. This
+  can allow loss recovery to occur more quickly for QUIC data.
 
 - QUIC datagrams are subject to QUIC congestion control. Providing a single
   congestion control for both reliable and unreliable data can be more effective
