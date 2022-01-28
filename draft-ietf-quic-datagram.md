@@ -106,7 +106,7 @@ QUIC, such as for a Virtual Private Network (VPN). Internet-layer tunneling
 protocols generally require a reliable and authenticated handshake, followed by
 unreliable secure transmission of IP packets. This can, for example, require a
 TLS connection for the control data, and DTLS for tunneling IP packets. A single
-QUIC connection could support both parts with the use of unreliable datagrams.
+QUIC connection could support both parts when unreliable datagrams are available.
 
 # Transport Parameter
 
@@ -205,10 +205,10 @@ protected with either 0-RTT or 1-RTT keys.
 
 Note that while the max_datagram_frame_size transport parameter places a limit
 on the maximum size of DATAGRAM frames, that limit can be further reduced by the
-max_packet_size transport parameter and the Maximum Transmission Unit (MTU) of
-the path between endpoints. DATAGRAM frames cannot be fragmented; therefore,
-application protocols need to handle cases where the maximum datagram size is
-limited by other factors.
+max_udp_payload_size transport parameter and the Maximum Transmission Unit
+(MTU) of the path between endpoints. DATAGRAM frames cannot be fragmented;
+therefore, application protocols need to handle cases where the maximum
+datagram size is limited by other factors.
 
 ## Multiplexing Datagrams
 
@@ -289,7 +289,7 @@ ought to be dropped without transmission.
 # Security Considerations
 
 The DATAGRAM frame shares the same security properties as the rest of the data
-transmitted within a QUIC connection. All application data transmitted with the
+transmitted within a QUIC connection, and the security considerations of {{RFC9000}} apply accordingly. All application data transmitted with the
 DATAGRAM frame, like the STREAM frame, MUST be protected either by 0-RTT or
 1-RTT keys.
 
