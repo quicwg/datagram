@@ -290,7 +290,8 @@ ought to be dropped without transmission.
 # Security Considerations
 
 The DATAGRAM frame shares the same security properties as the rest of the data
-transmitted within a QUIC connection, and the security considerations of {{RFC9000}} apply accordingly. All application data transmitted with the
+transmitted within a QUIC connection, and the security considerations of
+{{RFC9000}} apply accordingly. All application data transmitted with the
 DATAGRAM frame, like the STREAM frame, MUST be protected either by 0-RTT or
 1-RTT keys.
 
