@@ -106,7 +106,8 @@ QUIC, such as for a Virtual Private Network (VPN). Internet-layer tunneling
 protocols generally require a reliable and authenticated handshake, followed by
 unreliable secure transmission of IP packets. This can, for example, require a
 TLS connection for the control data, and DTLS for tunneling IP packets. A single
-QUIC connection could support both parts when unreliable datagrams are available.
+QUIC connection could support both parts with the use of unreliable datagrams
+in addition to reliable streams.
 
 # Transport Parameter
 
