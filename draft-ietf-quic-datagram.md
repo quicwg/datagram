@@ -195,7 +195,8 @@ Datagram Data:
 
 When an application sends a datagram over a QUIC connection, QUIC will generate
 a new DATAGRAM frame and send it in the first available packet. This frame
-SHOULD be sent as soon as possible, and MAY be coalesced with other frames.
+SHOULD be sent as soon as possible (as determined by factors like congestion
+control, described below) and MAY be coalesced with other frames.
 
 When a QUIC endpoint receives a valid DATAGRAM frame, it SHOULD deliver the data
 to the application immediately, as long as it is able to process the frame and
