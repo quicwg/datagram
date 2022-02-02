@@ -163,9 +163,9 @@ if the max_datagram_frame_size transport parameter is not present.
 DATAGRAM frames are used to transmit application data in an unreliable manner.
 The Type field in the DATAGRAM frame takes the form 0b0011000X (or the values
 0x30 and 0x31). The least significant bit of the Type field in the DATAGRAM frame
-is the LEN bit (0x01), which indicates whether there is a Length field present. If this
+is the LEN bit (0x01), which indicates whether there is a Length field present: if this
 bit is set to 0, the Length field is absent and the Datagram Data field extends
-to the end of the packet. If this bit is set to 1, the Length field is present.
+to the end of the packet; if this bit is set to 1, the Length field is present.
 
 DATAGRAM frames are structured as follows:
 
