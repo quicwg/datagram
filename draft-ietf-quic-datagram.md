@@ -144,13 +144,13 @@ DATAGRAM frames MAY choose to only negotiate and use them in a single direction.
 When clients use 0-RTT, they MAY store the value of the server's
 max_datagram_frame_size transport parameter. Doing so allows the client to send
 DATAGRAM frames in 0-RTT packets. When servers decide to accept 0-RTT data, they
-MUST send a max_datagram_frame_size transport parameter greater or equal to the
-value they sent to the client in the connection where they sent them the
+MUST send a max_datagram_frame_size transport parameter greater than or equal to
+the value they sent to the client in the connection where they sent them the
 NewSessionTicket message. If a client stores the value of the
 max_datagram_frame_size transport parameter with their 0-RTT state, they MUST
 validate that the new value of the max_datagram_frame_size transport parameter
-sent by the server in the handshake is greater or equal to the stored value; if
-not, the client MUST terminate the connection with error PROTOCOL_VIOLATION.
+sent by the server in the handshake is greater than or equal to the stored value;
+if not, the client MUST terminate the connection with error PROTOCOL_VIOLATION.
 
 Application protocols that use datagrams MUST define how they react to the
 max_datagram_frame_size transport parameter being missing. If datagram support
