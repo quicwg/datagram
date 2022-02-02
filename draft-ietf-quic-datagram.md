@@ -88,7 +88,8 @@ Transmitting unreliable data over QUIC provides benefits over existing solutions
 - Applications that want to use both a reliable stream and an unreliable flow
   to the same peer can benefit by sharing a single handshake and authentication
   context between a reliable QUIC stream and flow of unreliable QUIC datagrams.
-  This can reduce the latency required for handshakes.
+  This can reduce the latency required for handshakes compared to opening both
+  a TLS connection and a DTLS connection.
 
 - QUIC uses a more nuanced loss recovery mechanism than the DTLS handshake. This
   can allow loss recovery to occur more quickly for QUIC data.
@@ -162,7 +163,7 @@ if the max_datagram_frame_size transport parameter is not present.
 DATAGRAM frames are used to transmit application data in an unreliable manner.
 The Type field in the DATAGRAM frame takes the form 0b0011000X (or the values
 0x30 and 0x31). The least significant bit of the Type field in the DATAGRAM frame
-is the LEN bit (0x01), which indicates if there is a Length field present. If this
+is the LEN bit (0x01), which indicates whether there is a Length field present. If this
 bit is set to 0, the Length field is absent and the Datagram Data field extends
 to the end of the packet. If this bit is set to 1, the Length field is present.
 
