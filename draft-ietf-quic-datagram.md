@@ -59,19 +59,19 @@ for sending and receiving unreliable datagrams over a QUIC connection.
 
 The QUIC Transport Protocol {{!RFC9000}} provides a secure, multiplexed
 connection for transmitting reliable streams of application data. QUIC uses
-various frame types to transmit data within packets, and each frame type defines
-whether or not the data it contains will be retransmitted. Streams of reliable
+various frame types to transmit data within packets, and each frame type
+defines whether the data it contains will be retransmitted. Streams of reliable
 application data are sent using STREAM frames.
 
 Some applications, particularly those that need to transmit real-time data,
 prefer to transmit data unreliably. In the past, these applications have built
-directly upon UDP {{?RFC0768}} as a transport, and have often added security
+directly upon UDP {{?RFC0768}} as a transport and have often added security
 with DTLS {{?RFC6347}}. Extending QUIC to support transmitting unreliable
-application data provides another option for secure datagrams, with the added
+application data provides another option for secure datagrams with the added
 benefit of sharing the cryptographic and authentication context used for
 reliable streams.
 
-This document defines two new DATAGRAM QUIC frame types, which carry application
+This document defines two new DATAGRAM QUIC frame types which carry application
 data without requiring retransmissions.
 
 ## Specification of Requirements
@@ -85,11 +85,11 @@ when, and only when, they appear in all capitals, as shown here.
 
 Transmitting unreliable data over QUIC provides benefits over existing solutions:
 
-- Applications that want to use both a reliable stream and an unreliable flow
-  to the same peer can benefit by sharing a single handshake and authentication
-  context between a reliable QUIC stream and flow of unreliable QUIC datagrams.
-  This can reduce the latency required for handshakes compared to opening both
-  a TLS connection and a DTLS connection.
+- Applications that want to use both a reliable stream and an unreliable flow to
+  the same peer can benefit by sharing a single handshake and authentication
+  context between a reliable QUIC stream and a flow of unreliable QUIC
+  datagrams. This can reduce the latency required for handshakes compared to
+  opening both a TLS connection and a DTLS connection.
 
 - QUIC uses a more nuanced loss recovery mechanism than the DTLS handshake. This
   can allow loss recovery to occur more quickly for QUIC data.
@@ -103,9 +103,9 @@ gaming applications, and other real-time network applications.
 
 Unreliable QUIC datagrams can also be used to implement an IP packet tunnel over
 QUIC, such as for a Virtual Private Network (VPN). Internet-layer tunneling
-protocols generally require a reliable and authenticated handshake, followed by
+protocols generally require a reliable and authenticated handshake followed by
 unreliable secure transmission of IP packets. This can, for example, require a
-TLS connection for the control data, and DTLS for tunneling IP packets. A single
+TLS connection for the control data and DTLS for tunneling IP packets. A single
 QUIC connection could support both parts with the use of unreliable datagrams
 in addition to reliable streams.
 
@@ -144,17 +144,18 @@ DATAGRAM frames MAY choose to only negotiate and use them in a single direction.
 
 When clients use 0-RTT, they MAY store the value of the server's
 max_datagram_frame_size transport parameter. Doing so allows the client to send
-DATAGRAM frames in 0-RTT packets. When servers decide to accept 0-RTT data, they
-MUST send a max_datagram_frame_size transport parameter greater than or equal to
-the value they sent to the client in the connection where they sent them the
-NewSessionTicket message. If a client stores the value of the
+DATAGRAM frames in 0-RTT packets. When servers decide to accept 0-RTT data,
+they MUST send a max_datagram_frame_size transport parameter greater than or
+equal to the value they sent to the client in the connection where they sent
+them the NewSessionTicket message. If a client stores the value of the
 max_datagram_frame_size transport parameter with their 0-RTT state, they MUST
 validate that the new value of the max_datagram_frame_size transport parameter
-sent by the server in the handshake is greater than or equal to the stored value;
-if not, the client MUST terminate the connection with error PROTOCOL_VIOLATION.
+sent by the server in the handshake is greater than or equal to the stored
+value; if not, the client MUST terminate the connection with error
+PROTOCOL_VIOLATION.
 
 Application protocols that use datagrams MUST define how they react to the
-max_datagram_frame_size transport parameter being missing. If datagram support
+absence of the max_datagram_frame_size transport parameter. If datagram support
 is integral to the application, the application protocol can fail the handshake
 if the max_datagram_frame_size transport parameter is not present.
 
@@ -162,10 +163,11 @@ if the max_datagram_frame_size transport parameter is not present.
 
 DATAGRAM frames are used to transmit application data in an unreliable manner.
 The Type field in the DATAGRAM frame takes the form 0b0011000X (or the values
-0x30 and 0x31). The least significant bit of the Type field in the DATAGRAM frame
-is the LEN bit (0x01), which indicates whether there is a Length field present: if this
-bit is set to 0, the Length field is absent and the Datagram Data field extends
-to the end of the packet; if this bit is set to 1, the Length field is present.
+0x30 and 0x31). The least significant bit of the Type field in the DATAGRAM
+frame is the LEN bit (0x01), which indicates whether there is a Length field
+present: if this bit is set to 0, the Length field is absent and the Datagram
+Data field extends to the end of the packet; if this bit is set to 1, the
+Length field is present.
 
 DATAGRAM frames are structured as follows:
 
@@ -278,14 +280,13 @@ the receiver if the receiver cannot process them.
 DATAGRAM frames employ the QUIC connection's congestion controller. As a result,
 a connection might be unable to send a DATAGRAM frame generated by the
 application until the congestion controller allows it {{!RFC9002}}. The sender
-implementation MUST either delay sending the frame until the controller allows
-it or drop the frame without sending it (at which point it MAY notify the
-application). Implementations that use packet pacing ({{Section 7.7 of
-RFC9002}}) can also delay the sending of DATAGRAM frames to maintain consistent
-packet pacing.
+MUST either delay sending the frame until the controller allows it or drop the
+frame without sending it (at which point it MAY notify the application).
+Implementations that use packet pacing ({{Section 7.7 of RFC9002}}) can also
+delay the sending of DATAGRAM frames to maintain consistent packet pacing.
 
 Implementations can optionally support allowing the application to specify a
-sending expiration time, beyond which a congestion-controlled DATAGRAM frame
+sending expiration time beyond which a congestion-controlled DATAGRAM frame
 ought to be dropped without transmission.
 
 # Security Considerations
