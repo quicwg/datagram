@@ -9,6 +9,13 @@ category: std
 consensus: true
 area: Transport
 wg: QUIC
+venue:
+  group: "QUIC"
+  type: "Working Group"
+  mail: "quic@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/quic/"
+  github: "quicwg/datagram"
+  latest: "https://quicwg.github.io/datagram/draft-ietf-quic-datagram.html"
 
 ipr: trust200902
 keyword:
