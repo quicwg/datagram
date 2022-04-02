@@ -326,6 +326,7 @@ Status:
 Specification:
 
 : RFC 9221
+{: spacing="compact"}
 
 ## QUIC Frame Types
 
