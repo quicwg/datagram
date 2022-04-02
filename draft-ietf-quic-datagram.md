@@ -1,20 +1,19 @@
 ---
 title: An Unreliable Datagram Extension to QUIC
 abbrev: QUIC Datagrams
+number: 9221
 docname: draft-ietf-quic-datagram-latest
-date:
+submissiontype: IETF
+date: 2022-03
 category: std
+consensus: true
+area: Transport
 wg: QUIC
-venue:
-  group: "QUIC"
-  type: "Working Group"
-  mail: "quic@ietf.org"
-  arch: "https://mailarchive.ietf.org/arch/browse/quic/"
-  github: "quicwg/datagram"
-  latest: "https://quicwg.github.io/datagram/draft-ietf-quic-datagram.html"
 
 ipr: trust200902
-keyword: Internet-Draft
+keyword:
+  - quic
+  - datagram
 
 stand_alone: yes
 pi: [toc, sortrefs, symrefs]
@@ -25,7 +24,9 @@ author:
     name: Tommy Pauly
     org: Apple Inc.
     street: One Apple Park Way
-    city: Cupertino, California 95014
+    city: Cupertino
+    region: CA
+    code: 95014
     country: United States of America
     email: tpauly@apple.com
   -
@@ -33,7 +34,9 @@ author:
     name: Eric Kinnear
     org: Apple Inc.
     street: One Apple Park Way
-    city: Cupertino, California 95014
+    city: Cupertino
+    region: CA
+    code: 95014
     country: United States of America
     email: ekinnear@apple.com
   -
@@ -41,12 +44,11 @@ author:
     name: David Schinazi
     org: Google LLC
     street: 1600 Amphitheatre Parkway
-    city: Mountain View, California 94043
+    city: Mountain View
+    region: CA
+    code: 94043
     country: United States of America
     email: dschinazi.ietf@gmail.com
-
-normative:
-  RFC9001:
 
 --- abstract
 
@@ -57,7 +59,7 @@ for sending and receiving unreliable datagrams over a QUIC connection.
 
 # Introduction
 
-The QUIC Transport Protocol {{!RFC9000}} provides a secure, multiplexed
+The QUIC transport protocol {{!RFC9000}} provides a secure, multiplexed
 connection for transmitting reliable streams of application data. QUIC uses
 various frame types to transmit data within packets, and each frame type
 defines whether the data it contains will be retransmitted. Streams of reliable
@@ -71,15 +73,12 @@ application data provides another option for secure datagrams with the added
 benefit of sharing the cryptographic and authentication context used for
 reliable streams.
 
-This document defines two new DATAGRAM QUIC frame types which carry application
+This document defines two new DATAGRAM QUIC frame types that carry application
 data without requiring retransmissions.
 
 ## Specification of Requirements
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in BCP 14 {{!RFC2119}} {{!RFC8174}}
-when, and only when, they appear in all capitals, as shown here.
+{::boilerplate bcp14-tagged}
 
 # Motivation
 
@@ -112,7 +111,7 @@ in addition to reliable streams.
 # Transport Parameter
 
 Support for receiving the DATAGRAM frame types is advertised by means of a QUIC
-Transport Parameter (name=max_datagram_frame_size, value=0x20). The
+transport parameter (name=max_datagram_frame_size, value=0x20). The
 max_datagram_frame_size transport parameter is an integer value (represented as
 a variable-length integer) that represents the maximum size of a DATAGRAM frame
 (including the frame type, length, and payload) the endpoint is willing to
@@ -216,16 +215,16 @@ datagram size is limited by other factors.
 
 ## Multiplexing Datagrams
 
-DATAGRAM frames belong to a QUIC connection as a whole, and are not associated
+DATAGRAM frames belong to a QUIC connection as a whole and are not associated
 with any stream ID at the QUIC layer. However, it is expected that applications
 will want to differentiate between specific DATAGRAM frames by using
 identifiers, such as for logical flows of datagrams or to distinguish between
 different kinds of datagrams.
 
-Identifiers used to multiplex different kinds of datagrams, or flows of
-datagrams, are the responsibility of the application protocol running over QUIC
-to define. The application defines the semantics of the Datagram Data field and
-how it is parsed.
+Defining the identifiers used to multiplex different kinds of datagrams or flows
+of datagrams is the responsibility of the application protocol running over
+QUIC. The application defines the semantics of the Datagram Data field and how
+it is parsed.
 
 If the application needs to support the coexistence of multiple flows of
 datagrams, one recommended pattern is to use a variable-length integer at the
@@ -257,16 +256,16 @@ the datagram was lost.
 Similarly, if a packet containing a DATAGRAM frame is acknowledged, the
 implementation MAY notify the sender application that the datagram was
 successfully transmitted and received. Due to reordering, this can include a
-DATAGRAM frame that was thought to be lost, but which at a later point was
-received and acknowledged. It is important to note that acknowledgement of a
-DATAGRAM frame only indicates that the transport-layer handling on the receiver
-processed the frame, and does not guarantee that the application on the receiver
+DATAGRAM frame that was thought to be lost but, at a later point, was received
+and acknowledged. It is important to note that acknowledgement of a DATAGRAM
+frame only indicates that the transport-layer handling on the receiver processed
+the frame and does not guarantee that the application on the receiver
 successfully processed the data. Thus, this signal cannot replace
 application-layer signals that indicate successful processing.
 
 ## Flow Control
 
-DATAGRAM frames do not provide any explicit flow control signaling, and do not
+DATAGRAM frames do not provide any explicit flow control signaling and do not
 contribute to any per-flow or connection-wide data limit.
 
 The risk associated with not providing flow control for DATAGRAM frames is that
@@ -298,7 +297,7 @@ DATAGRAM frame, like the STREAM frame, MUST be protected either by 0-RTT or
 1-RTT keys.
 
 Application protocols that allow DATAGRAM frames to be sent in 0-RTT require a
-profile that defines acceptable use of 0-RTT; see {{Section 5.6 of RFC9001}}.
+profile that defines acceptable use of 0-RTT; see {{Section 5.6 of !RFC9001}}.
 
 The use of DATAGRAM frames might be detectable by an adversary on path that is
 capable of dropping packets. Since DATAGRAM frames do not use transport-level
@@ -309,9 +308,8 @@ other connections due to their different response to packet loss.
 
 ## QUIC Transport Parameter
 
-This document registers a new value in the QUIC Transport Parameter Registry
-maintained at
-[](https://www.iana.org/assignments/quic/quic.xhtml#quic-transport).
+This document registers a new value in the "QUIC Transport Parameters" registry
+maintained at <[](https://www.iana.org/assignments/quic)>.
 
 Value:
 
@@ -327,17 +325,16 @@ Status:
 
 Specification:
 
-: This document
+: RFC 9221
 
 ## QUIC Frame Types
 
-This document registers two new values in the QUIC Frame Type registry
-maintained at
-[](https://www.iana.org/assignments/quic/quic.xhtml#quic-frame-types).
+This document registers two new values in the "QUIC Frame Types" registry
+maintained at <[](https://www.iana.org/assignments/quic)>.
 
 Value:
 
-: 0x30 and 0x31 (if this document is approved)
+: 0x30-0x31
 
 Frame Name:
 
@@ -349,9 +346,13 @@ Status:
 
 Specification:
 
-: This document
+: RFC 9221
+{: spacing="compact"}
+
+--- back
 
 # Acknowledgments
+{:numbered="false"}
 
 The original proposal for this work came from Ian Swett.
 
