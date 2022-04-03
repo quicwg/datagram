@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>An Unreliable Datagram Extension to QUIC</title>
+<meta content="Tommy Pauly" name="author">
+<meta content="Eric Kinnear" name="author">
+<meta content="David Schinazi" name="author">
+<meta content="
+       This document defines an extension to the QUIC transport protocol to
+add support for sending and receiving unreliable datagrams over
+a QUIC connection. 
+       Discussion of this work is encouraged to happen on the QUIC IETF mailing list
+ quic@ietf.org  or on the GitHub repository which contains the draft:
+ https://github.com/quicwg/datagram . 
+    " name="description">
+<meta content="xml2rfc 3.11.1" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-ietf-quic-datagram-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.11.1
+    Python 3.9.7
+    appdirs 1.4.4
+    ConfigArgParse 1.3
+    google-i18n-address 2.5.0
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 2.11.3
+    kitchen 1.2.6
+    lxml 4.6.4
+    pycountry 20.7.3
+    pyflakes 2.3.1
+    PyYAML 5.4.1
+    requests 2.26.0
+    setuptools 52.0.0
+    six 1.16.0
+-->
+<link href="draft-ietf-quic-datagram.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+dd.break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href].selfRef {
+  color: var(--text-color);
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines */
+  line-height: 0;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  pre + .pilcrow, svg + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+tr:nth-child(2n) > td {
+  background-color: var(--background-color);
+}
+tr:nth-child(2n+1) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n+1) > td {
+  background-color: var(--background-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 8em;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  margin: 0;
+  clear: left;
+  float: left;
+  text-align: right;
+}
+#identifiers dd {
+  margin: 0 0 0 calc(1em + var(--identifier-width));
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul p, #toc ul li {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left, table .text-left {
+  text-align: left;
+}
+table .text-center, table .text-center {
+  text-align: center;
+}
+table .text-right, table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+/* Trick: a prefix match works because only black and white are allowed */
+svg [stroke="black"], svg [stroke^="#000"] {
+  stroke: var(--text-color);
+}
+svg [stroke="white"], svg [stroke^="#fff"] {
+  stroke: var(--background-color);
+}
+svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+  fill: var(--text-color);
+}
+svg [stroke="fill"], svg [fill^="#fff"] {
+  fill: var(--background-color);
+}
+}
+</style>
+
+</head>
+<body>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">QUIC Datagrams</td>
+<td class="right">December 2021</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Pauly, et al.</td>
+<td class="center">Expires 9 June 2022</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">QUIC</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-quic-datagram-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2021-12-06" class="published">6 December 2021</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2022-06-09">9 June 2022</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">T. Pauly</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">E. Kinnear</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">D. Schinazi</div>
+<div class="org">Google LLC</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">An Unreliable Datagram Extension to QUIC</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document defines an extension to the QUIC transport protocol to
+add support for sending and receiving unreliable datagrams over
+a QUIC connection.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">Discussion of this work is encouraged to happen on the QUIC IETF mailing list
+<a href="mailto:quic@ietf.org">quic@ietf.org</a> or on the GitHub repository which contains the draft:
+<a href="https://github.com/quicwg/datagram">https://github.com/quicwg/datagram</a>.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 9 June 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2021 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-specification-of-requiremen" class="xref">Specification of Requirements</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-motivation" class="xref">Motivation</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-transport-parameter" class="xref">Transport Parameter</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-datagram-frame-types" class="xref">Datagram Frame Types</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-behavior-and-usage" class="xref">Behavior and Usage</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-multiplexing-datagrams" class="xref">Multiplexing Datagrams</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-acknowledgement-handling" class="xref">Acknowledgement Handling</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-flow-control" class="xref">Flow Control</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="xref">5.4</a>.  <a href="#name-congestion-control" class="xref">Congestion Control</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-quic-transport-parameter" class="xref">QUIC Transport Parameter</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-quic-frame-types" class="xref">QUIC Frame Types</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-references" class="xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The QUIC Transport Protocol <span>[<a href="#RFC9000" class="xref">RFC9000</a>]</span> provides a secure,
+multiplexed connection for transmitting reliable streams of application data.
+QUIC uses various frame types to transmit data within packets, and each frame
+type defines whether or not the data it contains will be retransmitted.
+Streams of reliable application data are sent using STREAM frames.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Some applications, particularly those that need to transmit real-time data,
+prefer to transmit data unreliably. In the past, these applications have built
+directly upon UDP <span>[<a href="#RFC0768" class="xref">RFC0768</a>]</span> as a transport, and have often added security with
+DTLS <span>[<a href="#RFC6347" class="xref">RFC6347</a>]</span>. Extending QUIC to support transmitting unreliable application
+data provides another option for secure datagrams, with the added benefit of
+sharing the cryptographic and authentication context used for reliable streams.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document defines two new DATAGRAM QUIC frame types, which
+carry application data without requiring retransmissions.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Discussion of this work is encouraged to happen on the QUIC IETF mailing list
+<a href="mailto:quic@ietf.org">quic@ietf.org</a> or on the GitHub repository which contains the draft:
+<a href="https://github.com/quicwg/datagram">https://github.com/quicwg/datagram</a>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<div id="specification-of-requirements">
+<section id="section-1.1">
+        <h3 id="name-specification-of-requiremen">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-specification-of-requiremen" class="section-name selfRef">Specification of Requirements</a>
+        </h3>
+<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in BCP 14
+<span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when,
+they appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="motivation">
+<section id="section-2">
+      <h2 id="name-motivation">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-motivation" class="section-name selfRef">Motivation</a>
+      </h2>
+<p id="section-2-1">Transmitting unreliable data over QUIC provides benefits over existing
+solutions:<a href="#section-2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-2.1">Applications that open both a reliable TLS stream and an unreliable
+DTLS flow to the same peer can benefit by sharing a single handshake
+and authentication context between a reliable QUIC stream and flow
+of unreliable QUIC datagrams. This can reduce the latency required
+for handshakes.<a href="#section-2-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-2.2">QUIC uses a more nuanced loss recovery mechanism than the DTLS
+handshake, which has a basic packet loss retransmission timer. This
+can allow loss recovery to occur more quickly for QUIC data.<a href="#section-2-2.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-2-2.3">QUIC datagrams are subject to QUIC congestion control. Providing a single
+congestion control for both reliable and unreliable data can be more effective
+and efficient.<a href="#section-2-2.3" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-3">These features can be useful for optimizing audio/video streaming applications,
+gaming applications, and other real-time network applications.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">Unreliable QUIC datagrams can also be used to implement an IP
+packet tunnel over QUIC, such as for a Virtual Private Network (VPN).
+Internet-layer tunneling protocols generally require a reliable and
+authenticated handshake, followed by unreliable secure transmission
+of IP packets. This can, for example, require a TLS connection for
+the control data, and DTLS for tunneling IP packets. A single
+QUIC connection could support both parts with the use of unreliable
+datagrams.<a href="#section-2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="transport-parameter">
+<section id="section-3">
+      <h2 id="name-transport-parameter">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-transport-parameter" class="section-name selfRef">Transport Parameter</a>
+      </h2>
+<p id="section-3-1">Support for receiving the DATAGRAM frame types is advertised by means
+of a QUIC Transport Parameter (name=max_datagram_frame_size, value=0x0020).
+The max_datagram_frame_size transport parameter is an integer value
+(represented as a variable-length integer) that represents the maximum
+size of a DATAGRAM frame (including the frame type, length, and
+payload) the endpoint is willing to receive, in bytes.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">The default for this parameter is 0, which indicates that the endpoint
+does not support DATAGRAM frames. A value greater than 0 indicates
+that the endpoint supports the DATAGRAM frame types and is willing to
+receive such frames on this connection.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">An endpoint MUST NOT send DATAGRAM frames until it has received the
+max_datagram_frame_size transport parameter with a non-zero value. An
+endpoint MUST NOT send DATAGRAM frames that are larger than the
+max_datagram_frame_size value it has received from its peer.
+An endpoint that receives a DATAGRAM frame when it has not indicated support
+via the transport parameter MUST terminate the connection with an error of
+type PROTOCOL_VIOLATION. Similarly, an endpoint that receives a DATAGRAM frame
+that is larger than the value it sent in its max_datagram_frame_size
+transport parameter MUST terminate the connection with an error of type
+PROTOCOL_VIOLATION.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">For most uses of DATAGRAM frames, it is RECOMMENDED to send a value of 65535 in
+the max_datagram_frame_size transport parameter to indicate that this endpoint
+will accept any DATAGRAM frame that fits inside a QUIC packet.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The max_datagram_frame_size transport parameter is a unidirectional limit and
+indication of support of DATAGRAM frames. Application protocols that use
+DATAGRAM frames MAY choose to only negotiate and use them in a single direction.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">When clients use 0-RTT, they MAY store the value of the server's
+max_datagram_frame_size transport parameter. Doing so allows the client to send
+DATAGRAM frames in 0-RTT packets. When servers decide to accept 0-RTT data,
+they MUST send a max_datagram_frame_size transport parameter greater or equal
+to the value they sent to the client in the connection where they sent them
+the NewSessionTicket message. If a client stores the value of the
+max_datagram_frame_size transport parameter with their 0-RTT state, they MUST
+validate that the new value of the max_datagram_frame_size transport parameter
+sent by the server in the handshake is greater or equal to the stored value;
+if not, the client MUST terminate the connection with error PROTOCOL_VIOLATION.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">Application protocols that use datagrams MUST define how they react to the
+max_datagram_frame_size transport parameter being missing. If datagram support
+is integral to the application, the application protocol can fail the handshake
+if the max_datagram_frame_size transport parameter is not present.<a href="#section-3-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="datagram-frame-types">
+<section id="section-4">
+      <h2 id="name-datagram-frame-types">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-datagram-frame-types" class="section-name selfRef">Datagram Frame Types</a>
+      </h2>
+<p id="section-4-1">DATAGRAM frames are used to transmit application data in an unreliable manner.
+The DATAGRAM frame type takes the form 0b0011000X (or the values 0x30
+and 0x31). The least significant bit of the DATAGRAM frame type is the
+LEN bit (0x01). It indicates that there is a Length field present. If this
+bit is set to 0, the Length field is absent and the Datagram Data field extends
+to the end of the packet. If this bit is set to 1, the Length field is present.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">DATAGRAM frames are structured as follows:<a href="#section-4-2" class="pilcrow">¶</a></p>
+<span id="name-datagram-frame-format"></span><div id="datagram-format">
+<figure id="figure-1">
+        <div class="alignLeft art-text artwork" id="section-4-3.1">
+<pre>
+DATAGRAM Frame {
+  Type (i) = 0x30..0x31,
+  [Length (i)],
+  Datagram Data (..),
+}
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-datagram-frame-format" class="selfRef">DATAGRAM Frame Format</a>
+        </figcaption></figure>
+</div>
+<p id="section-4-4">DATAGRAM frames contain the following fields:<a href="#section-4-4" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4-5">
+        <dt id="section-4-5.1">
+Length:  </dt>
+        <dd style="margin-left: 1.5em" id="section-4-5.2">
+          <p id="section-4-5.2.1">A variable-length integer specifying the length of the Datagram Data field in
+bytes. This field is present only when the LEN bit is set to 1. When the LEN bit
+is set to 0, the Datagram Data field extends to the end of the QUIC packet. Note
+that empty (i.e., zero-length) datagrams are allowed.<a href="#section-4-5.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-4-5.3">
+Datagram Data:  </dt>
+        <dd style="margin-left: 1.5em" id="section-4-5.4">
+          <p id="section-4-5.4.1">The bytes of the datagram to be delivered.<a href="#section-4-5.4.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="behavior-and-usage">
+<section id="section-5">
+      <h2 id="name-behavior-and-usage">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-behavior-and-usage" class="section-name selfRef">Behavior and Usage</a>
+      </h2>
+<p id="section-5-1">When an application sends a datagram over a QUIC connection,
+QUIC will generate a new DATAGRAM frame and send it in the first available
+packet. This frame SHOULD be sent as soon as possible, and MAY be
+coalesced with other frames.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">When a QUIC endpoint receives a valid DATAGRAM frame, it SHOULD deliver the
+data to the application immediately, as long as it is able to process the frame
+and can store the contents in memory.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">DATAGRAM frames MUST be protected with either 0-RTT or 1-RTT keys.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">Note that while the max_datagram_frame_size transport parameter places a limit
+on the maximum size of DATAGRAM frames, that limit can be further reduced by
+the max_packet_size transport parameter and the Maximum Transmission Unit
+(MTU) of the path between endpoints. DATAGRAM frames cannot be fragmented;
+therefore, application protocols need to handle cases where the maximum datagram
+size is limited by other factors.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<div id="multiplexing-datagrams">
+<section id="section-5.1">
+        <h3 id="name-multiplexing-datagrams">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-multiplexing-datagrams" class="section-name selfRef">Multiplexing Datagrams</a>
+        </h3>
+<p id="section-5.1-1">DATAGRAM frames belong to a QUIC connection as a whole, and are not
+associated with any stream ID at the QUIC layer. However, it is expected
+that applications will want to differentiate between specific DATAGRAM frames
+by using identifiers, such as for logical flows of datagrams or to distinguish
+between different kinds of datagrams.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">Identifiers used to multiplex different kinds of datagrams, or flows of
+datagrams, are the responsibility of the application protocol running over QUIC
+to define. The application defines the semantics of the Datagram Data field
+and how it is parsed.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">If the application needs to support the coexistence of multiple flows of
+datagrams, one recommended pattern is to use a variable-length integer at the
+beginning of the Datagram Data field. This is a simple approach that allows
+a large number of flows to be encoded using minimal space.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">QUIC implementations SHOULD present an API to applications to assign relative
+priorities to DATAGRAM frames with respect to each other and to QUIC streams.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgement-handling">
+<section id="section-5.2">
+        <h3 id="name-acknowledgement-handling">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-acknowledgement-handling" class="section-name selfRef">Acknowledgement Handling</a>
+        </h3>
+<p id="section-5.2-1">Although DATAGRAM frames are not retransmitted upon loss detection, they are
+ack-eliciting (<span>[<a href="#RFC9002" class="xref">RFC9002</a>]</span>). Receivers SHOULD support delaying
+ACK frames (within the limits specified by max_ack_delay) in response to
+receiving packets that only contain DATAGRAM frames, since the sender takes no
+action if these packets are temporarily unacknowledged. Receivers will
+continue to send ACK frames when conditions indicate a packet might be lost,
+since the packet's payload is unknown to the receiver, and when dictated by
+max_ack_delay or other protocol components.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">As with any ack-eliciting frame, when a sender suspects that a packet containing
+only DATAGRAM frames has been lost, it sends probe packets to elicit a faster
+acknowledgement as described in <span><a href="https://rfc-editor.org/rfc/rfc9002#section-6.2.4" class="relref">Section 6.2.4</a> of [<a href="#RFC9002" class="xref">RFC9002</a>]</span>.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">If a sender detects that a packet containing a specific DATAGRAM frame might
+have been lost, the implementation MAY notify the application that it believes
+the datagram was lost.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">Similarly, if a packet containing a DATAGRAM frame is acknowledged, the
+implementation MAY notify the sender application that the datagram was
+successfully transmitted and received. Due to reordering, this can include a
+DATAGRAM frame that was thought to be lost, but which at a later point was
+received and acknowledged. It is important to note that acknowledgement of a
+DATAGRAM frame only indicates that the transport-layer handling on the receiver
+processed the frame, and does not guarantee that the application on the receiver
+successfully processed the data. Thus, this signal cannot replace
+application-layer signals that indicate successful processing.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="flow-control">
+<section id="section-5.3">
+        <h3 id="name-flow-control">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-flow-control" class="section-name selfRef">Flow Control</a>
+        </h3>
+<p id="section-5.3-1">DATAGRAM frames do not provide any explicit flow control signaling,
+and do not contribute to any per-flow or connection-wide data limit.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">The risk associated with not providing flow control for DATAGRAM frames
+is that a receiver might not be able to commit the necessary resources to process
+the frames. For example, it might not be able to store the frame contents in memory.
+However, since DATAGRAM frames are inherently unreliable, they MAY be
+dropped by the receiver if the receiver cannot process them.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="congestion-control">
+<section id="section-5.4">
+        <h3 id="name-congestion-control">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-congestion-control" class="section-name selfRef">Congestion Control</a>
+        </h3>
+<p id="section-5.4-1">DATAGRAM frames employ the QUIC connection's congestion controller. As a
+result, a connection might be unable to send a DATAGRAM frame generated by the
+application until the congestion controller allows it <span>[<a href="#RFC9002" class="xref">RFC9002</a>]</span>. The sender
+implementation MUST either delay sending the frame until the controller allows
+it or drop the frame without sending it (at which point it MAY notify the
+application). Implementations that use packet pacing (<span><a href="https://rfc-editor.org/rfc/rfc9002#section-7.7" class="relref">Section 7.7</a> of [<a href="#RFC9002" class="xref">RFC9002</a>]</span>)
+can also delay the sending of DATAGRAM frames to maintain consistent packet
+pacing.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">Implementations can optionally support allowing the application to specify
+a sending expiration time, beyond which a congestion-controlled DATAGRAM
+frame ought to be dropped without transmission.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-6">
+      <h2 id="name-security-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-6-1">The DATAGRAM frame shares the same security properties as the rest of
+the data transmitted within a QUIC connection. All application data transmitted
+with the DATAGRAM frame, like the STREAM frame, MUST be protected
+either by 0-RTT or 1-RTT keys.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Application protocols that allow DATAGRAM frames to be sent in 0-RTT require a
+profile that defines acceptable use of 0-RTT; see <span><a href="https://rfc-editor.org/rfc/rfc9001#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC9001" class="xref">RFC9001</a>]</span>.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">The use of DATAGRAM frames might be detectable by an adversary on path that is
+capable of dropping packets. Since DATAGRAM frames do not use transport-level
+retransmission, connections that use DATAGRAM frames might be distinguished from
+other frames using the different response to loss.<a href="#section-6-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-7">
+      <h2 id="name-iana-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="quic-transport-parameter">
+<section id="section-7.1">
+        <h3 id="name-quic-transport-parameter">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-quic-transport-parameter" class="section-name selfRef">QUIC Transport Parameter</a>
+        </h3>
+<p id="section-7.1-1">This document registers a new value in the QUIC Transport Parameter Registry
+maintained at
+<span><a href="https://www.iana.org/assignments/quic/quic.xhtml#quic-transport">https://www.iana.org/assignments/quic/quic.xhtml#quic-transport</a></span>.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-7.1-2">
+          <dt id="section-7.1-2.1">
+Value:  </dt>
+          <dd style="margin-left: 1.5em" id="section-7.1-2.2">
+            <p id="section-7.1-2.2.1">0x20 (if this document is approved)<a href="#section-7.1-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.1-2.3">
+Parameter Name:  </dt>
+          <dd style="margin-left: 1.5em" id="section-7.1-2.4">
+            <p id="section-7.1-2.4.1">max_datagram_frame_size<a href="#section-7.1-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.1-2.5">
+Status:  </dt>
+          <dd style="margin-left: 1.5em" id="section-7.1-2.6">
+            <p id="section-7.1-2.6.1">permanent<a href="#section-7.1-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.1-2.7">
+Specification:  </dt>
+          <dd style="margin-left: 1.5em" id="section-7.1-2.8">
+            <p id="section-7.1-2.8.1">This document<a href="#section-7.1-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="quic-frame-types">
+<section id="section-7.2">
+        <h3 id="name-quic-frame-types">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-quic-frame-types" class="section-name selfRef">QUIC Frame Types</a>
+        </h3>
+<p id="section-7.2-1">This document registers two new values in the QUIC Frame Type registry
+maintained at
+<span><a href="https://www.iana.org/assignments/quic/quic.xhtml#quic-frame-types">https://www.iana.org/assignments/quic/quic.xhtml#quic-frame-types</a></span>.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-7.2-2">
+          <dt id="section-7.2-2.1">
+Value:  </dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.2">
+            <p id="section-7.2-2.2.1">0x30 and 0x31 (if this document is approved)<a href="#section-7.2-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.2-2.3">
+Frame Name:  </dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.4">
+            <p id="section-7.2-2.4.1">DATAGRAM<a href="#section-7.2-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.2-2.5">
+Status:  </dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.6">
+            <p id="section-7.2-2.6.1">permanent<a href="#section-7.2-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-7.2-2.7">
+Specification:  </dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.8">
+            <p id="section-7.2-2.8.1">This document<a href="#section-7.2-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="section-8">
+      <h2 id="name-acknowledgments">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="section-8-1">The original proposal for this work came from Ian Swett.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">This document had reviews and input from many contributors in the
+IETF QUIC Working Group, with substantive input from Nick Banks,
+Lucas Pardue, Rui Paulo, Martin Thomson, Victor Vasiliev, and Chris Wood.<a href="#section-8-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-9">
+      <h2 id="name-references">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-9.1">
+        <h3 id="name-normative-references">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC9000">[RFC9000]</dt>
+        <dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9001">[RFC9001]</dt>
+        <dd>
+<span class="refAuthor">Thomson, M., Ed.</span> and <span class="refAuthor">S. Turner, Ed.</span>, <span class="refTitle">"Using TLS to Secure QUIC"</span>, <span class="seriesInfo">RFC 9001</span>, <span class="seriesInfo">DOI 10.17487/RFC9001</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9001">https://www.rfc-editor.org/rfc/rfc9001</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9002">[RFC9002]</dt>
+      <dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">I. Swett, Ed.</span>, <span class="refTitle">"QUIC Loss Detection and Congestion Control"</span>, <span class="seriesInfo">RFC 9002</span>, <span class="seriesInfo">DOI 10.17487/RFC9002</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9002">https://www.rfc-editor.org/rfc/rfc9002</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-9.2">
+        <h3 id="name-informative-references">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC0768">[RFC0768]</dt>
+        <dd>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"User Datagram Protocol"</span>, <span class="seriesInfo">STD 6</span>, <span class="seriesInfo">RFC 768</span>, <span class="seriesInfo">DOI 10.17487/RFC0768</span>, <time datetime="1980-08" class="refDate">August 1980</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc768">https://www.rfc-editor.org/rfc/rfc768</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6347">[RFC6347]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span> and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"Datagram Transport Layer Security Version 1.2"</span>, <span class="seriesInfo">RFC 6347</span>, <span class="seriesInfo">DOI 10.17487/RFC6347</span>, <time datetime="2012-01" class="refDate">January 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6347">https://www.rfc-editor.org/rfc/rfc6347</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+      <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="authors-addresses">
+<section id="appendix-A">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Tommy Pauly</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:tpauly@apple.com" class="email">tpauly@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Eric Kinnear</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ekinnear@apple.com" class="email">ekinnear@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">David Schinazi</span></div>
+<div dir="auto" class="left"><span class="org">Google LLC</span></div>
+<div dir="auto" class="left"><span class="street-address">1600 Amphitheatre Parkway</span></div>
+<div dir="auto" class="left">
+<span class="locality">Mountain View, California 94043</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:dschinazi.ietf@gmail.com" class="email">dschinazi.ietf@gmail.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
