@@ -3,6 +3,7 @@ title: An Unreliable Datagram Extension to QUIC
 abbrev: QUIC Datagrams
 number: 9221
 docname: draft-ietf-quic-datagram-latest
+v: 3
 submissiontype: IETF
 date: 2022-03
 category: std
@@ -16,15 +17,9 @@ venue:
   arch: "https://mailarchive.ietf.org/arch/browse/quic/"
   github: "quicwg/datagram"
   latest: "https://quicwg.github.io/datagram/draft-ietf-quic-datagram.html"
-
-ipr: trust200902
 keyword:
   - quic
   - datagram
-
-stand_alone: yes
-pi: [toc, sortrefs, symrefs]
-
 author:
   -
     ins: T. Pauly
