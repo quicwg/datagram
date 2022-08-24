@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-04-03T18:23:55.741280+00:00",
+  "timestamp": "2022-08-24T00:08:40.763943+00:00",
   "repo": "quicwg/datagram",
   "labels": [
     {
@@ -5105,7 +5105,7 @@
       "labels": [],
       "body": "Closes #66",
       "createdAt": "2021-12-06T17:56:52Z",
-      "updatedAt": "2021-12-07T23:03:08Z",
+      "updatedAt": "2022-04-03T18:24:34Z",
       "baseRepository": "quicwg/datagram",
       "baseRefName": "main",
       "baseRefOid": "cde5858964fc410d32dd2db33d815eb1c8ed4f77",
