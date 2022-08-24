@@ -6,5 +6,5 @@ The datagram repository is is the historical home of the QUIC Datagram specifica
 can be reported to the RFC Editor using the [errata
 tool](https://www.rfc-editor.org/errata.php).**
 
-* [RFC 9221](https://quicwg.org/base-drafts/rfc9221.html)
+* [RFC 9221](https://quicwg.org/datagram/rfc9221.html)
 * [Datatracker](https://datatracker.ietf.org/doc/html/draft-ietf-quic-datagram)
